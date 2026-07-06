@@ -5,6 +5,7 @@ export default function WordPage() {
   const { word } = useParams<{ word: string }>()
   const navigate = useNavigate()
   const [etymology, setEtymology] = useState<unknown>(null)
+  const [ipa, setIpa] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -17,10 +18,16 @@ export default function WordPage() {
     if (!word) return
     setLoading(true)
     setError(null)
-    fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/words/${encodeURIComponent(word)}/etymology`)
+    setIpa(null)
+    const base = `${import.meta.env.VITE_SERVER_URL}/api/v1/words/${encodeURIComponent(word)}`
+    fetch(`${base}/etymology`)
       .then(r => r.json())
       .then(data => { setEtymology(data); setLoading(false) })
       .catch(e => { setError(e.message); setLoading(false) })
+    fetch(`${base}/ipa`)
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { setIpa(data?.ipa ?? null) })
+      .catch(() => {})
   }, [word])
 
   return (
@@ -35,7 +42,10 @@ export default function WordPage() {
         </svg>
         Back
       </button>
-      <h1 className="text-zinc-900 text-2xl font-semibold">{word}</h1>
+      <div className="flex items-baseline gap-3">
+        <h1 className="text-zinc-900 text-2xl font-semibold">{word}</h1>
+        {ipa && <span className="text-zinc-400 text-sm">{ipa}</span>}
+      </div>
       {loading && <p className="text-zinc-400 text-sm">Loading…</p>}
       {error && <p className="text-red-400 text-sm">{error}</p>}
       {etymology !== null && !loading && (
