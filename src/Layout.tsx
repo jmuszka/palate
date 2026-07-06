@@ -12,27 +12,22 @@ export default function Layout({ children }: { children: ReactNode }) {
   const dragging = useRef(false)
   const location = useLocation()
 
+  const isWordPage = location.pathname.startsWith('/words/')
+  const mapCenter: [number, number] = isWordPage ? [15, 54] : [0, 20]
+  const mapZoom = isWordPage ? 4 : 2
+
   useEffect(() => {
     if (!containerRef.current) return
     const map = new maplibregl.Map({
       container: containerRef.current,
       style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-      center: [0, 20],
-      zoom: 2,
+      center: mapCenter,
+      zoom: mapZoom,
+      maxParallelImageRequests: 4,
     })
     mapRef.current = map
     return () => { map.remove(); mapRef.current = null }
-  }, [])
-
-  useEffect(() => {
-    const map = mapRef.current
-    if (!map) return
-    if (location.pathname === '/') {
-      map.flyTo({ center: [0, 20], zoom: 2 })
-    } else if (location.pathname.startsWith('/words/')) {
-      map.flyTo({ center: [15, 54], zoom: 4 })
-    }
-  }, [location.pathname])
+  }, [location.pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onMouseDown = useCallback(() => {
     dragging.current = true
