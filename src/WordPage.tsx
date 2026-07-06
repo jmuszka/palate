@@ -6,6 +6,7 @@ export default function WordPage() {
   const navigate = useNavigate()
   const [etymology, setEtymology] = useState<unknown>(null)
   const [ipa, setIpa] = useState<string | null>(null)
+  const [history, setHistory] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -19,6 +20,7 @@ export default function WordPage() {
     setLoading(true)
     setError(null)
     setIpa(null)
+    setHistory(null)
     const base = `${import.meta.env.VITE_SERVER_URL}/api/v1/words/${encodeURIComponent(word)}`
     fetch(`${base}/etymology`)
       .then(r => r.json())
@@ -27,6 +29,10 @@ export default function WordPage() {
     fetch(`${base}/ipa`)
       .then(r => r.ok ? r.json() : null)
       .then(data => { setIpa(data?.ipa ?? null) })
+      .catch(() => {})
+    fetch(`${base}/history`)
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { setHistory(data?.history ?? null) })
       .catch(() => {})
   }, [word])
 
@@ -53,6 +59,7 @@ export default function WordPage() {
           {JSON.stringify(etymology, null, 2)}
         </pre>
       )}
+      {history && <p className="text-zinc-600 text-sm">{history}</p>}
     </>
   )
 }
