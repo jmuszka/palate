@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import Layout from './Layout'
+import { useParams, useNavigate } from 'react-router-dom'
 
 export default function WordPage() {
   const { word } = useParams<{ word: string }>()
+  const navigate = useNavigate()
   const [etymology, setEtymology] = useState<unknown>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -17,14 +17,24 @@ export default function WordPage() {
     if (!word) return
     setLoading(true)
     setError(null)
-    fetch(`http://localhost:8080/api/v1/words/${encodeURIComponent(word)}/etymology`)
+    fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/words/${encodeURIComponent(word)}/etymology`)
       .then(r => r.json())
       .then(data => { setEtymology(data); setLoading(false) })
       .catch(e => { setError(e.message); setLoading(false) })
   }, [word])
 
   return (
-    <Layout>
+    <>
+      <button
+        type="button"
+        onClick={() => navigate('/')}
+        className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-800 transition-colors w-fit"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        Back
+      </button>
       <h1 className="text-zinc-900 text-2xl font-semibold">{word}</h1>
       {loading && <p className="text-zinc-400 text-sm">Loading…</p>}
       {error && <p className="text-red-400 text-sm">{error}</p>}
@@ -33,6 +43,6 @@ export default function WordPage() {
           {JSON.stringify(etymology, null, 2)}
         </pre>
       )}
-    </Layout>
+    </>
   )
 }
