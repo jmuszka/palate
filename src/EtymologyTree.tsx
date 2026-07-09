@@ -38,7 +38,10 @@ interface Neo4jPath {
   };
 }
 
-export type EtymologyData = Neo4jPath[];
+export type EtymologyData = {
+  graph: Neo4jPath[];
+  family: string[];
+};
 
 const elk = new ELK();
 
@@ -48,13 +51,17 @@ const elkOptions = {
   "elk.direction": "UP",
   "elk.spacing.nodeNode": "60",
   "elk.layered.spacing.nodeNodeBetweenLayers": "100",
+  // Place every node at its true distance from the root so nodes of the
+  // same depth share a level, giving a clean top-down poly-tree structure.
+  // (The default NETWORK_SIMPLEX pulls nodes toward their neighbors instead.)
+  "elk.layered.layering.strategy": "LONGEST_PATH",
 };
 
 // Flatten the (potentially many) Neo4j paths into a deduplicated set of
 // nodes and edges. Nodes are deduplicated by term + language, so
 // the same word in the same language collapses into a single node. Edges reference nodes
 // by Neo4j Id, so we remap each Id onto its term|lang node.
-const buildGraph = (data: EtymologyData): { nodes: Node[]; edges: Edge[] } => {
+const buildGraph = (data: Neo4jPath[]): { nodes: Node[]; edges: Edge[] } => {
   const nodeMap = new Map<string, Node>(); // term|lang -> node
   const canonical = new Map<string, string>(); // Neo4j Id -> term|lang node id
   const edgeMap = new Map<string, Edge>();
@@ -131,7 +138,7 @@ const getLayoutedElements = async (nodes: Node[], edges: Edge[]) => {
 };
 
 // Interior component so we can access React Flow's viewport controls
-const TreeCanvas = ({ data }: { data: EtymologyData }) => {
+const TreeCanvas = ({ data }: { data: Neo4jPath[] }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { fitView } = useReactFlow();
@@ -179,7 +186,7 @@ export default function EtymologyTree({ data }: { data: EtymologyData }) {
   return (
     <div className="h-[480px] w-full rounded-xl border border-zinc-200 bg-zinc-50 overflow-hidden">
       <ReactFlowProvider>
-        <TreeCanvas data={data} />
+        <TreeCanvas data={data.graph} />
       </ReactFlowProvider>
     </div>
   );

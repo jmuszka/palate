@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import EtymologyTree, { type EtymologyData } from './EtymologyTree'
+import FamilyPieChart from './FamilyPieChart'
 
 export default function WordPage() {
   const { word } = useParams<{ word: string }>()
@@ -56,7 +57,10 @@ export default function WordPage() {
       {loading && <p className="text-zinc-400 text-sm">Loading…</p>}
       {error && <p className="text-red-400 text-sm">{error}</p>}
       {etymology !== null && !loading && (
-        <EtymologyTree data={etymology} />
+        <>
+          <EtymologyTree data={etymology} />
+          <FamilyPieChart families={etymology.family} />
+        </>
       )}
       {history && <p className="text-zinc-600 text-sm">{history}</p>}
     </>
