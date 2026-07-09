@@ -32,6 +32,14 @@ export default function Layout({ children }: { children: ReactNode }) {
       maxParallelImageRequests: 4,
     });
     mapRef.current = map;
+    map.on("load", () => {
+      // Strip modern country borders and place labels
+      for (const layer of map.getStyle().layers ?? []) {
+        if (layer.type === "symbol" || /boundary|admin/i.test(layer.id)) {
+          map.removeLayer(layer.id);
+        }
+      }
+    });
     return () => {
       map.remove();
       mapRef.current = null;
