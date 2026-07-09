@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import EtymologyTree, { type EtymologyData } from './EtymologyTree'
 
 export default function WordPage() {
   const { word } = useParams<{ word: string }>()
   const navigate = useNavigate()
-  const [etymology, setEtymology] = useState<unknown>(null)
+  const [etymology, setEtymology] = useState<EtymologyData | null>(null)
   const [ipa, setIpa] = useState<string | null>(null)
   const [history, setHistory] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
@@ -55,9 +56,7 @@ export default function WordPage() {
       {loading && <p className="text-zinc-400 text-sm">Loading…</p>}
       {error && <p className="text-red-400 text-sm">{error}</p>}
       {etymology !== null && !loading && (
-        <pre className="rounded-xl bg-zinc-50 border border-zinc-200 p-4 text-xs text-zinc-600 overflow-auto whitespace-pre-wrap break-all">
-          {JSON.stringify(etymology, null, 2)}
-        </pre>
+        <EtymologyTree data={etymology} />
       )}
       {history && <p className="text-zinc-600 text-sm">{history}</p>}
     </>
