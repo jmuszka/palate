@@ -1,22 +1,32 @@
 import { useEffect, useState, useDeferredValue } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SUGGESTIONS = [
-  "whiskey",
-  "robot",
-  "coffee",
-  "quarantine",
-  "salary",
-  "avocado",
-  "nightmare",
-  "ketchup",
-];
-
 export default function App() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const deferredQuery = useDeferredValue(query);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/suggestions.txt", { signal: controller.signal })
+      .then((r) => r.text())
+      .then((text) => {
+        const words = text
+          .split("\n")
+          .map((w) => w.trim())
+          .filter(Boolean);
+        // Shuffle and take a handful, fresh on each page load
+        for (let i = words.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [words[i], words[j]] = [words[j], words[i]];
+        }
+        setSuggestions(words.slice(0, 8));
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, []);
 
   useEffect(() => {
     if (!deferredQuery.trim()) {
@@ -94,7 +104,7 @@ export default function App() {
         </div>
 
         <div className="mt-4 flex flex-wrap justify-center gap-2">
-          {SUGGESTIONS.map((word) => (
+          {suggestions.map((word) => (
             <button
               key={word}
               type="button"
