@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import type { Feature } from "geojson";
 import {
   ReactFlow,
   useNodesState,
@@ -41,6 +42,7 @@ interface Neo4jPath {
 export type EtymologyData = {
   graph: Neo4jPath[];
   family: string[];
+  geojson: string[];
 };
 
 const elk = new ELK();
