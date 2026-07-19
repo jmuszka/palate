@@ -131,9 +131,9 @@ export default function App() {
           Norse, Greek, and many others as well.
         </p>
         <p className="mt-2 text-zinc-600 text-sm leading-relaxed">
-          Open any entry to uncover a word's etymology — the languages and older
-          forms it descended from — laid out alongside its IPA pronunciation,
-          historical usage, and an interactive map that charts where it came
+          Open any entry to uncover a word's etymology, the languages and older
+          forms it descended from, laid out alongside its International Phonetic Alphabet spelling,
+          historical usage, and an interactive atlas that maps where it came
           from and how it spread across the world.
         </p>
       </section>
@@ -141,7 +141,7 @@ export default function App() {
       <section className="mt-6">
         <h3 className="text-zinc-800 text-lg font-semibold">Discover more</h3>
         <p className="mt-1 text-zinc-500 text-sm">
-          There's plenty more to dig into beyond the dictionary.
+          There's plenty more to dig into beyond the atlas.
         </p>
         <div className="mt-3 flex flex-col gap-2">
           {[
@@ -158,7 +158,7 @@ export default function App() {
             {
               href: "/games",
               title: "Games",
-              blurb: "Put your instincts to the test with etymology games.",
+              blurb: "Put your knowledge to the test with etymology games.",
             },
           ].map((link) => (
             <a
