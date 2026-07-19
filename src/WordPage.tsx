@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import EtymologyTree, { type EtymologyData } from "./EtymologyTree";
 import FamilyPieChart from "./FamilyPieChart";
-import { useMapGeometry } from "./Layout";
+import { useMapGeometry } from "./Map";
 
 export default function WordPage() {
   const { word } = useParams<{ word: string }>();

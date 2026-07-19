@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import type { Feature } from "geojson";
 import {
   ReactFlow,
   useNodesState,
