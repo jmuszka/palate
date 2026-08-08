@@ -40,11 +40,7 @@ export default function WordPage() {
           ...feature,
         }));
 
-        setMapGeometry(
-          Array.isArray(features)
-            ? { type: "FeatureCollection", features }
-            : null,
-        );
+        setMapGeometry(Array.isArray(features) ? { type: "FeatureCollection", features } : null);
       })
       .catch((e) => {
         setError(e.message);

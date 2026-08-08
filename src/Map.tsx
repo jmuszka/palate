@@ -11,11 +11,7 @@ const EMPTY_FC: FeatureCollection = {
 };
 
 function extendBounds(bounds: maplibregl.LngLatBounds, coords: unknown) {
-  if (
-    Array.isArray(coords) &&
-    typeof coords[0] === "number" &&
-    typeof coords[1] === "number"
-  ) {
+  if (Array.isArray(coords) && typeof coords[0] === "number" && typeof coords[1] === "number") {
     bounds.extend(coords as [number, number]);
     return;
   }
@@ -35,15 +31,10 @@ function fitToGeometry(map: maplibregl.Map, geometry: FeatureCollection) {
   map.fitBounds(bounds, { padding: 60, maxZoom: 8, animate: false });
 }
 
-function applyGeometry(
-  map: maplibregl.Map,
-  geometry: FeatureCollection | null,
-) {
+function applyGeometry(map: maplibregl.Map, geometry: FeatureCollection | null) {
   const data = geometry ?? EMPTY_FC;
   if (geometry) fitToGeometry(map, geometry);
-  const source = map.getSource(GEOMETRY_SOURCE) as
-    | maplibregl.GeoJSONSource
-    | undefined;
+  const source = map.getSource(GEOMETRY_SOURCE) as maplibregl.GeoJSONSource | undefined;
   if (source) {
     source.setData(data);
     return;
@@ -74,20 +65,14 @@ function applyGeometry(
   });
 }
 
-const MapGeometryContext = createContext<
-  (geometry: FeatureCollection | null) => void
->(() => {});
+const MapGeometryContext = createContext<(geometry: FeatureCollection | null) => void>(() => {});
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useMapGeometry = () => useContext(MapGeometryContext);
 
 export { MapGeometryContext };
 
-export default function Map({
-  geometry,
-}: {
-  geometry: FeatureCollection | null;
-}) {
+export default function Map({ geometry }: { geometry: FeatureCollection | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const mapLoadedRef = useRef(false);
@@ -132,10 +117,5 @@ export default function Map({
     }
   }, [geometry]);
 
-  return (
-    <div
-      ref={containerRef}
-      className="h-full rounded-3xl flex-1 border border-zinc-200"
-    />
-  );
+  return <div ref={containerRef} className="h-full rounded-3xl flex-1 border border-zinc-200" />;
 }

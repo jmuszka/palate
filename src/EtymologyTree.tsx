@@ -122,9 +122,7 @@ const getLayoutedElements = async (nodes: Node[], edges: Edge[]) => {
 
     // Map computed coordinates back onto original objects
     const layoutedNodes = nodes.map((node) => {
-      const elkNode = layoutedGraph.children?.find(
-        (child) => child.id === node.id,
-      );
+      const elkNode = layoutedGraph.children?.find((child) => child.id === node.id);
       return {
         ...node,
         position: { x: elkNode?.x ?? 0, y: elkNode?.y ?? 0 },
@@ -153,15 +151,13 @@ const TreeCanvas = ({ data }: { data: Neo4jPath[] }) => {
     }
 
     let cancelled = false;
-    getLayoutedElements(rawNodes, rawEdges).then(
-      ({ nodes: laidOutNodes, edges: laidOutEdges }) => {
-        if (cancelled) return;
-        setNodes(laidOutNodes);
-        setEdges(laidOutEdges);
-        // Delay fitView briefly so the viewport matches fresh node DOM boundaries
-        window.requestAnimationFrame(() => fitView({ padding: 0.2 }));
-      },
-    );
+    getLayoutedElements(rawNodes, rawEdges).then(({ nodes: laidOutNodes, edges: laidOutEdges }) => {
+      if (cancelled) return;
+      setNodes(laidOutNodes);
+      setEdges(laidOutEdges);
+      // Delay fitView briefly so the viewport matches fresh node DOM boundaries
+      window.requestAnimationFrame(() => fitView({ padding: 0.2 }));
+    });
 
     return () => {
       cancelled = true;

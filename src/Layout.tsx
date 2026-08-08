@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  type ReactNode,
-} from "react";
+import { useEffect, useRef, useState, useCallback, type ReactNode } from "react";
 import Header from "./Header";
 import ContentPanel from "./ContentPanel";
 import Map from "./Map";
@@ -22,14 +16,12 @@ export default function Layout({ children }: { children: ReactNode }) {
   isMobileRef.current = isMobile;
 
   const startDrag = useCallback(
-    (direction: "horizontal" | "vertical") =>
-      (_e: React.MouseEvent | React.TouchEvent) => {
-        dragging.current = true;
-        document.body.style.cursor =
-          direction === "horizontal" ? "col-resize" : "row-resize";
-        document.body.style.userSelect = "none";
-        document.body.style.touchAction = "none";
-      },
+    (direction: "horizontal" | "vertical") => (_e: React.MouseEvent | React.TouchEvent) => {
+      dragging.current = true;
+      document.body.style.cursor = direction === "horizontal" ? "col-resize" : "row-resize";
+      document.body.style.userSelect = "none";
+      document.body.style.touchAction = "none";
+    },
     [],
   );
 
@@ -79,15 +71,9 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   if (isMobile) {
     return (
-      <div
-        ref={containerRef}
-        className="flex flex-col w-screen h-dvh p-2 bg-zinc-100"
-      >
+      <div ref={containerRef} className="flex flex-col w-screen h-dvh p-2 bg-zinc-100">
         <Header />
-        <div
-          className="flex items-center justify-center h-2 shrink-0 cursor-row-resize group touch-none"
-        >
-        </div>
+        <div className="flex items-center justify-center h-2 shrink-0 cursor-row-resize group touch-none"></div>
         <div
           className="shrink-0 rounded-3xl overflow-hidden border border-zinc-200"
           style={{ height: `${mapHeightPct}%` }}
@@ -109,14 +95,8 @@ export default function Layout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="flex w-screen h-dvh p-4 gap-0 bg-zinc-100"
-    >
-      <div
-        className="h-full flex flex-col gap-4 min-h-0"
-        style={{ width: `${panelWidth}%` }}
-      >
+    <div ref={containerRef} className="flex w-screen h-dvh p-4 gap-0 bg-zinc-100">
+      <div className="h-full flex flex-col gap-4 min-h-0" style={{ width: `${panelWidth}%` }}>
         <Header />
         <ContentPanel setGeometry={setGeometry}>{children}</ContentPanel>
       </div>
