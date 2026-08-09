@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import EtymologyTree, { type EtymologyData } from "./EtymologyTree";
 import FamilyPieChart from "./FamilyPieChart";
 import { useMapGeometry } from "./Map";
@@ -7,6 +7,7 @@ import { useMapGeometry } from "./Map";
 export default function WordPage() {
   const { word } = useParams<{ word: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [etymology, setEtymology] = useState<EtymologyData | null>(null);
   const [ipa, setIpa] = useState<string | null>(null);
   const [history, setHistory] = useState<string | null>(null);
@@ -28,7 +29,9 @@ export default function WordPage() {
     setIpa(null);
     setHistory(null);
     const base = `${import.meta.env.VITE_SERVER_URL}/api/v1/words/${encodeURIComponent(word)}`;
-    fetch(`${base}/etymology`)
+    const qs = searchParams.toString();
+    const suffix = qs ? `?${qs}` : "";
+    fetch(`${base}/etymology${suffix}`)
       .then((r) => r.json())
       .then((data: EtymologyData) => {
         setEtymology(data);
@@ -46,13 +49,13 @@ export default function WordPage() {
         setError(e.message);
         setLoading(false);
       });
-    fetch(`${base}/ipa`)
+    fetch(`${base}/ipa${suffix}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         setIpa(data?.ipa ?? null);
       })
       .catch(() => {});
-    fetch(`${base}/history`)
+    fetch(`${base}/history${suffix}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         setHistory(data?.history ?? null);
@@ -61,7 +64,7 @@ export default function WordPage() {
     return () => {
       setMapGeometry(null);
     };
-  }, [word, setMapGeometry]);
+  }, [word, searchParams, setMapGeometry]);
 
   return (
     <>
