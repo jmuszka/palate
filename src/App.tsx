@@ -1,4 +1,4 @@
-import { useEffect, useState, useDeferredValue } from "react";
+import { useEffect, useState, useDeferredValue, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function App() {
@@ -7,6 +7,51 @@ export default function App() {
   const [results, setResults] = useState<string[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const deferredQuery = useDeferredValue(query);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const closeResults = useCallback(() => {
+    setResults([]);
+    setSelectedIndex(-1);
+    inputRef.current?.focus();
+  }, []);
+
+  const goToWord = useCallback(
+    (word: string) => {
+      setQuery("");
+      closeResults();
+      navigate(`/words/${encodeURIComponent(word)}`);
+    },
+    [navigate, closeResults],
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (results.length === 0) return;
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          setSelectedIndex((prev) => (prev + 1) % results.length);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          setSelectedIndex((prev) => (prev - 1 + results.length) % results.length);
+          break;
+        case "Enter":
+          if (selectedIndex >= 0 && selectedIndex < results.length) {
+            e.preventDefault();
+            goToWord(results[selectedIndex]);
+          }
+          break;
+        case "Escape":
+          e.preventDefault();
+          closeResults();
+          break;
+      }
+    },
+    [results, selectedIndex, goToWord, closeResults],
+  );
 
   useEffect(() => {
     const controller = new AbortController();
@@ -44,6 +89,17 @@ export default function App() {
     return () => controller.abort();
   }, [deferredQuery]);
 
+  useEffect(() => {
+    if (results.length === 0) return;
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        closeResults();
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [results.length, closeResults]);
+
   return (
     <div className="flex flex-col">
       <section className="flex flex-col items-center text-center py-6">
@@ -53,7 +109,7 @@ export default function App() {
           travelled across the map of language.
         </p>
 
-        <div className="relative w-full mt-5">
+        <div ref={searchRef} className="relative w-full mt-5">
           <svg
             className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
             width="18"
@@ -71,22 +127,48 @@ export default function App() {
             />
           </svg>
           <input
+            ref={inputRef}
             id="word-search"
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelectedIndex(-1);
+            }}
+            onKeyDown={handleKeyDown}
             placeholder="Search any word…"
             autoFocus
-            className="w-full rounded-full border border-zinc-300 bg-white pl-11 pr-4 py-3 text-base text-zinc-800 placeholder-zinc-400 shadow-sm outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-200 transition"
+            role="combobox"
+            aria-label="Search words"
+            aria-expanded={results.length > 0}
+            aria-controls="search-results"
+            aria-activedescendant={
+              selectedIndex >= 0 ? `search-result-${selectedIndex}` : undefined
+            }
+            aria-autocomplete="list"
+            className="w-full rounded-full border border-zinc-300 bg-white pl-11 pr-4 py-3 text-base text-zinc-800 placeholder-zinc-400 shadow-sm outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-200 transition"
           />
           {results.length > 0 && (
-            <div className="absolute z-10 left-0 right-0 mt-2 flex flex-col rounded-2xl border border-zinc-200 bg-white shadow-lg overflow-hidden text-left">
-              {results.map((word) => (
+            <div
+              id="search-results"
+              role="listbox"
+              onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                  e.preventDefault();
+                  closeResults();
+                }
+              }}
+              className="absolute z-10 left-0 right-0 mt-2 flex flex-col rounded-2xl border border-zinc-200 bg-white shadow-lg overflow-hidden text-left"
+            >
+              {results.map((word, i) => (
                 <button
                   key={word}
+                  id={`search-result-${i}`}
                   type="button"
-                  onClick={() => navigate(`/words/${encodeURIComponent(word)}`)}
-                  className="px-4 py-2.5 text-left text-sm text-zinc-700 hover:bg-zinc-50 transition-colors"
+                  role="option"
+                  aria-selected={i === selectedIndex}
+                  onClick={() => goToWord(word)}
+                  className={`px-4 py-2.5 text-left text-sm text-zinc-700 hover:bg-zinc-50 focus-visible:outline-none focus-visible:bg-zinc-50 transition-colors ${i === selectedIndex ? "bg-zinc-100 focus-visible:bg-zinc-100" : ""}`}
                 >
                   {word}
                 </button>
