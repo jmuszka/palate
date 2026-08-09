@@ -5,3 +5,7 @@
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+.map-container .maplibregl-canvas {
+  border-radius: var(--radius-3xl, 1.5rem);
+}

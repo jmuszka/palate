@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App.tsx";
 import WordPage from "./WordPage.tsx";
 import ComingSoon from "./ComingSoon.tsx";
+import Attributions from "./Attributions.tsx";
 import Layout from "./Layout.tsx";
 
 createRoot(document.getElementById("root")!).render(
@@ -23,6 +24,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/about" element={<ComingSoon title="About" />} />
           <Route path="/blog/articles" element={<ComingSoon title="Blog" />} />
           <Route path="/games" element={<ComingSoon title="Games" />} />
+          <Route path="/attributions" element={<Attributions />} />
         </Route>
       </Routes>
     </BrowserRouter>
