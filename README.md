@@ -2,8 +2,6 @@
 
 Every word has a journey. **Palate** is an interactive etymology explorer and language atlas — trace the roots, meanings, and geographic paths of English words. [EtymoMap](https://etymomap.com) is the live deployment.
 
-![Palate](./public/favicon.png)
-
 ## Features
 
 - **Etymology tree** — Interactive graph visualization showing a word's ancestral lineage, built with React Flow and ELK.js. Click any node to explore that word's own etymology.
@@ -133,7 +131,3 @@ See the [Attributions](/attributions) page for details.
 | Variable          | Required | Description                        |
 | ----------------- | -------- | ---------------------------------- |
 | `VITE_SERVER_URL` | Yes      | Base URL of the Larynx backend API |
-
-## License
-
-[Add your license here]
