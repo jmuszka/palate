@@ -52,7 +52,10 @@ export default function Header() {
   );
 
   return (
-    <div ref={menuRef} className="shrink-0 rounded-3xl bg-white border border-zinc-200 px-8 py-4 flex items-center justify-between gap-4 relative">
+    <div
+      ref={menuRef}
+      className="shrink-0 rounded-3xl bg-white border border-zinc-200 px-8 py-4 flex items-center justify-between gap-4 relative"
+    >
       <a className="flex items-center" href="/">
         <img src="/favicon.png" alt="" className="w-11 h-11" />
         <h1 className="text-zinc-900 text-xl font-semibold">EtymoMap</h1>
