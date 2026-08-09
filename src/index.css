@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+*:focus-visible:not(input):not(textarea) {
+  outline: 2px solid oklch(0.446 0.02 256.05);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
