@@ -10,6 +10,7 @@ import {
   type Node,
   type Edge,
 } from "@xyflow/react";
+import { useNavigate } from "react-router-dom";
 import ELK from "elkjs/lib/elk.bundled.js";
 import "@xyflow/react/dist/style.css";
 
@@ -76,7 +77,7 @@ const buildGraph = (data: Neo4jPath[]): { nodes: Node[]; edges: Edge[] } => {
       if (!nodeMap.has(key)) {
         nodeMap.set(key, {
           id: key,
-          data: { label: lang ? `${term} (${lang})` : (term ?? key) },
+          data: { label: lang ? `${term} (${lang})` : (term ?? key), term, lang },
           position: { x: 0, y: 0 },
         });
       }
@@ -141,6 +142,7 @@ const TreeCanvas = ({ data }: { data: Neo4jPath[] }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { fitView } = useReactFlow();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const { nodes: rawNodes, edges: rawEdges } = buildGraph(data);
@@ -170,6 +172,11 @@ const TreeCanvas = ({ data }: { data: Neo4jPath[] }) => {
       edges={edges}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
+      onNodeClick={(_, node) => {
+        const term = encodeURIComponent(node.data.term as string);
+        const lang = node.data.lang ? `?lang=${encodeURIComponent(node.data.lang as string)}` : "";
+        navigate(`/words/${term}${lang}`);
+      }}
       fitView
       proOptions={{ hideAttribution: true }}
     >
