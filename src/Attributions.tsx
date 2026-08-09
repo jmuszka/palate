@@ -36,7 +36,8 @@ const SOURCES = [
     name: "CARTO Positron",
     href: "https://carto.com/basemaps",
     what: "A free vector basemap style by CARTO that uses a muted palette of light grays and creams, designed to sit quietly behind data overlays without competing for visual attention.",
-    usage: "The tile layer underneath all map content, providing roads, coastlines, and place labels without distracting from the etymology data rendered on top.",
+    usage:
+      "The tile layer underneath all map content, providing roads, coastlines, and place labels without distracting from the etymology data rendered on top.",
   },
 ];
 
@@ -75,9 +76,7 @@ export default function Attributions() {
         Back
       </button>
       <h2 className="text-zinc-900 text-2xl font-semibold">Attributions</h2>
-      <p className="text-zinc-500 text-sm">
-        EtymoMap is built on data from these sources:
-      </p>
+      <p className="text-zinc-500 text-sm">EtymoMap is built on data from these sources:</p>
       <ul className="flex flex-col gap-4">
         {SOURCES.map((source) => (
           <li
