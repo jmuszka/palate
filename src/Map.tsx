@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { FeatureCollection } from "geojson";
+import rewind from "@turf/rewind";
 
 const GEOMETRY_SOURCE = "etymology-geometry";
 const EMPTY_FC: FeatureCollection = {
@@ -39,28 +40,25 @@ function applyGeometry(map: maplibregl.Map, geometry: FeatureCollection | null) 
     source.setData(data);
     return;
   }
-  map.addSource(GEOMETRY_SOURCE, { type: "geojson", data });
+  map.addSource(GEOMETRY_SOURCE, { type: "geojson", data: rewind(data, { reverse: true }) });
   map.addLayer({
     id: `${GEOMETRY_SOURCE}-fill`,
     type: "fill",
     source: GEOMETRY_SOURCE,
-    paint: { "fill-color": "#6366f1", "fill-opacity": 0.15 },
+    paint: {
+      "fill-color": "#6366f1",
+      "fill-opacity": 0.5,
+    },
   });
   map.addLayer({
-    id: `${GEOMETRY_SOURCE}-line`,
+    id: `${GEOMETRY_SOURCE}-feathered-border`,
     type: "line",
     source: GEOMETRY_SOURCE,
-    paint: { "line-color": "#4f46e5", "line-width": 2 },
-  });
-  map.addLayer({
-    id: `${GEOMETRY_SOURCE}-point`,
-    type: "circle",
-    source: GEOMETRY_SOURCE,
     paint: {
-      "circle-radius": 5,
-      "circle-color": "#4f46e5",
-      "circle-stroke-color": "#ffffff",
-      "circle-stroke-width": 1.5,
+      "line-color": "#6366f1",
+      "line-width": 2,
+      "line-blur": 100,
+      "line-opacity": 0.5,
     },
   });
 }

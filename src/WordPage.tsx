@@ -35,15 +35,8 @@ export default function WordPage() {
       .then((r) => r.json())
       .then((data: EtymologyData) => {
         setEtymology(data);
+        setMapGeometry(data.geojson);
         setLoading(false);
-
-        let features = data.geojson.map((geojson) => JSON.parse(geojson));
-        features = features.map((feature) => ({
-          coordinates: feature.geometry.coordinates,
-          ...feature,
-        }));
-
-        setMapGeometry(Array.isArray(features) ? { type: "FeatureCollection", features } : null);
       })
       .catch((e) => {
         setError(e.message);
