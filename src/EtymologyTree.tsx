@@ -11,6 +11,7 @@ import {
   type Edge,
 } from "@xyflow/react";
 import { useNavigate } from "react-router-dom";
+import type { FeatureCollection } from "geojson";
 import ELK from "elkjs/lib/elk.bundled.js";
 import "@xyflow/react/dist/style.css";
 
@@ -42,7 +43,7 @@ interface Neo4jPath {
 export type EtymologyData = {
   graph: Neo4jPath[];
   family: string[];
-  geojson: string[];
+  geojson: FeatureCollection;
 };
 
 const elk = new ELK();
