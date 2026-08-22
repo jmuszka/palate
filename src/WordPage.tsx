@@ -1,19 +1,42 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import EtymologyTree, { type EtymologyData } from "./EtymologyTree";
 import FamilyPieChart from "./FamilyPieChart";
 import { useMapGeometry } from "./Map";
+import useSWR from "swr";
+
+const fetcher = (url: string) =>
+  fetch(url, {
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
+    },
+  }).then((res) => res.json());
 
 export default function WordPage() {
   const { word } = useParams<{ word: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [etymology, setEtymology] = useState<EtymologyData | null>(null);
-  const [ipa, setIpa] = useState<string | null>(null);
-  const [history, setHistory] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const setMapGeometry = useMapGeometry();
+
+  const qs = searchParams.toString();
+  const suffix = qs ? `?${qs}` : "";
+  const base = word
+    ? `${import.meta.env.VITE_SERVER_URL}/api/v1/words/${encodeURIComponent(word)}`
+    : null;
+
+  const {
+    data: etymology,
+    isLoading: loading,
+    error,
+  } = useSWR<EtymologyData>(base ? `${base}/etymology${suffix}` : null, fetcher);
+  const { data: ipaData } = useSWR<{ ipa?: string }>(base ? `${base}/ipa${suffix}` : null, fetcher);
+  const { data: historyData } = useSWR<{ history?: string }>(
+    base ? `${base}/history${suffix}` : null,
+    fetcher,
+  );
+
+  const ipa = ipaData?.ipa ?? null;
+  const history = historyData?.history ?? null;
 
   useEffect(() => {
     if (word) document.title = `${word} - EtymoMap`;
@@ -23,53 +46,9 @@ export default function WordPage() {
   }, [word]);
 
   useEffect(() => {
-    if (!word) return;
-    setLoading(true);
-    setError(null);
-    setIpa(null);
-    setHistory(null);
-    const base = `${import.meta.env.VITE_SERVER_URL}/api/v1/words/${encodeURIComponent(word)}`;
-    const qs = searchParams.toString();
-    const suffix = qs ? `?${qs}` : "";
-    fetch(`${base}/etymology${suffix}`, {
-      headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
-      },
-    })
-      .then((r) => r.json())
-      .then((data: EtymologyData) => {
-        setEtymology(data);
-        setMapGeometry(data.geojson);
-        setLoading(false);
-      })
-      .catch((e) => {
-        setError(e.message);
-        setLoading(false);
-      });
-    fetch(`${base}/ipa${suffix}`, {
-      headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
-      },
-    })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        setIpa(data?.ipa ?? null);
-      })
-      .catch(() => {});
-    fetch(`${base}/history${suffix}`, {
-      headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
-      },
-    })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        setHistory(data?.history ?? null);
-      })
-      .catch(() => {});
-    return () => {
-      setMapGeometry(null);
-    };
-  }, [word, searchParams, setMapGeometry]);
+    setMapGeometry(etymology?.geojson ?? null);
+    return () => setMapGeometry(null);
+  }, [etymology, setMapGeometry]);
 
   return (
     <>
@@ -100,8 +79,8 @@ export default function WordPage() {
         {ipa && <span className="text-zinc-400 text-sm">{ipa}</span>}
       </div>
       {loading && <p className="text-zinc-400 text-sm">Loading…</p>}
-      {error && <p className="text-red-400 text-sm">{error}</p>}
-      {etymology !== null && !loading && (
+      {error && <p className="text-red-400 text-sm">{error.message}</p>}
+      {etymology !== undefined && !loading && (
         <>
           <EtymologyTree data={etymology} />
           <FamilyPieChart families={etymology.family} />
