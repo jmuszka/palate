@@ -31,7 +31,11 @@ export default function WordPage() {
     const base = `${import.meta.env.VITE_SERVER_URL}/api/v1/words/${encodeURIComponent(word)}`;
     const qs = searchParams.toString();
     const suffix = qs ? `?${qs}` : "";
-    fetch(`${base}/etymology${suffix}`)
+    fetch(`${base}/etymology${suffix}`, {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
+      },
+    })
       .then((r) => r.json())
       .then((data: EtymologyData) => {
         setEtymology(data);
@@ -42,13 +46,21 @@ export default function WordPage() {
         setError(e.message);
         setLoading(false);
       });
-    fetch(`${base}/ipa${suffix}`)
+    fetch(`${base}/ipa${suffix}`, {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
+      },
+    })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         setIpa(data?.ipa ?? null);
       })
       .catch(() => {});
-    fetch(`${base}/history${suffix}`)
+    fetch(`${base}/history${suffix}`, {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
+      },
+    })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         setHistory(data?.history ?? null);
