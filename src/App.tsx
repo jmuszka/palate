@@ -1,5 +1,15 @@
 import { useEffect, useState, useDeferredValue, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import useSWR from "swr";
+
+const controller = new AbortController();
+const fetcher = (url: string) =>
+  fetch(url, {
+    signal: controller.signal,
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
+    },
+  }).then((res) => res.json());
 
 export default function App() {
   const navigate = useNavigate();
@@ -73,26 +83,20 @@ export default function App() {
     return () => controller.abort();
   }, []);
 
+  const { data } = useSWR(
+    deferredQuery.trim()
+      ? `${import.meta.env.VITE_SERVER_URL}/api/v1/words?prefix=${encodeURIComponent(deferredQuery)}`
+      : null,
+    fetcher,
+  );
+
   useEffect(() => {
     if (!deferredQuery.trim()) {
       setResults([]);
       return;
     }
-    const controller = new AbortController();
-    fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/v1/words?prefix=${encodeURIComponent(deferredQuery)}`,
-      {
-        signal: controller.signal,
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
-        },
-      },
-    )
-      .then((r) => r.json())
-      .then(setResults)
-      .catch(() => {});
-    return () => controller.abort();
-  }, [deferredQuery]);
+    if (data) setResults(data);
+  }, [data, deferredQuery]);
 
   useEffect(() => {
     if (results.length === 0) return;
