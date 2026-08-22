@@ -81,7 +81,12 @@ export default function App() {
     const controller = new AbortController();
     fetch(
       `${import.meta.env.VITE_SERVER_URL}/api/v1/words?prefix=${encodeURIComponent(deferredQuery)}`,
-      { signal: controller.signal },
+      {
+        signal: controller.signal,
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
+        },
+      },
     )
       .then((r) => r.json())
       .then(setResults)

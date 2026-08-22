@@ -116,6 +116,16 @@ Palate expects a backend API (referred to as **Larynx**) at the URL configured i
 
 All endpoints support an optional `?lang=` query parameter for language-specific results.
 
+### Authentication
+
+Every API request includes an `Authorization` header carrying a client-level bearer token:
+
+```
+Authorization: Bearer <token>
+```
+
+Set the token via the `VITE_BEARER_TOKEN` environment variable. The backend (Larynx) requires an approved bearer token on each request, so requests made without a valid token are rejected. This is a single, shared client credential — not per-user authentication — and it must be present on every call.
+
 ## Data Sources
 
 - **Wiktionary** — Word database & etymological relationships
@@ -128,6 +138,7 @@ See the [Attributions](/attributions) page for details.
 
 ## Environment Variables
 
-| Variable          | Required | Description                        |
-| ----------------- | -------- | ---------------------------------- |
-| `VITE_SERVER_URL` | Yes      | Base URL of the Larynx backend API |
+| Variable            | Required | Description                            |
+| ------------------- | -------- | -------------------------------------- |
+| `VITE_SERVER_URL`   | Yes      | Base URL of the Larynx backend API     |
+| `VITE_BEARER_TOKEN` | Yes      | Bearer token sent on every API request |
