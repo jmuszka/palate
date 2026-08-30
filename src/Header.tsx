@@ -6,7 +6,6 @@ const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/blog/articles", label: "Blog" },
-  { href: "/games", label: "Games" },
 ];
 
 export default function Header() {
