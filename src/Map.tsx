@@ -4,6 +4,7 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { FeatureCollection } from "geojson";
 import rewind from "@turf/rewind";
+import { toast } from "./toast";
 
 const GEOMETRY_SOURCE = "etymology-geometry";
 const EMPTY_FC: FeatureCollection = {
@@ -33,34 +34,39 @@ function fitToGeometry(map: maplibregl.Map, geometry: FeatureCollection) {
 }
 
 function applyGeometry(map: maplibregl.Map, geometry: FeatureCollection | null) {
-  const data = geometry ?? EMPTY_FC;
-  if (geometry) fitToGeometry(map, geometry);
-  const source = map.getSource(GEOMETRY_SOURCE) as maplibregl.GeoJSONSource | undefined;
-  if (source) {
-    source.setData(data);
-    return;
+  try {
+    const data = geometry ?? EMPTY_FC;
+    if (geometry) fitToGeometry(map, geometry);
+    const source = map.getSource(GEOMETRY_SOURCE) as maplibregl.GeoJSONSource | undefined;
+    if (source) {
+      source.setData(data);
+      return;
+    }
+    map.addSource(GEOMETRY_SOURCE, { type: "geojson", data: rewind(data, { reverse: true }) });
+    map.addLayer({
+      id: `${GEOMETRY_SOURCE}-fill`,
+      type: "fill",
+      source: GEOMETRY_SOURCE,
+      paint: {
+        "fill-color": "#6366f1",
+        "fill-opacity": 0.5,
+      },
+    });
+    map.addLayer({
+      id: `${GEOMETRY_SOURCE}-feathered-border`,
+      type: "line",
+      source: GEOMETRY_SOURCE,
+      paint: {
+        "line-color": "#6366f1",
+        "line-width": 2,
+        "line-blur": 100,
+        "line-opacity": 0.5,
+      },
+    });
+  } catch (error) {
+    console.error("Failed to apply geometry:", error);
+    toast("Couldn't render the map data.", "error");
   }
-  map.addSource(GEOMETRY_SOURCE, { type: "geojson", data: rewind(data, { reverse: true }) });
-  map.addLayer({
-    id: `${GEOMETRY_SOURCE}-fill`,
-    type: "fill",
-    source: GEOMETRY_SOURCE,
-    paint: {
-      "fill-color": "#6366f1",
-      "fill-opacity": 0.5,
-    },
-  });
-  map.addLayer({
-    id: `${GEOMETRY_SOURCE}-feathered-border`,
-    type: "line",
-    source: GEOMETRY_SOURCE,
-    paint: {
-      "line-color": "#6366f1",
-      "line-width": 2,
-      "line-blur": 100,
-      "line-opacity": 0.5,
-    },
-  });
 }
 
 const MapGeometryContext = createContext<(geometry: FeatureCollection | null) => void>(() => {});
@@ -75,6 +81,7 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
   const mapRef = useRef<maplibregl.Map | null>(null);
   const mapLoadedRef = useRef(false);
   const geometryRef = useRef<FeatureCollection | null>(null);
+  const mapErrorShownRef = useRef(false);
   const location = useLocation();
 
   const isWordPage = location.pathname.startsWith("/words/");
@@ -92,6 +99,14 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
     maplibregl.config.MAX_PARALLEL_IMAGE_REQUESTS = 4;
     mapRef.current = map;
     mapLoadedRef.current = false;
+    mapErrorShownRef.current = false;
+    map.on("error", (e) => {
+      console.error("Map error:", e.error);
+      if (!mapErrorShownRef.current) {
+        mapErrorShownRef.current = true;
+        toast("The map couldn't load some content.", "error");
+      }
+    });
     map.on("load", () => {
       for (const layer of map.getStyle().layers ?? []) {
         if (layer.type === "symbol" || /boundary|admin/i.test(layer.id)) {
