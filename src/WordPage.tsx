@@ -5,13 +5,6 @@ import FamilyPieChart from "./FamilyPieChart";
 import { useMapGeometry } from "./Map";
 import useSWR from "swr";
 
-const fetcher = (url: string) =>
-  fetch(url, {
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
-    },
-  }).then((res) => res.json());
-
 export default function WordPage() {
   const { word } = useParams<{ word: string }>();
   const navigate = useNavigate();
@@ -28,11 +21,10 @@ export default function WordPage() {
     data: etymology,
     isLoading: loading,
     error,
-  } = useSWR<EtymologyData>(base ? `${base}/etymology${suffix}` : null, fetcher);
-  const { data: ipaData } = useSWR<{ ipa?: string }>(base ? `${base}/ipa${suffix}` : null, fetcher);
+  } = useSWR<EtymologyData>(base ? `${base}/etymology${suffix}` : null);
+  const { data: ipaData } = useSWR<{ ipa?: string }>(base ? `${base}/ipa${suffix}` : null);
   const { data: historyData } = useSWR<{ history?: string }>(
     base ? `${base}/history${suffix}` : null,
-    fetcher,
   );
 
   const ipa = ipaData?.ipa ?? null;
@@ -79,7 +71,9 @@ export default function WordPage() {
         {ipa && <span className="text-zinc-400 text-sm">{ipa}</span>}
       </div>
       {loading && <p className="text-zinc-400 text-sm">Loading…</p>}
-      {error && <p className="text-red-400 text-sm">{error.message}</p>}
+      {error && !loading && (
+        <p className="text-red-400 text-sm">We couldn't load this word. Please try again.</p>
+      )}
       {etymology !== undefined && !loading && (
         <>
           <EtymologyTree data={etymology} />

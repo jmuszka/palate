@@ -1,15 +1,7 @@
 import { useEffect, useState, useDeferredValue, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
-
-const controller = new AbortController();
-const fetcher = (url: string) =>
-  fetch(url, {
-    signal: controller.signal,
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_BEARER_TOKEN}`,
-    },
-  }).then((res) => res.json());
+import { toast } from "./toast";
 
 export default function App() {
   const navigate = useNavigate();
@@ -66,7 +58,10 @@ export default function App() {
   useEffect(() => {
     const controller = new AbortController();
     fetch("/suggestions.txt", { signal: controller.signal })
-      .then((r) => r.text())
+      .then((r) => {
+        if (!r.ok) throw new Error(`Failed to load suggestions (${r.status})`);
+        return r.text();
+      })
       .then((text) => {
         const words = text
           .split("\n")
@@ -79,15 +74,18 @@ export default function App() {
         }
         setSuggestions(words.slice(0, 8));
       })
-      .catch(() => {});
+      .catch((error) => {
+        if (controller.signal.aborted) return;
+        console.error("Failed to load suggestions:", error);
+        toast("Couldn't load word suggestions.", "error");
+      });
     return () => controller.abort();
   }, []);
 
-  const { data } = useSWR(
+  const { data } = useSWR<string[]>(
     deferredQuery.trim()
       ? `${import.meta.env.VITE_SERVER_URL}/api/v1/words?prefix=${encodeURIComponent(deferredQuery)}`
       : null,
-    fetcher,
   );
 
   useEffect(() => {
