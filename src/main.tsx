@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import "./index.css";
+import AboutPage from "./AboutPage.tsx";
 import App from "./App.tsx";
 import WordPage from "./WordPage.tsx";
 import ComingSoon from "./ComingSoon.tsx";
@@ -21,7 +22,7 @@ createRoot(document.getElementById("root")!).render(
         >
           <Route path="/" element={<App />} />
           <Route path="/words/:word" element={<WordPage />} />
-          <Route path="/about" element={<ComingSoon title="About" />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/blog/articles" element={<ComingSoon title="Blog" />} />
           <Route path="/games" element={<ComingSoon title="Games" />} />
           <Route path="/attributions" element={<Attributions />} />
