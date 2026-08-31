@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import useIsMobile from "./hooks/useIsMobile";
 
@@ -56,10 +57,10 @@ export default function Header() {
       ref={menuRef}
       className="shrink-0 rounded-3xl bg-white border border-zinc-200 px-8 py-4 flex items-center justify-between gap-4 relative"
     >
-      <a className="flex items-center" href="/">
+      <Link className="flex items-center" to="/">
         <img src="/favicon.png" alt="" className="w-11 h-11" />
         <h1 className="text-zinc-900 text-xl font-semibold">EtymoMap</h1>
-      </a>
+      </Link>
       {isTablet ? (
         <>
           <button
@@ -82,15 +83,15 @@ export default function Header() {
               className="absolute top-full right-0 mt-2 w-48 rounded-2xl bg-white border border-zinc-200 shadow-lg p-2 flex flex-col z-50"
             >
               {NAV_LINKS.map((link) => (
-                <a
+                <Link
                   key={link.href}
-                  href={link.href}
+                  to={link.href}
                   role="menuitem"
                   className="px-4 py-2 rounded-xl hover:bg-zinc-100 transition-colors"
                   onClick={() => closeMenu()}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
           )}
@@ -98,9 +99,9 @@ export default function Header() {
       ) : (
         <div className="flex gap-4">
           {NAV_LINKS.map((link) => (
-            <a key={link.href} href={link.href}>
+            <Link key={link.href} to={link.href}>
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
       )}
