@@ -4,6 +4,7 @@ import EtymologyTree, { type EtymologyData } from "./EtymologyTree";
 import FamilyPieChart from "./FamilyPieChart";
 import { useMapGeometry } from "./Map";
 import useSWR from "swr";
+import { useSEO, siteUrl } from "./seo";
 
 export default function WordPage() {
   const { word } = useParams<{ word: string }>();
@@ -30,12 +31,29 @@ export default function WordPage() {
   const ipa = ipaData?.ipa ?? null;
   const history = historyData?.history ?? null;
 
-  useEffect(() => {
-    if (word) document.title = `${word} - EtymoMap`;
-    return () => {
-      document.title = "EtymoMap";
-    };
-  }, [word]);
+  const description = history
+    ? history.length > 155
+      ? `${history.slice(0, 155)}…`
+      : history
+    : word
+      ? `Explore the etymology, language family, and geographic journey of "${word}" on EtymoMap.`
+      : undefined;
+
+  useSEO({
+    title: word ? `${word} - EtymoMap` : "EtymoMap",
+    description,
+    path: word ? `/words/${encodeURIComponent(word)}` : undefined,
+    type: "article",
+    jsonLd: word
+      ? {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: `${word} - EtymoMap`,
+          url: siteUrl(`/words/${encodeURIComponent(word)}`),
+          isPartOf: { "@type": "WebSite", name: "EtymoMap", url: siteUrl("/") },
+        }
+      : undefined,
+  });
 
   useEffect(() => {
     setMapGeometry(etymology?.geojson ?? null);

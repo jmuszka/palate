@@ -38,8 +38,11 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/" element={<App />} />
                 <Route path="/words/:word" element={<WordPage />} />
                 <Route path="/about" element={<AboutPage />} />
-                <Route path="/blog/articles" element={<ComingSoon title="Blog" />} />
-                <Route path="/games" element={<ComingSoon title="Games" />} />
+                <Route
+                  path="/blog/articles"
+                  element={<ComingSoon title="Blog" path="/blog/articles" />}
+                />
+                <Route path="/games" element={<ComingSoon title="Games" path="/games" />} />
                 <Route path="/attributions" element={<Attributions />} />
                 <Route path="/feedback" element={<FeedbackPage />} />
               </Route>

@@ -1,12 +1,15 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSEO } from "./seo";
 
 export default function AboutPage() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    document.title = "About - EtymoMap";
-  }, []);
+  useSEO({
+    title: "About - EtymoMap",
+    path: "/about",
+    description:
+      "Learn about EtymoMap, a historical geolinguistic atlas for visualizing the evolution of language over time and space.",
+  });
 
   return (
     <>

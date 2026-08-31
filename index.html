@@ -4,7 +4,47 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#18181b" />
+    <meta name="robots" content="index, follow" />
+    <meta
+      name="description"
+      content="EtymoMap is a historical geolinguistic atlas for visualizing the evolution of natural language over time and space. Search any word to trace its etymology, language family, and geographic journey."
+    />
+    <link rel="canonical" href="%VITE_SITE_URL%/" />
     <title>EtymoMap</title>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="EtymoMap" />
+    <meta property="og:title" content="EtymoMap" />
+    <meta
+      property="og:description"
+      content="EtymoMap is a historical geolinguistic atlas for visualizing the evolution of natural language over time and space. Search any word to trace its etymology, language family, and geographic journey."
+    />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
+    <meta property="og:image" content="%VITE_SITE_URL%/favicon.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="EtymoMap" />
+    <meta
+      name="twitter:description"
+      content="EtymoMap is a historical geolinguistic atlas for visualizing the evolution of natural language over time and space. Search any word to trace its etymology, language family, and geographic journey."
+    />
+    <meta name="twitter:image" content="%VITE_SITE_URL%/favicon.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "EtymoMap",
+        "url": "%VITE_SITE_URL%/",
+        "description": "EtymoMap is a historical geolinguistic atlas for visualizing the evolution of natural language over time and space.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "%VITE_SITE_URL%/words/{word}",
+          "query-input": "required name=word"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

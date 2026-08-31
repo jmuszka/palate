@@ -2,8 +2,17 @@ import { useEffect, useState, useDeferredValue, useCallback, useRef } from "reac
 import { useNavigate, Link } from "react-router-dom";
 import useSWR from "swr";
 import { toast } from "./toast";
+import { useSEO, HOME_TITLE, SITE_NAME, siteUrl } from "./seo";
+
+const WEBSITE_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: siteUrl("/"),
+};
 
 export default function App() {
+  useSEO({ title: HOME_TITLE, path: "/", jsonLd: WEBSITE_JSONLD });
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<string[]>([]);
