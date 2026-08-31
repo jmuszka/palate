@@ -1,5 +1,5 @@
 import { useEffect, useState, useDeferredValue, useCallback, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import useSWR from "swr";
 import { toast } from "./toast";
 
@@ -237,9 +237,9 @@ export default function App() {
               blurb: "Put your knowledge to the test with etymology games.",
             },
           ].map((link) => (
-            <a
+            <Link
               key={link.href}
-              href={link.href}
+              to={link.href}
               className="group flex items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 hover:border-zinc-400 hover:bg-white transition-colors"
             >
               <span className="flex flex-col">
@@ -262,7 +262,7 @@ export default function App() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </a>
+            </Link>
           ))}
         </div>
       </section>

@@ -1,6 +1,7 @@
 declare const __APP_VERSION__: string;
 
 import { type ReactNode } from "react";
+import { Link } from "react-router-dom";
 import { MapGeometryContext } from "./Map";
 import type { FeatureCollection } from "geojson";
 
@@ -17,9 +18,9 @@ export default function ContentPanel({
       <div className="mt-auto pt-4 flex items-center justify-center gap-2 text-xs text-zinc-400">
         <span>{__APP_VERSION__}</span>
         <span>·</span>
-        <a href="/attributions" className="hover:text-zinc-600 transition-colors">
+        <Link to="/attributions" className="hover:text-zinc-600 transition-colors">
           Attributions
-        </a>
+        </Link>
       </div>
     </div>
   );
