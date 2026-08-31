@@ -1,6 +1,7 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+import { useSEO } from "./seo";
 
 type Category = "suggestion" | "bug" | "feedback";
 
@@ -23,9 +24,12 @@ export default function FeedbackPage() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    document.title = "Feedback - EtymoMap";
-  }, []);
+  useSEO({
+    title: "Feedback - EtymoMap",
+    path: "/feedback",
+    description:
+      "Have a suggestion, found a bug, or want to share your thoughts about EtymoMap? Send us feedback.",
+  });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

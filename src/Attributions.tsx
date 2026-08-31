@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSEO } from "./seo";
 
 const SOURCES = [
   {
@@ -44,12 +44,11 @@ const SOURCES = [
 export default function Attributions() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    document.title = "Attributions - EtymoMap";
-    return () => {
-      document.title = "EtymoMap";
-    };
-  }, []);
+  useSEO({
+    title: "Attributions - EtymoMap",
+    path: "/attributions",
+    description: "The data sources that power EtymoMap, from Wiktionary to Glottolog.",
+  });
 
   return (
     <section className="flex flex-col gap-4">
