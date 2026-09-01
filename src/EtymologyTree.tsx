@@ -22,6 +22,7 @@ interface Neo4jNode {
   Props: {
     lang?: string;
     term?: string;
+    reltype?: string;
     [key: string]: unknown;
   };
 }
@@ -74,13 +75,14 @@ const elkOptions = {
 const buildGraph = (data: Neo4jPath[]): { nodes: Node[]; edges: Edge[] } => {
   const nodeMap = new Map<string, Node>(); // term|lang -> node
   const canonical = new Map<string, string>(); // Neo4j Id -> term|lang node id
+  const reltype = new Map<string, string>(); // Neo4j Id -> relationship label
   const edgeMap = new Map<string, Edge>();
 
   for (const { path } of data ?? []) {
     if (!path) continue;
 
     for (const n of path.Nodes ?? []) {
-      const { term, lang } = n.Props;
+      const { term, lang, reltype: nodeReltype } = n.Props;
       const key = `${term}|${lang}`;
       if (!nodeMap.has(key)) {
         nodeMap.set(key, {
@@ -91,6 +93,7 @@ const buildGraph = (data: Neo4jPath[]): { nodes: Node[]; edges: Edge[] } => {
       }
       // Point this Neo4j Id at whichever node "owns" the term|lang pair
       canonical.set(String(n.Id), key);
+      if (nodeReltype) reltype.set(String(n.Id), nodeReltype);
     }
 
     for (const r of path.Relationships ?? []) {
@@ -99,7 +102,22 @@ const buildGraph = (data: Neo4jPath[]): { nodes: Node[]; edges: Edge[] } => {
       if (source === target) continue; // self-loop from a merge — skip
       const key = `${source}->${target}`; // dedupe collapsed parallel edges
       if (!edgeMap.has(key)) {
-        edgeMap.set(key, { id: key, source, target, type: "smoothstep" });
+        const label = reltype.get(String(r.EndId));
+        edgeMap.set(key, {
+          id: key,
+          source,
+          target,
+          type: "smoothstep",
+          ...(label
+            ? {
+                label,
+                labelStyle: { fill: "#52525b", fontSize: 10, fontWeight: 500 },
+                labelBgStyle: { fill: "#fafafa", fillOpacity: 0.9 },
+                labelBgPadding: [4, 2] as [number, number],
+                labelBgBorderRadius: 4,
+              }
+            : {}),
+        });
       }
     }
   }
