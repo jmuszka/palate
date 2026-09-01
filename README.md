@@ -5,7 +5,7 @@ Every word has a journey. **Palate** is an interactive etymology explorer and la
 ## Features
 
 - **Etymology tree** — Interactive graph visualization showing a word's ancestral lineage, built with React Flow and ELK.js. Click any node to explore that word's own etymology.
-- **Language family pie chart** — See the proportional breakdown of a word's linguistic heritage (Germanic, Latin, Greek, etc.).
+- **Language family sunburst chart** — See the proportional breakdown of a word's linguistic heritage (Germanic, Latin, Greek, etc.).
 - **Interactive map** — MapLibre-powered globe renders the geographic regions where each ancestor language was spoken.
 - **IPA pronunciation** — Phonetic transcription for each word.
 - **Prose history** — Readable etymology narrative sourced from Etymonline.
@@ -24,7 +24,7 @@ Every word has a journey. **Palate** is an interactive etymology explorer and la
 | Graph rendering      | @xyflow/react (React Flow)     |
 | Graph layout         | ELK.js (Eclipse Layout Kernel) |
 | Maps                 | MapLibre GL JS                 |
-| Charts               | Recharts                       |
+| Charts               | Nivo (sunburst)                |
 | Linting & formatting | oxlint + oxfmt                 |
 | CI                   | GitHub Actions (Bun)           |
 
@@ -36,7 +36,7 @@ src/
 ├── App.tsx               # Home page: search, suggestions, intro
 ├── WordPage.tsx          # Word detail: etymology tree, pie chart, map, IPA, history
 ├── EtymologyTree.tsx     # React Flow + ELK.js graph visualization
-├── FamilyPieChart.tsx    # Language family donut chart
+├── FamilySunburst.tsx    # Language family sunburst chart
 ├── Map.tsx               # MapLibre GL map with GeoJSON overlays
 ├── Layout.tsx            # Responsive split layout with draggable divider
 ├── Header.tsx            # Site header with responsive navigation
@@ -107,12 +107,12 @@ A pre-commit hook (Husky) runs linting and formatting automatically.
 
 Palate expects a backend API (referred to as **Larynx**) at the URL configured in `VITE_SERVER_URL`. The following endpoints are used:
 
-| Endpoint                             | Used by                                   |
-| ------------------------------------ | ----------------------------------------- |
-| `GET /api/v1/words?prefix={query}`   | Search autocomplete                       |
-| `GET /api/v1/words/{word}/etymology` | Etymology tree + pie chart + map geometry |
-| `GET /api/v1/words/{word}/ipa`       | IPA pronunciation                         |
-| `GET /api/v1/words/{word}/history`   | Prose etymology                           |
+| Endpoint                             | Used by                                      |
+| ------------------------------------ | -------------------------------------------- |
+| `GET /api/v1/words?prefix={query}`   | Search autocomplete                          |
+| `GET /api/v1/words/{word}/etymology` | Etymology tree + family chart + map geometry |
+| `GET /api/v1/words/{word}/ipa`       | IPA pronunciation                            |
+| `GET /api/v1/words/{word}/history`   | Prose etymology                              |
 
 All endpoints support an optional `?lang=` query parameter for language-specific results.
 

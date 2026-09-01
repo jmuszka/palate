@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import EtymologyTree, { type EtymologyData } from "./EtymologyTree";
-import FamilyPieChart from "./FamilyPieChart";
+import FamilySunburst from "./FamilySunburst";
 import { useMapGeometry } from "./Map";
 import useSWR from "swr";
 import { useSEO, siteUrl } from "./seo";
@@ -95,7 +95,7 @@ export default function WordPage() {
       {etymology !== undefined && !loading && (
         <>
           <EtymologyTree data={etymology} />
-          <FamilyPieChart families={etymology.family} />
+          <FamilySunburst families={etymology.family} />
         </>
       )}
       {history && <p className="text-zinc-600 text-sm">{history}</p>}

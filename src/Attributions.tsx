@@ -23,7 +23,7 @@ const SOURCES = [
     href: "https://glottolog.org",
     what: "A bibliographic database of the world\u2019s languages run by the Max Planck Institute for Evolutionary Anthropology in Leipzig. It assigns every known language a unique identifier (\u201Cglottocode\u201D), classifies them into a genealogical family tree, and tracks the published literature documenting each one.",
     usage:
-      "Provides the language family hierarchy so EtymoMap knows, for example, that English belongs to the West Germanic branch of Indo-European. This powers the family pie chart and the language classification shown on each word page.",
+      "Provides the language family hierarchy so EtymoMap knows, for example, that English belongs to the West Germanic branch of Indo-European. This powers the family chart and the language classification shown on each word page.",
   },
   {
     name: "Glottography",
