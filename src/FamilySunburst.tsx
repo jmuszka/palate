@@ -7,7 +7,8 @@ import type { FamilyTreeNode } from "./EtymologyTree";
 // Renders the language-family hierarchy as a sunburst chart with the root
 // (top of the hierarchy) on the outer ring and the leaves in the center.
 // Nivo lays out the tree root-first, so we render arcs ourselves using each
-// node's `height` (distance from the deepest leaf) to invert the radius order.
+// node's `depth` to invert the radius order: the outer ring is always full and
+// every node's children fully split its arc on the next ring inward.
 // Every family gets its own color and is listed in a legend next to the chart.
 
 const PALETTE = [
@@ -66,14 +67,14 @@ function ReversedSunburstLayer({
 }: SunburstCustomLayerProps<ColoredFamilyNode>) {
   const { showTooltipFromEvent, hideTooltip } = useTooltip();
 
-  const maxHeight = Math.max(...nodes.map((node) => node.height), 1);
-  const band = radius / (maxHeight + 1);
+  const maxDepth = Math.max(...nodes.map((node) => node.depth), 1);
+  const band = radius / maxDepth;
 
   return (
     <g transform={`translate(${centerX}, ${centerY})`}>
       {nodes.map((node) => {
-        const innerRadius = node.height * band;
-        const outerRadius = (node.height + 1) * band;
+        const innerRadius = (maxDepth - node.depth) * band;
+        const outerRadius = (maxDepth - node.depth + 1) * band;
         const d = arcGenerator({
           startAngle: node.arc.startAngle,
           endAngle: node.arc.endAngle,
