@@ -40,9 +40,16 @@ interface Neo4jPath {
   };
 }
 
+export interface FamilyTreeNode {
+  id: string;
+  name: string;
+  value: number;
+  children?: FamilyTreeNode[];
+}
+
 export type EtymologyData = {
   graph: Neo4jPath[];
-  family: string[];
+  familyTree: FamilyTreeNode;
   geojson: FeatureCollection;
 };
 
