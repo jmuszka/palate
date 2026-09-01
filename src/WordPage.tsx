@@ -95,7 +95,7 @@ export default function WordPage() {
       {etymology !== undefined && !loading && (
         <>
           <EtymologyTree data={etymology} />
-          <FamilySunburst families={etymology.family} />
+          <FamilySunburst familyTree={etymology.familyTree} />
         </>
       )}
       {history && <p className="text-zinc-600 text-sm">{history}</p>}

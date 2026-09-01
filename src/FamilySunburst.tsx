@@ -1,28 +1,17 @@
 import { ResponsiveSunburst } from "@nivo/sunburst";
+import type { FamilyTreeNode } from "./EtymologyTree";
 
-// Renders the language-family distribution as a sunburst chart.
-// Input is a flat list of family labels (e.g. ["Germanic", "Latin", "Germanic"]);
-// we tally counts and draw one slice per distinct family. Later this can be
-// fed a hierarchical structure to add depth.
+// Renders the language-family hierarchy as a sunburst chart.
+// Input is the nested `familyTree` from the /etymology endpoint:
+// a root node with `name`, `value`, and (optionally) `children`.
 
-export default function FamilySunburst({ families }: { families: string[] }) {
-  if (!families || families.length === 0) return null;
-
-  // Tally occurrences, then sort largest-first for a stable, readable order.
-  const counts = new Map<string, number>();
-  for (const f of families) counts.set(f, (counts.get(f) ?? 0) + 1);
-
-  const data = {
-    name: "Language families",
-    children: [...counts.entries()]
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value),
-  };
+export default function FamilySunburst({ familyTree }: { familyTree: FamilyTreeNode }) {
+  if (!familyTree?.children?.length) return null;
 
   return (
-    <div className="h-72 w-full">
+    <div className="h-80 w-full">
       <ResponsiveSunburst
-        data={data}
+        data={familyTree}
         id="name"
         value="value"
         margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
@@ -33,7 +22,7 @@ export default function FamilySunburst({ families }: { families: string[] }) {
         childColor={{ from: "color", modifiers: [["brighter", 0.2]] }}
         enableArcLabels
         arcLabel={(d) => String(d.id)}
-        arcLabelsSkipAngle={12}
+        arcLabelsSkipAngle={15}
         arcLabelsTextColor="#18181b"
         tooltip={(d) => (
           <div className="pointer-events-none rounded-lg bg-zinc-900 px-3 py-1.5 text-xs text-white shadow-lg">
