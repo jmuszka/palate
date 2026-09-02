@@ -59,7 +59,7 @@ export default function Header() {
     >
       <Link className="flex items-center" to="/">
         <img src="/favicon.png" alt="" className="w-11 h-11" />
-        <h1 className="text-zinc-900 text-xl font-semibold">EtymoMap</h1>
+        <span className="text-zinc-900 text-xl font-semibold">EtymoMap</span>
       </Link>
       {isTablet ? (
         <>

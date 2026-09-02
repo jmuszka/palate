@@ -37,7 +37,7 @@ export default function AboutPage() {
       </button>
 
       <div className="flex flex-col gap-4 text-zinc-600 text-sm leading-relaxed">
-        <h3 className="text-zinc-800 text-lg font-semibold">About the EtymoMap Project</h3>
+        <h1 className="text-zinc-800 text-lg font-semibold">About the EtymoMap Project</h1>
 
         <p>
           EtymoMap is a historical geolinguistic atlas for visualizing the evolution of natural
