@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import useIsMobile from "./hooks/useIsMobile";
 
@@ -83,15 +83,22 @@ export default function Header() {
               className="absolute top-full right-0 mt-2 w-48 rounded-2xl bg-white border border-zinc-200 shadow-lg p-2 flex flex-col z-50"
             >
               {NAV_LINKS.map((link) => (
-                <Link
+                <NavLink
                   key={link.href}
                   to={link.href}
+                  end={link.href === "/"}
                   role="menuitem"
-                  className="px-4 py-2 rounded-xl hover:bg-zinc-100 transition-colors"
+                  className={({ isActive }) =>
+                    `px-4 py-2 rounded-xl transition-colors ${
+                      isActive
+                        ? "bg-zinc-100 text-zinc-900 font-medium"
+                        : "text-zinc-700 hover:bg-zinc-100"
+                    }`
+                  }
                   onClick={() => closeMenu()}
                 >
                   {link.label}
-                </Link>
+                </NavLink>
               ))}
             </div>
           )}
@@ -99,9 +106,18 @@ export default function Header() {
       ) : (
         <div className="flex gap-4">
           {NAV_LINKS.map((link) => (
-            <Link key={link.href} to={link.href}>
+            <NavLink
+              key={link.href}
+              to={link.href}
+              end={link.href === "/"}
+              className={({ isActive }) =>
+                `text-sm transition-colors ${
+                  isActive ? "text-zinc-900 font-medium" : "text-zinc-500 hover:text-zinc-900"
+                }`
+              }
+            >
               {link.label}
-            </Link>
+            </NavLink>
           ))}
         </div>
       )}
