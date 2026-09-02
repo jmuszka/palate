@@ -36,7 +36,7 @@ interface LegendEntry {
   color: string;
 }
 
-function buildColoredTree(tree: FamilyTreeNode): {
+export function buildColoredTree(tree: FamilyTreeNode): {
   root: ColoredFamilyNode;
   legend: LegendEntry[];
 } {
