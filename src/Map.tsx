@@ -3,11 +3,12 @@ import { useLocation } from "react-router-dom";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { FeatureCollection, Feature } from "geojson";
-import centroid from "@turf/centroid";
+import rewind from "@turf/rewind";
 import { toast } from "./toast";
 
-const HEATMAP_SOURCE = "etymology-heatmap";
-const HEATMAP_LAYER_ID = `${HEATMAP_SOURCE}-layer`;
+const GEOMETRY_SOURCE = "etymology-geometry";
+const FILL_LAYER_ID = `${GEOMETRY_SOURCE}-fill`;
+const BORDER_LAYER_ID = `${GEOMETRY_SOURCE}-feathered-border`;
 const EMPTY_FC: FeatureCollection = {
   type: "FeatureCollection",
   features: [],
@@ -48,15 +49,6 @@ function normalizeGeometry(geometry: FeatureCollection): FeatureCollection {
   return { type: "FeatureCollection", features } as FeatureCollection;
 }
 
-function toCentroidPoints(geometry: FeatureCollection): FeatureCollection {
-  return {
-    type: "FeatureCollection",
-    features: geometry.features.map((feature) =>
-      centroid(feature, { properties: feature.properties }),
-    ),
-  } as FeatureCollection;
-}
-
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
@@ -95,38 +87,48 @@ function applyGeometry(map: maplibregl.Map, geometry: FeatureCollection | null) 
   try {
     const data = geometry ? normalizeGeometry(geometry) : EMPTY_FC;
     if (geometry) fitToGeometry(map, data);
-    const points = toCentroidPoints(data);
+    const rewound = rewind(data, { reverse: true });
 
-    const source = map.getSource(HEATMAP_SOURCE) as maplibregl.GeoJSONSource | undefined;
+    const source = map.getSource(GEOMETRY_SOURCE) as maplibregl.GeoJSONSource | undefined;
     if (source) {
-      source.setData(points);
+      source.setData(rewound);
       return;
     }
-    map.addSource(HEATMAP_SOURCE, { type: "geojson", data: points });
+    map.addSource(GEOMETRY_SOURCE, { type: "geojson", data: rewound });
     map.addLayer({
-      id: HEATMAP_LAYER_ID,
-      type: "heatmap",
-      source: HEATMAP_SOURCE,
+      id: FILL_LAYER_ID,
+      type: "fill",
+      source: GEOMETRY_SOURCE,
       paint: {
-        "heatmap-weight": ["get", "count"],
-        "heatmap-intensity": 1,
-        "heatmap-radius": 45,
-        "heatmap-color": [
+        "fill-color": [
           "interpolate",
           ["linear"],
-          ["heatmap-density"],
+          ["get", "count"],
           0,
-          "rgba(199,210,254,0)",
-          0.2,
-          "#c7d2fe",
-          0.45,
-          "#818cf8",
-          0.7,
-          "#6366f1",
+          "#eef2ff",
           1,
+          "#c7d2fe",
+          3,
+          "#818cf8",
+          5,
+          "#6366f1",
+          7,
+          "#4f46e5",
+          10,
           "#312e81",
         ],
-        "heatmap-opacity": 0.9,
+        "fill-opacity": 0.7,
+      },
+    });
+    map.addLayer({
+      id: BORDER_LAYER_ID,
+      type: "line",
+      source: GEOMETRY_SOURCE,
+      paint: {
+        "line-color": "#4f46e5",
+        "line-width": 2,
+        "line-blur": 100,
+        "line-opacity": 0.35,
       },
     });
   } catch (error) {
@@ -186,7 +188,7 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
       popupRef.current = new maplibregl.Popup({ closeButton: false, closeOnClick: false });
 
       map.on("mousemove", (e) => {
-        const features = map.queryRenderedFeatures(e.point, { layers: [HEATMAP_LAYER_ID] });
+        const features = map.queryRenderedFeatures(e.point, { layers: [FILL_LAYER_ID] });
         map.getCanvas().style.cursor = features.length > 0 ? "pointer" : "";
         if (features.length === 0) {
           if (hoveredIdRef.current !== null) {
