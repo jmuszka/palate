@@ -3,12 +3,11 @@ import { useLocation } from "react-router-dom";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { FeatureCollection, Feature } from "geojson";
-import rewind from "@turf/rewind";
+import centroid from "@turf/centroid";
 import { toast } from "./toast";
 
-const GEOMETRY_SOURCE = "etymology-geometry";
-const FILL_LAYER_ID = `${GEOMETRY_SOURCE}-fill`;
-const BORDER_LAYER_ID = `${GEOMETRY_SOURCE}-feathered-border`;
+const HEATMAP_SOURCE = "etymology-heatmap";
+const HEATMAP_LAYER_ID = `${HEATMAP_SOURCE}-layer`;
 const EMPTY_FC: FeatureCollection = {
   type: "FeatureCollection",
   features: [],
@@ -24,13 +23,11 @@ interface NormalizedProps {
   id: string;
   name: string;
   count: number;
-  heat: number;
 }
 
 function normalizeGeometry(geometry: FeatureCollection): FeatureCollection {
   const seen = new Set<string>();
-  const entries: { feature: Feature; id: string; name: string; count: number }[] = [];
-  let maxCount = 1;
+  const features: Feature[] = [];
 
   for (const feature of geometry.features) {
     const raw = (feature.properties ?? {}) as RegionProperties;
@@ -41,17 +38,23 @@ function normalizeGeometry(geometry: FeatureCollection): FeatureCollection {
     const name = raw.name ?? id;
     const countValue = Number(raw.count);
     const count = Number.isFinite(countValue) && countValue > 0 ? Math.round(countValue) : 1;
-    if (count > maxCount) maxCount = count;
 
-    entries.push({ feature, id, name, count });
+    features.push({
+      ...feature,
+      properties: { id, name, count },
+    });
   }
 
-  const features = entries.map(({ feature, id, name, count }) => ({
-    ...feature,
-    properties: { id, name, count, heat: count / maxCount },
-  }));
-
   return { type: "FeatureCollection", features } as FeatureCollection;
+}
+
+function toCentroidPoints(geometry: FeatureCollection): FeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features: geometry.features.map((feature) =>
+      centroid(feature, { properties: feature.properties }),
+    ),
+  } as FeatureCollection;
 }
 
 function escapeHtml(value: string): string {
@@ -95,41 +98,38 @@ function applyGeometry(map: maplibregl.Map, geometry: FeatureCollection | null) 
   try {
     const data = geometry ? normalizeGeometry(geometry) : EMPTY_FC;
     if (geometry) fitToGeometry(map, data);
-    const rewound = rewind(data, { reverse: true });
-    const source = map.getSource(GEOMETRY_SOURCE) as maplibregl.GeoJSONSource | undefined;
+    const points = toCentroidPoints(data);
+
+    const source = map.getSource(HEATMAP_SOURCE) as maplibregl.GeoJSONSource | undefined;
     if (source) {
-      source.setData(rewound);
+      source.setData(points);
       return;
     }
-    map.addSource(GEOMETRY_SOURCE, { type: "geojson", data: rewound });
+    map.addSource(HEATMAP_SOURCE, { type: "geojson", data: points });
     map.addLayer({
-      id: FILL_LAYER_ID,
-      type: "fill",
-      source: GEOMETRY_SOURCE,
+      id: HEATMAP_LAYER_ID,
+      type: "heatmap",
+      source: HEATMAP_SOURCE,
       paint: {
-        "fill-color": [
+        "heatmap-weight": ["get", "count"],
+        "heatmap-intensity": 1,
+        "heatmap-radius": 45,
+        "heatmap-color": [
           "interpolate",
           ["linear"],
-          ["get", "heat"],
+          ["heatmap-density"],
           0,
+          "rgba(199,210,254,0)",
+          0.2,
           "#c7d2fe",
-          0.5,
+          0.45,
+          "#818cf8",
+          0.7,
           "#6366f1",
           1,
-          "#4338ca",
+          "#312e81",
         ],
-        "fill-opacity": 0.6,
-      },
-    });
-    map.addLayer({
-      id: BORDER_LAYER_ID,
-      type: "line",
-      source: GEOMETRY_SOURCE,
-      paint: {
-        "line-color": "#4f46e5",
-        "line-width": 2,
-        "line-blur": 100,
-        "line-opacity": 0.35,
+        "heatmap-opacity": 0.9,
       },
     });
   } catch (error) {
@@ -189,7 +189,7 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
       popupRef.current = new maplibregl.Popup({ closeButton: false, closeOnClick: false });
 
       map.on("mousemove", (e) => {
-        const features = map.queryRenderedFeatures(e.point, { layers: [FILL_LAYER_ID] });
+        const features = map.queryRenderedFeatures(e.point, { layers: [HEATMAP_LAYER_ID] });
         map.getCanvas().style.cursor = features.length > 0 ? "pointer" : "";
         if (features.length === 0) {
           if (hoveredIdRef.current !== null) {
