@@ -67,10 +67,7 @@ function escapeHtml(value: string): string {
 }
 
 function renderPopup(props: NormalizedProps): string {
-  return `<div style="display:flex;flex-direction:column;gap:2px;">
-    <span style="font-size:13px;font-weight:600;color:#18181b;">${escapeHtml(props.name)}</span>
-    <span style="font-size:11px;color:#71717a;">weight ${props.count}</span>
-  </div>`;
+  return `<span style="font-size:13px;font-weight:600;color:#18181b;">${escapeHtml(props.name)}</span>`;
 }
 
 function extendBounds(bounds: maplibregl.LngLatBounds, coords: unknown) {
