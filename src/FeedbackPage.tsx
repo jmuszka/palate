@@ -106,7 +106,7 @@ export default function FeedbackPage() {
 
       <div className="flex flex-col gap-4">
         <div>
-          <h3 className="text-zinc-800 text-lg font-semibold">Send feedback</h3>
+          <h1 className="text-zinc-800 text-lg font-semibold">Send feedback</h1>
           <p className="mt-1 text-zinc-500 text-sm">
             Have a suggestion, found a bug, or just want to share your thoughts? Submit it below.
           </p>

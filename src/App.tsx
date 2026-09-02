@@ -119,7 +119,7 @@ export default function App() {
   return (
     <div className="flex flex-col">
       <section className="flex flex-col items-center text-center py-6">
-        <h2 className="text-zinc-900 text-2xl font-semibold">Welcome to EtymoMap</h2>
+        <h1 className="text-zinc-900 text-2xl font-semibold">Welcome to EtymoMap</h1>
         <p className="mt-1 text-zinc-500 text-sm max-w-md">
           Every word has a journey. Search any word to trace its roots, meanings, and the paths it
           travelled across the map of language.

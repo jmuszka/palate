@@ -74,7 +74,7 @@ export default function Attributions() {
         </svg>
         Back
       </button>
-      <h2 className="text-zinc-900 text-2xl font-semibold">Attributions</h2>
+      <h1 className="text-zinc-900 text-2xl font-semibold">Attributions</h1>
       <p className="text-zinc-500 text-sm">EtymoMap is built on data from these sources:</p>
       <ul className="flex flex-col gap-4">
         {SOURCES.map((source) => (
