@@ -55,6 +55,7 @@ export type EtymologyData = {
   graph: Neo4jPath[];
   familyTree: FamilyTreeNode;
   geojson: FeatureCollection;
+  ipa: string;
 };
 
 const elk = new ELK();

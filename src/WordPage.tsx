@@ -23,12 +23,10 @@ export default function WordPage() {
     isLoading: loading,
     error,
   } = useSWR<EtymologyData>(base ? `${base}/etymology${suffix}` : null);
-  const { data: ipaData } = useSWR<{ ipa?: string }>(base ? `${base}/ipa${suffix}` : null);
   const { data: historyData } = useSWR<{ history?: string }>(
     base ? `${base}/history${suffix}` : null,
   );
 
-  const ipa = ipaData?.ipa ?? null;
   const history = historyData?.history ?? null;
 
   const description = history
@@ -86,7 +84,7 @@ export default function WordPage() {
       </button>
       <div className="flex items-baseline gap-3">
         <h1 className="text-zinc-900 text-2xl font-semibold">{word}</h1>
-        {ipa && <span className="text-zinc-400 text-sm">{ipa}</span>}
+        {etymology?.ipa && <span className="text-zinc-400 text-sm">{etymology.ipa}</span>}
       </div>
       {loading && <p className="text-zinc-400 text-sm">Loading…</p>}
       {error && !loading && (
