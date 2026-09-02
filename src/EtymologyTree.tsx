@@ -76,7 +76,7 @@ const elkOptions = {
 // nodes and edges. Nodes are deduplicated by term + language, so
 // the same word in the same language collapses into a single node. Edges reference nodes
 // by Neo4j Id, so we remap each Id onto its term|lang node.
-const buildGraph = (data: Neo4jPath[]): { nodes: Node[]; edges: Edge[] } => {
+export const buildGraph = (data: Neo4jPath[]): { nodes: Node[]; edges: Edge[] } => {
   const nodeMap = new Map<string, Node>(); // term|lang -> node
   const canonical = new Map<string, string>(); // Neo4j Id -> term|lang node id
   const edgeMap = new Map<string, Edge>();
@@ -128,7 +128,7 @@ const buildGraph = (data: Neo4jPath[]): { nodes: Node[]; edges: Edge[] } => {
 };
 
 // Calculate positions using ELK.js
-const getLayoutedElements = async (nodes: Node[], edges: Edge[]) => {
+export const getLayoutedElements = async (nodes: Node[], edges: Edge[]) => {
   const graph = {
     id: "root",
     layoutOptions: elkOptions,

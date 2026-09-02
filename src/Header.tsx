@@ -10,11 +10,24 @@ const NAV_LINKS = [
   { href: "/feedback", label: "Feedback" },
 ];
 
+const COMPACT_BREAKPOINT = 560;
+
 export default function Header() {
-  const isTablet = useIsMobile(1440);
+  const isMobile = useIsMobile();
+  const [compact, setCompact] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = menuRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver((entries) => {
+      setCompact(entries[0].contentRect.width < COMPACT_BREAKPOINT);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
@@ -61,7 +74,7 @@ export default function Header() {
         <img src="/favicon.png" alt="" className="w-11 h-11" />
         <h1 className="text-zinc-900 text-xl font-semibold">EtymoMap</h1>
       </Link>
-      {isTablet ? (
+      {isMobile || compact ? (
         <>
           <button
             ref={toggleRef}

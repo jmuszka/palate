@@ -12,7 +12,7 @@ const EMPTY_FC: FeatureCollection = {
   features: [],
 };
 
-function extendBounds(bounds: maplibregl.LngLatBounds, coords: unknown) {
+export function extendBounds(bounds: maplibregl.LngLatBounds, coords: unknown) {
   if (Array.isArray(coords) && typeof coords[0] === "number" && typeof coords[1] === "number") {
     bounds.extend(coords as [number, number]);
     return;
@@ -22,7 +22,7 @@ function extendBounds(bounds: maplibregl.LngLatBounds, coords: unknown) {
   }
 }
 
-function fitToGeometry(map: maplibregl.Map, geometry: FeatureCollection) {
+export function fitToGeometry(map: maplibregl.Map, geometry: FeatureCollection) {
   const bounds = new maplibregl.LngLatBounds();
   for (const feature of geometry.features) {
     if (feature.geometry && "coordinates" in feature.geometry) {
