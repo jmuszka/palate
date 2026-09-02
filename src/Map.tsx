@@ -131,9 +131,18 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
   }, [geometry]);
 
   return (
-    <div
-      ref={containerRef}
-      className="map-container h-full rounded-3xl flex-1 border border-zinc-200"
-    />
+    <div className="relative h-full flex-1">
+      <div
+        ref={containerRef}
+        className="map-container h-full w-full rounded-3xl border border-zinc-200"
+      />
+      {!isWordPage && !geometry && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-4">
+          <div className="rounded-full border border-zinc-200 bg-white/90 px-4 py-2 text-center text-sm text-zinc-500 shadow-sm backdrop-blur">
+            Search a word to trace its journey across the map
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
