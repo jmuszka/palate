@@ -206,7 +206,6 @@ const TreeCanvas = ({ data }: { data: Neo4jPath[] }) => {
         navigate(`/words/${term}${lang}`);
       }}
       fitView
-      proOptions={{ hideAttribution: true }}
     >
       <Background color="#e4e4e7" gap={16} />
       <Controls />
