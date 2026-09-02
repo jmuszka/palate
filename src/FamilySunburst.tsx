@@ -65,7 +65,7 @@ function ReversedSunburstLayer({
   radius,
   arcGenerator,
 }: SunburstCustomLayerProps<ColoredFamilyNode>) {
-  const { showTooltipFromEvent, hideTooltip } = useTooltip();
+  const { showTooltipAt, showTooltipFromEvent, hideTooltip } = useTooltip();
 
   const maxDepth = Math.max(...nodes.map((node) => node.depth), 1);
   const band = radius / maxDepth;
@@ -95,9 +95,17 @@ function ReversedSunburstLayer({
             fill={node.data.color}
             stroke="#ffffff"
             strokeWidth={1}
+            role="img"
+            aria-label={String(node.id)}
+            tabIndex={node.depth > 0 ? 0 : -1}
             onMouseEnter={(e) => showTooltipFromEvent(tooltip, e)}
             onMouseMove={(e) => showTooltipFromEvent(tooltip, e)}
             onMouseLeave={hideTooltip}
+            onFocus={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              showTooltipAt(tooltip, [rect.left + rect.width / 2, rect.top + rect.height / 2]);
+            }}
+            onBlur={hideTooltip}
           />
         );
       })}
@@ -133,7 +141,9 @@ export default function FamilySunburst({ familyTree }: { familyTree: FamilyTreeN
               className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="truncate">{entry.name}</span>
+            <span className="truncate" title={entry.name}>
+              {entry.name}
+            </span>
           </li>
         ))}
       </ul>
