@@ -15,6 +15,7 @@ const STATIC_ROUTES = [
   "/attributions",
   "/feedback",
   "/changelog",
+  "/glossary",
 ];
 
 function generateSeoFiles(siteUrl: string) {
