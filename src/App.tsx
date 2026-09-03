@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import useSWR from "swr";
 import { toast } from "./toast";
 import { useSEO, HOME_TITLE, SITE_NAME, siteUrl } from "./seo";
+import home from "./content/home.json";
 
 const WEBSITE_JSONLD = {
   "@context": "https://schema.org",
@@ -119,11 +120,8 @@ export default function App() {
   return (
     <div className="flex flex-col">
       <section className="flex flex-col items-center text-center py-6">
-        <h2 className="text-zinc-900 text-2xl font-semibold">Welcome to EtymoMap</h2>
-        <p className="mt-1 text-zinc-500 text-sm max-w-md">
-          Every word has a journey. Search any word to trace its roots, meanings, and the paths it
-          travelled across the map of language.
-        </p>
+        <h2 className="text-zinc-900 text-2xl font-semibold">{home.welcome}</h2>
+        <p className="mt-1 text-zinc-500 text-sm max-w-md">{home.tagline}</p>
 
         <div ref={searchRef} className="relative w-full mt-5">
           <svg
@@ -208,44 +206,16 @@ export default function App() {
       </section>
 
       <section className="mt-2 border-t border-zinc-100 pt-6 flex flex-col gap-2">
-        <h3 className="text-zinc-800 text-lg font-semibold">Explore the story behind every word</h3>
-        <p className="mt-2 text-zinc-600 text-sm leading-relaxed">
-          From the viking invasions to the Norman-French conquest in 1066, and from post-Renaissance
-          neologisms to its status as a global lingua franca, the English language boasts a
-          fascinating history and development. Despite its origins as a West Germanic language, over
-          two-thirds of the English lexicon consists of Romance vocabulary, mainly from French and
-          Latin, with significant influence from Old Norse, Greek, and many others as well.
-        </p>
-        <p className="mt-2 text-zinc-600 text-sm leading-relaxed">
-          Open any entry to uncover a word's etymology, the languages and older forms it descended
-          from, laid out alongside its International Phonetic Alphabet spelling, historical usage,
-          and an interactive atlas that maps where it came from and how it spread across the world.
-        </p>
+        <h3 className="text-zinc-800 text-lg font-semibold">{home.exploreHeading}</h3>
+        <p className="mt-2 text-zinc-600 text-sm leading-relaxed">{home.exploreParagraph1}</p>
+        <p className="mt-2 text-zinc-600 text-sm leading-relaxed">{home.exploreParagraph2}</p>
       </section>
 
       <section className="mt-6">
-        <h3 className="text-zinc-800 text-lg font-semibold">Discover more</h3>
-        <p className="mt-1 text-zinc-500 text-sm">
-          There's plenty more to dig into beyond the atlas.
-        </p>
+        <h3 className="text-zinc-800 text-lg font-semibold">{home.discoverHeading}</h3>
+        <p className="mt-1 text-zinc-500 text-sm">{home.discoverIntro}</p>
         <div className="mt-3 flex flex-col gap-2">
-          {[
-            {
-              href: "/about",
-              title: "About the project",
-              blurb: "Why EtymoMap exists and the data that powers it.",
-            },
-            {
-              href: "/blog/articles",
-              title: "Blog",
-              blurb: "Deep dives, word stories, and language curiosities.",
-            },
-            {
-              href: "/games",
-              title: "Games",
-              blurb: "Put your knowledge to the test with etymology games.",
-            },
-          ].map((link) => (
+          {home.links.map((link) => (
             <Link
               key={link.href}
               to={link.href}
