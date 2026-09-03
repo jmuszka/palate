@@ -2,9 +2,11 @@ import { createContext, useContext, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import type { FeatureCollection, Feature } from "geojson";
+import type { FeatureCollection } from "geojson";
 import rewind from "@turf/rewind";
 import { toast } from "./toast";
+import { normalizeGeometry, fitToGeometry, renderPopup } from "./mapGeometry";
+import type { NormalizedProps } from "./mapGeometry";
 
 const GEOMETRY_SOURCE = "etymology-geometry";
 const FILL_LAYER_ID = `${GEOMETRY_SOURCE}-fill`;
@@ -13,75 +15,6 @@ const EMPTY_FC: FeatureCollection = {
   type: "FeatureCollection",
   features: [],
 };
-
-interface RegionProperties {
-  id?: string;
-  name?: string;
-  count?: number;
-}
-
-interface NormalizedProps {
-  id: string;
-  name: string;
-  count: number;
-}
-
-function normalizeGeometry(geometry: FeatureCollection): FeatureCollection {
-  const seen = new Set<string>();
-  const features: Feature[] = [];
-
-  for (const feature of geometry.features) {
-    const raw = (feature.properties ?? {}) as RegionProperties;
-    const id = raw.id ?? raw.name;
-    if (!id || seen.has(id)) continue;
-    seen.add(id);
-
-    const name = raw.name ?? id;
-    const countValue = Number(raw.count);
-    const count = Number.isFinite(countValue) && countValue > 0 ? Math.round(countValue) : 1;
-
-    features.push({
-      ...feature,
-      properties: { id, name, count },
-    });
-  }
-
-  return { type: "FeatureCollection", features } as FeatureCollection;
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-function renderPopup(props: NormalizedProps): string {
-  return `<span style="font-size:13px;font-weight:600;color:#18181b;">${escapeHtml(props.name)}</span>`;
-}
-
-function extendBounds(bounds: maplibregl.LngLatBounds, coords: unknown) {
-  if (Array.isArray(coords) && typeof coords[0] === "number" && typeof coords[1] === "number") {
-    bounds.extend(coords as [number, number]);
-    return;
-  }
-  if (Array.isArray(coords)) {
-    for (const child of coords) extendBounds(bounds, child);
-  }
-}
-
-function fitToGeometry(map: maplibregl.Map, geometry: FeatureCollection) {
-  const bounds = new maplibregl.LngLatBounds();
-  for (const feature of geometry.features) {
-    if (feature.geometry && "coordinates" in feature.geometry) {
-      extendBounds(bounds, feature.geometry.coordinates);
-    }
-  }
-  if (bounds.isEmpty()) return;
-  map.fitBounds(bounds, { padding: 60, maxZoom: 8, animate: false });
-}
 
 function applyGeometry(map: maplibregl.Map, geometry: FeatureCollection | null) {
   try {

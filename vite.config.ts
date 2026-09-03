@@ -1,4 +1,5 @@
-import { defineConfig, loadEnv } from "vite";
+import { defineConfig } from "vitest/config";
+import { loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
@@ -42,6 +43,15 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), tailwindcss(), generateSeoFiles(siteUrl)],
     define: {
       __APP_VERSION__: JSON.stringify(version),
+    },
+    test: {
+      environment: "jsdom",
+      globals: true,
+      setupFiles: ["./src/test/setup.ts"],
+      css: false,
+      coverage: {
+        reporter: ["text", "html"],
+      },
     },
   };
 });
