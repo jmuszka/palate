@@ -1,0 +1,346 @@
+{
+  "title": "Glossary",
+  "intro": "A reference for the linguistic terms and concepts used throughout EtymoMap, as well as general terms that are useful for linguistics or terminology used in any of the blog posts.",
+  "sections": [
+    {
+      "heading": "Historical Linguistics",
+      "entries": [
+        {
+          "term": "Comparative linguistics",
+          "definition": "The comparison of languages to establish their relationships and reconstruct their histories."
+        },
+        {
+          "term": "Etymology",
+          "definition": "The study of word origins and how their forms and meanings have developed over time."
+        },
+        {
+          "term": "Etymology tree",
+          "definition": "A visual map of a word's ancestry, laid out as a directed acyclic graph of ancestor forms."
+        },
+        {
+          "term": "Grimm's Law",
+          "definition": "A sound law describing the systematic consonant shifts from Proto-Indo-European to Proto-Germanic, setting the Germanic languages apart from the rest of Indo-European."
+        },
+        {
+          "term": "Historical linguistics",
+          "definition": "The study of how languages change over time."
+        },
+        {
+          "term": "Lingua franca",
+          "definition": "A language used as a common means of communication between speakers of different native languages."
+        },
+        {
+          "term": "Neologism",
+          "definition": "A newly coined word or expression."
+        },
+        {
+          "term": "Reconstruction",
+          "definition": "The process of inferring unattested earlier forms of a language by comparing its descendants and applying known sound changes. Reconstructed words are conventionally prefixed with an asterisk (*)."
+        },
+        {
+          "term": "Sound law",
+          "definition": "A regular, systematic change in pronunciation that applies across a language over time."
+        }
+      ]
+    },
+    {
+      "heading": "Word Formation",
+      "entries": [
+        {
+          "term": "Abbreviation",
+          "definition": "A shortened written form of a word or phrase."
+        },
+        {
+          "term": "Affix",
+          "definition": "A bound morpheme attached to a word to modify its meaning or grammatical function."
+        },
+        {
+          "term": "Back-formation",
+          "definition": "Forming a shorter word by removing a real or perceived affix from a longer word."
+        },
+        {
+          "term": "Clipping",
+          "definition": "Shortening a word to a shorter form, such as ad from advertisement."
+        },
+        {
+          "term": "Compound",
+          "definition": "A word formed by combining two or more existing words."
+        },
+        {
+          "term": "Confix (circumfix)",
+          "definition": "An affix that surrounds the base on both sides."
+        },
+        {
+          "term": "Derivation",
+          "definition": "Forming a new word by adding affixes or making other changes to an existing word."
+        },
+        {
+          "term": "Eponymy",
+          "definition": "Naming something after a person or place."
+        },
+        {
+          "term": "Initialism",
+          "definition": "An abbreviation formed from the initial letters of words and pronounced letter by letter."
+        },
+        {
+          "term": "Onomatopoeia",
+          "definition": "A word that imitates the sound it names."
+        },
+        {
+          "term": "Portmanteau",
+          "definition": "A word formed by merging parts of two or more words."
+        },
+        {
+          "term": "Prefix",
+          "definition": "An affix placed before the base of a word."
+        },
+        {
+          "term": "Root",
+          "definition": "The core morpheme that carries a word's primary meaning."
+        },
+        {
+          "term": "Suffix",
+          "definition": "An affix placed after the base of a word."
+        }
+      ]
+    },
+    {
+      "heading": "Borrowing & Language Contact",
+      "entries": [
+        {
+          "term": "Calque (loan translation)",
+          "definition": "A borrowing formed by translating the individual elements of a foreign expression."
+        },
+        {
+          "term": "Language contact",
+          "definition": "Interaction between languages that produces borrowing and structural convergence."
+        },
+        {
+          "term": "Learned borrowing",
+          "definition": "A word re-imported from a classical language with little change to its form."
+        },
+        {
+          "term": "Loanword (borrowing)",
+          "definition": "A word adopted from another language."
+        },
+        {
+          "term": "Orthographic borrowing",
+          "definition": "A loanword that keeps the spelling of the source language."
+        },
+        {
+          "term": "Phono-semantic matching",
+          "definition": "A borrowing chosen to match both the sound and meaning of native material."
+        },
+        {
+          "term": "Semantic loan (semantic calque)",
+          "definition": "Borrowing only a meaning from another language, without the word's form."
+        },
+        {
+          "term": "Semi-learned borrowing",
+          "definition": "A borrowing that has been partially adapted to the receiving language's patterns."
+        },
+        {
+          "term": "Unadapted borrowing",
+          "definition": "A loanword retained in close to its original foreign form."
+        }
+      ]
+    },
+    {
+      "heading": "Genetic & Phylogenetic Classification",
+      "entries": [
+        {
+          "term": "Afro-Asiatic",
+          "definition": "A major language family of northern Africa and the Middle East, including Arabic, Hebrew, and Amharic."
+        },
+        {
+          "term": "Ancestor language",
+          "definition": "An earlier language from which a later language descends."
+        },
+        {
+          "term": "Austronesian",
+          "definition": "A major language family spread across Southeast Asia and the Pacific, including Malay, Tagalog, and Hawaiian."
+        },
+        {
+          "term": "Branch (subfamily)",
+          "definition": "An intermediate grouping of languages within a family."
+        },
+        {
+          "term": "Celtic",
+          "definition": "A branch of the Indo-European family including Irish, Welsh, Scottish Gaelic, and Breton."
+        },
+        {
+          "term": "Cognate",
+          "definition": "Words in different languages that descend from a common ancestor."
+        },
+        {
+          "term": "Descendant language",
+          "definition": "A later language that developed from an earlier one."
+        },
+        {
+          "term": "Doublet",
+          "definition": "Two words in one language that come from the same source by different routes."
+        },
+        {
+          "term": "Dravidian",
+          "definition": "A major language family of southern India, including Tamil, Telugu, Kannada, and Malayalam."
+        },
+        {
+          "term": "East Germanic",
+          "definition": "An extinct subgroup of the Germanic languages, the best attested of which is Gothic."
+        },
+        {
+          "term": "Family tree (phylogeny)",
+          "definition": "The hierarchical genealogy showing how the members of a language family descend from one another."
+        },
+        {
+          "term": "Germanic",
+          "definition": "A branch of the Indo-European family including English, German, Dutch, and the Scandinavian languages."
+        },
+        {
+          "term": "Indo-European (family)",
+          "definition": "A large language family spanning much of Europe and parts of Asia, including the Germanic, Romance, Slavic, Celtic, Greek, and Indo-Iranian branches."
+        },
+        {
+          "term": "Language family",
+          "definition": "A group of languages descended from a common ancestor."
+        },
+        {
+          "term": "Lowest common ancestor",
+          "definition": "The deepest shared branching point between two languages in a family tree."
+        },
+        {
+          "term": "Niger–Congo",
+          "definition": "A major language family of sub-Saharan Africa, including Swahili, Yoruba, and Zulu."
+        },
+        {
+          "term": "North Germanic",
+          "definition": "A subgroup of the Germanic languages including the Scandinavian languages, such as Danish, Swedish, Norwegian, and Icelandic."
+        },
+        {
+          "term": "Proto-Germanic",
+          "definition": "The reconstructed common ancestor of the Germanic languages."
+        },
+        {
+          "term": "Proto-Indo-European",
+          "definition": "The reconstructed common ancestor of the Indo-European language family."
+        },
+        {
+          "term": "Proto-Italic",
+          "definition": "The reconstructed common ancestor of the Italic languages, including Latin."
+        },
+        {
+          "term": "Proto-language",
+          "definition": "A reconstructed ancestral language from which a family descends."
+        },
+        {
+          "term": "Proto-Romance",
+          "definition": "The reconstructed common ancestor of the Romance languages, essentially the spoken (Vulgar) Latin of late antiquity, as distinct from the literary Classical Latin."
+        },
+        {
+          "term": "Proto-West Germanic",
+          "definition": "The reconstructed common ancestor of the West Germanic languages, including English, German, Dutch, and Frisian."
+        },
+        {
+          "term": "Romance",
+          "definition": "A branch of the Indo-European family descended from Latin, including French, Spanish, Italian, Portuguese, and Romanian."
+        },
+        {
+          "term": "Sino-Tibetan",
+          "definition": "A major language family of East Asia, including Chinese (Mandarin), Burmese, and Tibetan."
+        },
+        {
+          "term": "Slavic",
+          "definition": "A branch of the Indo-European family including Russian, Polish, Czech, and the South Slavic languages."
+        },
+        {
+          "term": "Uralic",
+          "definition": "A language family native to northern Eurasia, including Finnish, Hungarian, and Estonian."
+        },
+        {
+          "term": "West Germanic",
+          "definition": "A subgroup of the Germanic languages including English, German, Dutch, and Frisian."
+        }
+      ]
+    },
+    {
+      "heading": "Areal Linguistics & Diffusion",
+      "entries": [
+        {
+          "term": "Areal feature",
+          "definition": "A trait shared across languages because of geographic proximity rather than common descent."
+        },
+        {
+          "term": "Diffusion",
+          "definition": "The spread of a language or linguistic feature across space and time."
+        },
+        {
+          "term": "Inherited word",
+          "definition": "A word transmitted naturally down a language's own line of descent."
+        },
+        {
+          "term": "Interlingual convergence",
+          "definition": "Languages becoming more similar to one another through sustained contact."
+        },
+        {
+          "term": "Sprachbund (linguistic area)",
+          "definition": "A region where unrelated languages come to share structural features through contact."
+        }
+      ]
+    },
+    {
+      "heading": "Phonology & Phonetics",
+      "entries": [
+        {
+          "term": "IPA (International Phonetic Alphabet)",
+          "definition": "The standard system for transcribing the sounds of spoken language."
+        },
+        {
+          "term": "Phoneme",
+          "definition": "The smallest unit of sound in a language that can distinguish one word from another."
+        },
+        {
+          "term": "Phonetic transcription",
+          "definition": "The written representation of a word's pronunciation using IPA."
+        },
+        {
+          "term": "Pronunciation",
+          "definition": "The way a word is spoken."
+        }
+      ]
+    },
+    {
+      "heading": "Geolinguistics & Spatial Data",
+      "entries": [
+        {
+          "term": "Geolinguistics",
+          "definition": "The study of the geographic distribution of languages."
+        },
+        {
+          "term": "Glottocode",
+          "definition": "A unique identifier assigned to every language in the Glottolog database."
+        },
+        {
+          "term": "Historical area of origin",
+          "definition": "The region where a language historically originated."
+        },
+        {
+          "term": "Language region",
+          "definition": "The geographic area where a language is spoken."
+        }
+      ]
+    },
+    {
+      "heading": "Semantics & Lexicography",
+      "entries": [
+        {
+          "term": "Lemma",
+          "definition": "The canonical citation form of a word."
+        },
+        {
+          "term": "Semantic shift",
+          "definition": "The evolution of a word's meaning over time."
+        }
+      ]
+    }
+  ]
+}
