@@ -16,7 +16,9 @@ export default function ContentPanel({
     <div className="h-full rounded-3xl bg-white border border-zinc-200 px-6 pt-6 pb-2 flex flex-col gap-4 overflow-y-auto">
       <MapGeometryContext.Provider value={setGeometry}>{children}</MapGeometryContext.Provider>
       <div className="mt-auto pt-4 flex items-center justify-center gap-2 text-xs text-zinc-500">
-        <span>{__APP_VERSION__}</span>
+        <Link to="/changelog" className="hover:text-zinc-600 transition-colors">
+          {__APP_VERSION__}
+        </Link>
         <span>·</span>
         <Link to="/attributions" className="hover:text-zinc-600 transition-colors">
           Attributions

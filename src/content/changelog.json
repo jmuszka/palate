@@ -1,0 +1,28 @@
+{
+  "title": "Changelog",
+  "releases": [
+    {
+      "version": "v2026.09.14",
+      "summary": "Initial release.",
+      "added": [
+        "Interactive word search with server-side prefix autocomplete across a graph database of 3.7+ million words, plus a randomized bank of suggestions.",
+        "Etymology tree visualization rendered as a directed acyclic graph, with clickable nodes and labeled relationships.",
+        "Hierarchical language-family chart with a proportional legend.",
+        "Geolinguistic map showing shaded language regions (GeoJSON for 5,000+ languages) and a region-shaped heatmap based on temporal and spatial diffusion.",
+        "IPA pronunciation for each word.",
+        "Prose etymology narrative for each word.",
+        "About and Attributions pages.",
+        "Interactive blog posts about various linguistics topics.",
+        "Feedback form.",
+        "Responsive layout with a draggable split between the map and content panel, adapting from desktop to mobile.",
+        "Language-specific results via the ?lang= query parameter.",
+        "Accessibility: ARIA semantics and full keyboard navigation.",
+        "Server-side caching with Redis, plus client-side request caching.",
+        "JWT authentication for write/update endpoints.",
+        "Unit test suite.",
+        "Linting and formatting with a pre-commit hook.",
+        "Continuous integration running build, tests, lint, and format checks."
+      ]
+    }
+  ]
+}

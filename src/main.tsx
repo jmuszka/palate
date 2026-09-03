@@ -13,6 +13,7 @@ import WordPage from "./WordPage.tsx";
 import ComingSoon from "./ComingSoon.tsx";
 import Attributions from "./Attributions.tsx";
 import FeedbackPage from "./FeedbackPage.tsx";
+import ChangelogPage from "./ChangelogPage.tsx";
 import Layout from "./Layout.tsx";
 
 function handleError(error: unknown) {
@@ -45,6 +46,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/games" element={<ComingSoon title="Games" path="/games" />} />
                 <Route path="/attributions" element={<Attributions />} />
                 <Route path="/feedback" element={<FeedbackPage />} />
+                <Route path="/changelog" element={<ChangelogPage />} />
               </Route>
             </Routes>
           </BrowserRouter>

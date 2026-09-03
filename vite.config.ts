@@ -7,7 +7,15 @@ import { resolve } from "node:path";
 
 const { version } = JSON.parse(readFileSync("./package.json", "utf-8")) as { version: string };
 
-const STATIC_ROUTES = ["/", "/about", "/blog/articles", "/games", "/attributions", "/feedback"];
+const STATIC_ROUTES = [
+  "/",
+  "/about",
+  "/blog/articles",
+  "/games",
+  "/attributions",
+  "/feedback",
+  "/changelog",
+];
 
 function generateSeoFiles(siteUrl: string) {
   return {
