@@ -3,7 +3,6 @@
   "releases": [
     {
       "version": "v2026.09.14",
-      "date": "2026-09-14",
       "summary": "Initial release.",
       "added": [
         "Interactive word search with server-side prefix autocomplete across a graph database of 3.7+ million words, plus a randomized bank of suggestions.",
