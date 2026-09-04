@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import Markdown from "react-markdown";
 import type { FeatureCollection } from "geojson";
 import { useSEO } from "./seo";
 import { useMapGeometry } from "./Map";
 import { formatDate, type BlogArticle } from "./blog";
 import { parseContent } from "./geoMarkers";
+import { fetcher } from "./fetcher";
 
 const mdComponents = {
   h1: (props: object) => <h1 className="text-zinc-900 text-xl font-semibold" {...props} />,
@@ -17,19 +18,29 @@ const mdComponents = {
   ol: (props: object) => <ol className="list-decimal pl-5 flex flex-col gap-1" {...props} />,
 };
 
-function PrefetchMarker({ endpoint }: { endpoint: string }) {
-  useSWR(`${import.meta.env.VITE_SERVER_URL}${endpoint}`);
-  return null;
-}
-
 function PrefetchMarkers({ endpoints }: { endpoints: string[] }) {
-  return (
-    <>
-      {endpoints.map((endpoint) => (
-        <PrefetchMarker key={endpoint} endpoint={endpoint} />
-      ))}
-    </>
-  );
+  const { mutate } = useSWRConfig();
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      for (const endpoint of endpoints) {
+        if (cancelled) break;
+        const key = `${import.meta.env.VITE_SERVER_URL}${endpoint}`;
+        try {
+          const data = await fetcher(key);
+          await mutate(key, data);
+        } catch {
+          // Errors surface later via the active marker's useSWR hook.
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [endpoints, mutate]);
+
+  return null;
 }
 
 export default function BlogArticlePage() {

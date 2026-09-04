@@ -1,13 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import BlogArticlePage from "./BlogArticlePage";
 
-const { useSWRMock, navigateMock, mapGeometrySetterMock } = vi.hoisted(() => ({
-  useSWRMock: vi.fn(),
-  navigateMock: vi.fn(),
-  mapGeometrySetterMock: vi.fn(),
-}));
+const { useSWRMock, mutateMock, fetcherMock, navigateMock, mapGeometrySetterMock } = vi.hoisted(
+  () => ({
+    useSWRMock: vi.fn(),
+    mutateMock: vi.fn(),
+    fetcherMock: vi.fn(),
+    navigateMock: vi.fn(),
+    mapGeometrySetterMock: vi.fn(),
+  }),
+);
 
 class MockIntersectionObserver {
   static instances: MockIntersectionObserver[] = [];
@@ -36,8 +40,9 @@ class MockIntersectionObserver {
   }
 }
 
-vi.mock("swr", () => ({ default: useSWRMock }));
+vi.mock("swr", () => ({ default: useSWRMock, useSWRConfig: () => ({ mutate: mutateMock }) }));
 vi.mock("./Map", () => ({ useMapGeometry: () => mapGeometrySetterMock }));
+vi.mock("./fetcher", () => ({ fetcher: fetcherMock }));
 vi.mock("react-router-dom", async (importOriginal) => {
   const actual = await importOriginal<typeof import("react-router-dom")>();
   return {
@@ -77,6 +82,8 @@ describe("BlogArticlePage", () => {
   beforeEach(() => {
     document.head.innerHTML = "";
     useSWRMock.mockReset();
+    mutateMock.mockReset();
+    fetcherMock.mockReset();
     navigateMock.mockReset();
     mapGeometrySetterMock.mockReset();
     MockIntersectionObserver.instances = [];
@@ -147,7 +154,7 @@ describe("BlogArticlePage", () => {
     expect(instance.options.root).toBe(container.querySelector("[data-scroll-container]"));
   });
 
-  it("prefetches every marker endpoint in parallel on load", () => {
+  it("prefetches every marker endpoint sequentially on load", async () => {
     const twoMarkerArticle = {
       ...article,
       content: "A {/api/v1/geography/England} B {/api/v1/geography/France}",
@@ -160,13 +167,25 @@ describe("BlogArticlePage", () => {
       return {};
     });
 
+    let releaseFirst!: () => void;
+    const firstGate = new Promise<void>((resolve) => {
+      releaseFirst = resolve;
+    });
+    fetcherMock.mockImplementation(async () => {
+      if (fetcherMock.mock.calls.length === 1) await firstGate;
+      return { geojson: { type: "FeatureCollection", features: [] } };
+    });
+    mutateMock.mockResolvedValue(undefined);
+
     renderPage();
 
-    const keys = useSWRMock.mock.calls
-      .map((call) => call[0])
-      .filter((k): k is string => typeof k === "string");
-    expect(keys.some((k) => k.includes("/api/v1/geography/England"))).toBe(true);
-    expect(keys.some((k) => k.includes("/api/v1/geography/France"))).toBe(true);
+    await waitFor(() => expect(fetcherMock).toHaveBeenCalledTimes(1));
+    expect(fetcherMock.mock.calls[0][0]).toContain("/api/v1/geography/England");
+
+    releaseFirst();
+    await waitFor(() => expect(fetcherMock).toHaveBeenCalledTimes(2));
+    expect(fetcherMock.mock.calls[1][0]).toContain("/api/v1/geography/France");
+    expect(fetcherMock.mock.calls[1][0]).not.toContain("/api/v1/geography/England");
   });
 
   it("shows an error state", () => {
