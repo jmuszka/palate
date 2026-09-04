@@ -18,6 +18,40 @@ const STATIC_ROUTES = [
   "/glossary",
 ];
 
+function injectCsp(serverUrl: string) {
+  const connectSrc = [
+    "'self'",
+    "https://api.web3forms.com",
+    "https://basemaps.cartocdn.com",
+    "https://tiles.basemaps.cartocdn.com",
+  ];
+  if (serverUrl) connectSrc.push(serverUrl);
+
+  const policy = [
+    "default-src 'self'",
+    "base-uri 'self'",
+    "object-src 'none'",
+    "script-src 'self'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob: https://tiles.basemaps.cartocdn.com",
+    "font-src 'self' data:",
+    `connect-src ${connectSrc.join(" ")}`,
+    "worker-src blob:",
+    "child-src blob:",
+  ].join("; ");
+
+  return {
+    name: "inject-csp",
+    apply: "build",
+    transformIndexHtml(html: string) {
+      return html.replace(
+        "</head>",
+        `    <meta http-equiv="Content-Security-Policy" content="${policy}" />\n  </head>`,
+      );
+    },
+  };
+}
+
 function generateSeoFiles(siteUrl: string) {
   return {
     name: "generate-seo-files",
@@ -47,9 +81,10 @@ function generateSeoFiles(siteUrl: string) {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const siteUrl = (env.VITE_SITE_URL ?? "").trim().replace(/\/+$/, "");
+  const serverUrl = (env.VITE_SERVER_URL ?? "").trim().replace(/\/+$/, "");
 
   return {
-    plugins: [react(), tailwindcss(), generateSeoFiles(siteUrl)],
+    plugins: [react(), tailwindcss(), generateSeoFiles(siteUrl), injectCsp(serverUrl)],
     define: {
       __APP_VERSION__: JSON.stringify(version),
     },
