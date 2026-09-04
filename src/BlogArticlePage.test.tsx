@@ -130,6 +130,28 @@ describe("BlogArticlePage", () => {
     expect(mapGeometrySetterMock).toHaveBeenCalledWith(geojson);
   });
 
+  it("prefetches every marker endpoint in parallel on load", () => {
+    const twoMarkerArticle = {
+      ...article,
+      content: "A {/api/v1/geography/England} B {/api/v1/geography/France}",
+    };
+    useSWRMock.mockImplementation((key: unknown) => {
+      if (typeof key !== "string") return {};
+      if (key.includes("/api/v1/blog/articles/hello")) {
+        return { data: twoMarkerArticle, isLoading: false };
+      }
+      return {};
+    });
+
+    renderPage();
+
+    const keys = useSWRMock.mock.calls
+      .map((call) => call[0])
+      .filter((k): k is string => typeof k === "string");
+    expect(keys.some((k) => k.includes("/api/v1/geography/England"))).toBe(true);
+    expect(keys.some((k) => k.includes("/api/v1/geography/France"))).toBe(true);
+  });
+
   it("shows an error state", () => {
     mockSWR({ data: undefined, isLoading: false, error: new Error("nope") });
 

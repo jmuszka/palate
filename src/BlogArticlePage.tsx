@@ -17,6 +17,21 @@ const mdComponents = {
   ol: (props: object) => <ol className="list-decimal pl-5 flex flex-col gap-1" {...props} />,
 };
 
+function PrefetchMarker({ endpoint }: { endpoint: string }) {
+  useSWR(`${import.meta.env.VITE_SERVER_URL}${endpoint}`);
+  return null;
+}
+
+function PrefetchMarkers({ endpoints }: { endpoints: string[] }) {
+  return (
+    <>
+      {endpoints.map((endpoint) => (
+        <PrefetchMarker key={endpoint} endpoint={endpoint} />
+      ))}
+    </>
+  );
+}
+
 export default function BlogArticlePage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -35,6 +50,11 @@ export default function BlogArticlePage() {
   );
 
   const segments = useMemo(() => (article ? parseContent(article.content) : []), [article]);
+
+  const endpoints = useMemo(
+    () => segments.filter((s) => s.type === "marker").map((s) => s.endpoint),
+    [segments],
+  );
 
   const { data: geoData } = useSWR<{ geojson: FeatureCollection }>(
     activeEndpoint ? `${import.meta.env.VITE_SERVER_URL}${activeEndpoint}` : null,
@@ -70,6 +90,7 @@ export default function BlogArticlePage() {
 
   return (
     <>
+      <PrefetchMarkers endpoints={endpoints} />
       <button
         type="button"
         onClick={() => navigate("/blog/articles")}
