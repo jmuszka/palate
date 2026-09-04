@@ -11,6 +11,8 @@ import AboutPage from "./AboutPage.tsx";
 import App from "./App.tsx";
 import WordPage from "./WordPage.tsx";
 import ComingSoon from "./ComingSoon.tsx";
+import BlogPage from "./BlogPage.tsx";
+import BlogArticlePage from "./BlogArticlePage.tsx";
 import Attributions from "./Attributions.tsx";
 import FeedbackPage from "./FeedbackPage.tsx";
 import ChangelogPage from "./ChangelogPage.tsx";
@@ -40,10 +42,8 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/" element={<App />} />
                 <Route path="/words/:word" element={<WordPage />} />
                 <Route path="/about" element={<AboutPage />} />
-                <Route
-                  path="/blog/articles"
-                  element={<ComingSoon title="Blog" path="/blog/articles" />}
-                />
+                <Route path="/blog/articles" element={<BlogPage />} />
+                <Route path="/blog/articles/:slug" element={<BlogArticlePage />} />
                 <Route path="/games" element={<ComingSoon title="Games" path="/games" />} />
                 <Route path="/attributions" element={<Attributions />} />
                 <Route path="/feedback" element={<FeedbackPage />} />
