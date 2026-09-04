@@ -69,6 +69,8 @@ export default function BlogArticlePage() {
   });
 
   useEffect(() => {
+    const markers = [...markerRefs.current.values()];
+    const root = markers[0]?.closest("[data-scroll-container]") ?? null;
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -77,9 +79,9 @@ export default function BlogArticlePage() {
           if (endpoint) setActiveEndpoint(endpoint);
         }
       },
-      { rootMargin: "0px 0px -75% 0px", threshold: 0 },
+      { root, rootMargin: "0px 0px -75% 0px", threshold: 0 },
     );
-    for (const el of markerRefs.current.values()) observer.observe(el);
+    for (const el of markers) observer.observe(el);
     return () => observer.disconnect();
   }, [segments]);
 

@@ -13,9 +13,11 @@ class MockIntersectionObserver {
   static instances: MockIntersectionObserver[] = [];
   callback: IntersectionObserverCallback;
   observed: Element[] = [];
+  options: IntersectionObserverInit;
 
-  constructor(callback: IntersectionObserverCallback) {
+  constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
     this.callback = callback;
+    this.options = options ?? {};
     MockIntersectionObserver.instances.push(this);
   }
 
@@ -128,6 +130,21 @@ describe("BlogArticlePage", () => {
     });
 
     expect(mapGeometrySetterMock).toHaveBeenCalledWith(geojson);
+  });
+
+  it("uses the scroll container as the observer root", () => {
+    mockSWR({ data: article, isLoading: false });
+
+    const { container } = render(
+      <MemoryRouter>
+        <div data-scroll-container>
+          <BlogArticlePage />
+        </div>
+      </MemoryRouter>,
+    );
+
+    const instance = MockIntersectionObserver.instances[0];
+    expect(instance.options.root).toBe(container.querySelector("[data-scroll-container]"));
   });
 
   it("prefetches every marker endpoint in parallel on load", () => {
