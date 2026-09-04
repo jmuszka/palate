@@ -23,7 +23,7 @@ function injectCsp(serverUrl: string) {
     "'self'",
     "https://api.web3forms.com",
     "https://basemaps.cartocdn.com",
-    "https://tiles.basemaps.cartocdn.com",
+    "https://*.basemaps.cartocdn.com",
   ];
   if (serverUrl) connectSrc.push(serverUrl);
 
@@ -33,7 +33,7 @@ function injectCsp(serverUrl: string) {
     "object-src 'none'",
     "script-src 'self'",
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob: https://tiles.basemaps.cartocdn.com",
+    "img-src 'self' data: blob: https://*.basemaps.cartocdn.com",
     "font-src 'self' data:",
     `connect-src ${connectSrc.join(" ")}`,
     "worker-src blob:",
