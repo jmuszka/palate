@@ -112,7 +112,10 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
     });
     map.on("load", () => {
       for (const layer of map.getStyle().layers ?? []) {
-        if (layer.type === "symbol" || /boundary|admin/i.test(layer.id)) {
+        if (
+          layer.type === "symbol" ||
+          /boundary|admin|road|rail|aeroway|tunnel|bridge|housenumber/i.test(layer.id)
+        ) {
           map.removeLayer(layer.id);
         }
       }
