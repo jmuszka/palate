@@ -89,10 +89,10 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
 
   const isWordPage = location.pathname.startsWith("/words/");
   const mapCenter = useMemo<[number, number]>(
-    () => (isWordPage ? [15, 54] : [0, 20]),
+    () => (isWordPage ? [15, 54] : [10, 40]),
     [isWordPage],
   );
-  const mapZoom = useMemo(() => (isWordPage ? 4 : 2), [isWordPage]);
+  const mapZoom = useMemo(() => (isWordPage ? 4 : 1.1), [isWordPage]);
   const defaultView = useMemo(() => ({ center: mapCenter, zoom: mapZoom }), [mapCenter, mapZoom]);
 
   useEffect(() => {
