@@ -153,7 +153,7 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
       mapRef.current = null;
       mapLoadedRef.current = false;
     };
-  }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     geometryRef.current = geometry;
