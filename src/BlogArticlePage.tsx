@@ -134,13 +134,13 @@ export default function BlogArticlePage() {
                 <span
                   key={i}
                   data-geo-endpoint={segment.endpoint}
+                  aria-hidden="true"
+                  className="block h-px"
                   ref={(el) => {
                     if (el) markerRefs.current.set(i, el);
                     else markerRefs.current.delete(i);
                   }}
-                >
-                  {`{${segment.endpoint}}`}
-                </span>
+                />
               ) : (
                 <Markdown key={i} components={mdComponents}>
                   {segment.value}
