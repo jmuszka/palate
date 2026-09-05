@@ -115,11 +115,14 @@ describe("BlogArticlePage", () => {
     expect(screen.getByText(/markdown/)).toBeInTheDocument();
   });
 
-  it("renders the marker as visible text", () => {
+  it("renders the marker as an invisible sentinel", () => {
     mockSWR({ data: article, isLoading: false });
 
-    renderPage();
-    expect(screen.getByText("{/api/v1/words/hello/etymology}")).toBeInTheDocument();
+    const { container } = renderPage();
+    expect(
+      container.querySelector('[data-geo-endpoint="/api/v1/words/hello/etymology"]'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("{/api/v1/words/hello/etymology}")).not.toBeInTheDocument();
   });
 
   it("fetches the marker endpoint and renders its geojson when it crosses the threshold", () => {
