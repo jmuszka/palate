@@ -115,8 +115,16 @@ export default function BlogArticlePage() {
           <div className="flex flex-col gap-1">
             <h1 className="text-zinc-900 text-2xl font-semibold">{article.title}</h1>
             <div className="flex flex-col gap-0.5 text-xs text-zinc-400">
-              <span>Published {formatDate(article.published)}</span>
-              <span>Modified {formatDate(article.modified)}</span>
+              <span>
+                Published: <b>{formatDate(article.published)}</b>
+              </span>
+              {article?.modified ? (
+                <span>
+                  Last updated: <b>{formatDate(article.modified)}</b>
+                </span>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
 
