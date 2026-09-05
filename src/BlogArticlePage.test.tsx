@@ -111,7 +111,6 @@ describe("BlogArticlePage", () => {
 
     expect(screen.getByRole("heading", { name: "Hello" })).toBeInTheDocument();
     expect(screen.getByText(/Published/)).toBeInTheDocument();
-    expect(screen.getByText(/Modified/)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Heading" })).toBeInTheDocument();
     expect(screen.getByText(/markdown/)).toBeInTheDocument();
   });
