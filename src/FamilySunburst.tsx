@@ -31,7 +31,7 @@ function ReversedSunburstLayer({
         });
 
         const tooltip = (
-          <div className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs text-white shadow-lg">
+          <div className="rounded-md bg-zinc-900 px-3 py-1.5 text-xs text-white shadow-lg">
             {String(node.id)}
           </div>
         );

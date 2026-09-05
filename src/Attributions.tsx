@@ -29,7 +29,7 @@ export default function Attributions() {
         {sources.map((source) => (
           <li
             key={source.name}
-            className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 flex flex-col gap-2"
+            className="rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 flex flex-col gap-2"
           >
             <a
               href={source.href}

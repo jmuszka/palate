@@ -56,7 +56,7 @@ export default function Header() {
   return (
     <div
       ref={menuRef}
-      className="shrink-0 rounded-3xl bg-white border border-zinc-200 px-8 py-4 flex items-center justify-between gap-4 relative"
+      className="shrink-0 rounded-2xl bg-white border border-zinc-200 px-4 py-4 flex items-center justify-between gap-4 relative"
     >
       <Link className="flex items-center" to="/">
         <img src="/favicon.png" alt="" className="w-11 h-11" />
@@ -68,7 +68,7 @@ export default function Header() {
             ref={toggleRef}
             onClick={() => setMenuOpen((v) => !v)}
             onKeyDown={handleToggleKeyDown}
-            className="p-2 rounded-xl hover:bg-zinc-100 transition-colors"
+            className="p-2 rounded-lg hover:bg-zinc-100 transition-colors"
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
             aria-haspopup="menu"
@@ -81,14 +81,14 @@ export default function Header() {
               role="menu"
               id="nav-menu"
               onKeyDown={handleMenuKeyDown}
-              className="absolute top-full right-0 mt-2 w-48 rounded-2xl bg-white border border-zinc-200 shadow-lg p-2 flex flex-col z-50"
+              className="absolute top-full right-0 mt-2 w-48 rounded-xl bg-white border border-zinc-200 shadow-lg p-2 flex flex-col z-50"
             >
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
                   role="menuitem"
-                  className="px-4 py-2 rounded-xl hover:bg-zinc-100 transition-colors"
+                  className="px-4 py-2 rounded-lg hover:bg-zinc-100 transition-colors"
                   onClick={() => closeMenu()}
                 >
                   {link.label}

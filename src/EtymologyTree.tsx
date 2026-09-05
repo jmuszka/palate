@@ -67,7 +67,7 @@ const TreeCanvas = ({ data }: { data: Neo4jPath[] }) => {
 
 export default function EtymologyTree({ data }: { data: EtymologyData }) {
   return (
-    <div className="h-[480px] w-full rounded-xl border border-zinc-200 bg-zinc-50 overflow-hidden">
+    <div className="h-[480px] w-full rounded-lg border border-zinc-200 bg-zinc-50 overflow-hidden">
       <ReactFlowProvider>
         <TreeCanvas data={data.graph} />
       </ReactFlowProvider>
