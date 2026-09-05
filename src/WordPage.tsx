@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import EtymologyTree, { type EtymologyData } from "./EtymologyTree";
+import BackButton from "./BackButton";
 import FamilySunburst from "./FamilySunburst";
 import { useMapGeometry } from "./Map";
 import useSWR from "swr";
@@ -8,7 +9,6 @@ import { useSEO, siteUrl } from "./seo";
 
 export default function WordPage() {
   const { word } = useParams<{ word: string }>();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const setMapGeometry = useMapGeometry();
 
@@ -60,28 +60,7 @@ export default function WordPage() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => navigate("/")}
-        className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-800 transition-colors w-fit"
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M10 3L5 8L10 13"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        Back
-      </button>
+      <BackButton />
       <div className="flex items-baseline gap-3">
         <h1 className="text-zinc-900 text-2xl font-semibold">{word}</h1>
         {etymology?.ipa && <span className="text-zinc-500 text-sm">{etymology.ipa}</span>}

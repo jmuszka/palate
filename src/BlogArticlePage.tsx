@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useSWR, { useSWRConfig } from "swr";
 import Markdown from "react-markdown";
 import type { FeatureCollection } from "geojson";
@@ -8,6 +8,7 @@ import { useMapGeometry } from "./Map";
 import { formatDate, type BlogArticle } from "./blog";
 import { parseContent } from "./geoMarkers";
 import { fetcher } from "./fetcher";
+import BackButton from "./BackButton";
 
 const mdComponents = {
   h1: (props: object) => <h1 className="text-zinc-900 text-xl font-semibold" {...props} />,
@@ -45,7 +46,6 @@ function PrefetchMarkers({ endpoints }: { endpoints: string[] }) {
 
 export default function BlogArticlePage() {
   const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
   const setGeometry = useMapGeometry();
   const [activeEndpoint, setActiveEndpoint] = useState<string | null>(null);
   const markerRefs = useRef(new Map<number, HTMLSpanElement>());
@@ -104,28 +104,7 @@ export default function BlogArticlePage() {
   return (
     <>
       <PrefetchMarkers endpoints={endpoints} />
-      <button
-        type="button"
-        onClick={() => navigate("/blog/articles")}
-        className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-800 transition-colors w-fit"
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M10 3L5 8L10 13"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        Back
-      </button>
+      <BackButton />
 
       {isLoading && <p className="text-zinc-500 text-sm">Loading…</p>}
       {error && !isLoading && (
