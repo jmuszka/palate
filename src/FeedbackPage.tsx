@@ -99,7 +99,7 @@ export default function FeedbackPage() {
               {CATEGORIES.map((c) => (
                 <label
                   key={c.value}
-                  className={`flex items-start gap-3 rounded-xl border px-4 py-3 cursor-pointer transition-colors ${
+                  className={`flex items-start gap-3 rounded-lg border px-4 py-3 cursor-pointer transition-colors ${
                     category === c.value
                       ? "border-zinc-500 bg-zinc-50"
                       : "border-zinc-200 hover:border-zinc-400"
@@ -131,7 +131,7 @@ export default function FeedbackPage() {
                 placeholder="Ferdinand de Saussure"
                 onChange={(e) => setName(e.target.value)}
                 autoComplete="name"
-                className="rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-800 placeholder-zinc-400 shadow-sm outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-200 transition"
+                className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-800 placeholder-zinc-400 shadow-sm outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-200 transition"
               />
             </label>
             <label className="flex flex-col gap-1.5">
@@ -142,7 +142,7 @@ export default function FeedbackPage() {
                 placeholder="name@email.com"
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
-                className="rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-800 placeholder-zinc-400 shadow-sm outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-200 transition"
+                className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-800 placeholder-zinc-400 shadow-sm outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-200 transition"
               />
             </label>
           </div>
@@ -155,7 +155,7 @@ export default function FeedbackPage() {
               required
               rows={5}
               placeholder="Share your thoughts…"
-              className="rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-800 placeholder-zinc-400 shadow-sm outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-200 transition resize-y"
+              className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-800 placeholder-zinc-400 shadow-sm outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-zinc-200 transition resize-y"
             />
           </label>
 

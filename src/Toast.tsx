@@ -12,7 +12,7 @@ function ToastItem({ toast }: { toast: Toast }) {
   return (
     <div
       role="alert"
-      className={`${VARIANT_STYLES[toast.variant]} pointer-events-auto flex items-start gap-3 rounded-xl px-4 py-3 text-sm shadow-lg`}
+      className={`${VARIANT_STYLES[toast.variant]} pointer-events-auto flex items-start gap-3 rounded-lg px-4 py-3 text-sm shadow-lg`}
     >
       <span className="leading-snug">{toast.message}</span>
       <button

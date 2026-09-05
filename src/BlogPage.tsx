@@ -42,7 +42,7 @@ export default function BlogPage() {
               <Link
                 key={article.slug}
                 to={`/blog/articles/${encodeURIComponent(article.slug)}`}
-                className="group flex flex-col gap-1 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 hover:border-zinc-400 hover:bg-white transition-colors"
+                className="group flex flex-col gap-1 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 hover:border-zinc-400 hover:bg-white transition-colors"
               >
                 <span className="text-sm font-medium text-zinc-800 group-hover:text-zinc-900">
                   {article.title}

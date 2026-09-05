@@ -172,7 +172,7 @@ export default function App() {
                   closeResults();
                 }
               }}
-              className="absolute z-10 left-0 right-0 mt-2 flex flex-col rounded-2xl border border-zinc-200 bg-white shadow-lg overflow-hidden text-left"
+              className="absolute z-10 left-0 right-0 mt-2 flex flex-col rounded-xl border border-zinc-200 bg-white shadow-lg overflow-hidden text-left"
             >
               {results.map((word, i) => (
                 <button
@@ -219,7 +219,7 @@ export default function App() {
             <Link
               key={link.href}
               to={link.href}
-              className="group flex items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 hover:border-zinc-400 hover:bg-white transition-colors"
+              className="group flex items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 hover:border-zinc-400 hover:bg-white transition-colors"
             >
               <span className="flex flex-col">
                 <span className="text-sm font-medium text-zinc-800">{link.title}</span>

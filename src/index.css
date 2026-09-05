@@ -7,5 +7,5 @@
 }
 
 .map-container .maplibregl-canvas {
-  border-radius: var(--radius-3xl, 1.5rem);
+  border-radius: var(--radius-2xl, 1rem);
 }

@@ -167,7 +167,7 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
   return (
     <div
       ref={containerRef}
-      className="map-container h-full rounded-3xl flex-1 border border-zinc-200"
+      className="map-container h-full rounded-2xl flex-1 border border-zinc-200"
     />
   );
 }

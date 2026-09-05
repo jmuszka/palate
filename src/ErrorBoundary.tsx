@@ -23,7 +23,7 @@ export default class ErrorBoundary extends Component<Props, State> {
     if (this.state.error) {
       return (
         <div className="flex h-dvh w-screen items-center justify-center bg-zinc-100 p-4">
-          <div className="max-w-md rounded-3xl border border-zinc-200 bg-white px-8 py-10 text-center">
+          <div className="max-w-md rounded-2xl border border-zinc-200 bg-white px-8 py-10 text-center">
             <h1 className="text-zinc-900 text-xl font-semibold">Something went wrong</h1>
             <p className="mt-2 text-zinc-500 text-sm">
               An unexpected error occurred. Please reload the page to continue.
