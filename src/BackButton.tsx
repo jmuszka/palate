@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
-export default function BackButton({ to = "/" }: { to?: string }) {
+export default function BackButton() {
   const navigate = useNavigate();
 
   return (
     <button
       type="button"
-      onClick={() => navigate(to)}
+      onClick={() => navigate(-1)}
       className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-800 transition-colors w-fit"
     >
       <svg

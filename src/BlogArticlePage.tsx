@@ -104,7 +104,7 @@ export default function BlogArticlePage() {
   return (
     <>
       <PrefetchMarkers endpoints={endpoints} />
-      <BackButton to="/blog/articles" />
+      <BackButton />
 
       {isLoading && <p className="text-zinc-500 text-sm">Loading…</p>}
       {error && !isLoading && (
