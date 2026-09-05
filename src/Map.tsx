@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -88,8 +88,12 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
   const location = useLocation();
 
   const isWordPage = location.pathname.startsWith("/words/");
-  const mapCenter: [number, number] = isWordPage ? [15, 54] : [0, 20];
-  const mapZoom = isWordPage ? 4 : 2;
+  const mapCenter = useMemo<[number, number]>(
+    () => (isWordPage ? [15, 54] : [0, 20]),
+    [isWordPage],
+  );
+  const mapZoom = useMemo(() => (isWordPage ? 4 : 2), [isWordPage]);
+  const defaultView = useMemo(() => ({ center: mapCenter, zoom: mapZoom }), [mapCenter, mapZoom]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -153,10 +157,12 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
 
   useEffect(() => {
     geometryRef.current = geometry;
-    if (mapRef.current && mapLoadedRef.current) {
-      applyGeometry(mapRef.current, geometry);
+    if (!mapRef.current || !mapLoadedRef.current) return;
+    applyGeometry(mapRef.current, geometry);
+    if (!geometry) {
+      mapRef.current.jumpTo(defaultView);
     }
-  }, [geometry]);
+  }, [geometry, defaultView]);
 
   return (
     <div
