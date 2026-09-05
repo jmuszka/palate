@@ -67,5 +67,5 @@ export function fitToGeometry(map: maplibregl.Map, geometry: FeatureCollection) 
     }
   }
   if (bounds.isEmpty()) return;
-  map.fitBounds(bounds, { padding: 60, maxZoom: 8, animate: false });
+  map.fitBounds(bounds, { padding: 60, maxZoom: 8, animate: true, duration: 2000 });
 }
