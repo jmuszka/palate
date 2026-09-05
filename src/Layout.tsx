@@ -12,6 +12,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const [mapHeightPct, setMapHeightPct] = useState(40);
   const dragging = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
   const isMobileRef = useRef(isMobile);
   isMobileRef.current = isMobile;
 
@@ -31,7 +32,8 @@ export default function Layout({ children }: { children: ReactNode }) {
       e.preventDefault();
       const rect = containerRef.current.getBoundingClientRect();
       if (isMobileRef.current) {
-        const pct = ((e.clientY - rect.top) / rect.height) * 100;
+        const mapTop = mapRef.current?.getBoundingClientRect().top ?? rect.top;
+        const pct = ((e.clientY - mapTop) / rect.height) * 100;
         setMapHeightPct(Math.min(Math.max(pct, 20), 60));
       } else {
         const pct = ((e.clientX - rect.left) / rect.width) * 100;
@@ -44,7 +46,8 @@ export default function Layout({ children }: { children: ReactNode }) {
       const touch = e.touches[0];
       const rect = containerRef.current.getBoundingClientRect();
       if (isMobileRef.current) {
-        const pct = ((touch.clientY - rect.top) / rect.height) * 100;
+        const mapTop = mapRef.current?.getBoundingClientRect().top ?? rect.top;
+        const pct = ((touch.clientY - mapTop) / rect.height) * 100;
         setMapHeightPct(Math.min(Math.max(pct, 20), 60));
       } else {
         const pct = ((touch.clientX - rect.left) / rect.width) * 100;
@@ -75,6 +78,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <Header />
         <div className="flex items-center justify-center h-1 shrink-0 cursor-row-resize group touch-none"></div>
         <div
+          ref={mapRef}
           className="shrink-0 rounded-2xl overflow-hidden border border-zinc-200"
           style={{ height: `${mapHeightPct}%` }}
         >
