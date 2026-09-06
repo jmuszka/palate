@@ -24,12 +24,46 @@ export const PALETTE = [
 
 export interface ColoredFamilyNode extends FamilyTreeNode {
   color: string;
+  // Glottocode extracted from the node id (e.g. "Indo-European [indo1319]").
+  code?: string;
+  // Number of levels below this node (0 for a leaf). Used by the sunburst to
+  // extend arcs inward without leaving gaps in unbalanced trees.
+  subtreeDepth: number;
   children?: ColoredFamilyNode[];
 }
 
 export interface LegendEntry {
   name: string;
   color: string;
+  code?: string;
+}
+
+const FAMILY_CODE_PATTERN = /\[([a-z0-9]+)\]/i;
+
+export function extractFamilyCode(id: string): string | undefined {
+  return id.match(FAMILY_CODE_PATTERN)?.[1];
+}
+
+// Active arc ids for a hovered family: the matched node, all of its ancestors,
+// and all of its descendants. Everything else can be dimmed.
+export function matchFamily(
+  root: ColoredFamilyNode,
+  code: string,
+): { active: Set<string>; found: boolean } {
+  const active = new Set<string>();
+
+  const walk = (node: ColoredFamilyNode): boolean => {
+    const foundHere = node.code === code;
+    let foundDescendant = false;
+    for (const child of node.children ?? []) {
+      if (walk(child)) foundDescendant = true;
+    }
+    if (foundHere || foundDescendant) active.add(node.code ?? "");
+    return foundHere || foundDescendant;
+  };
+
+  const found = walk(root);
+  return { active, found };
 }
 
 export function buildColoredTree(tree: FamilyTreeNode): {
@@ -42,16 +76,23 @@ export function buildColoredTree(tree: FamilyTreeNode): {
   const colorize = (node: FamilyTreeNode): ColoredFamilyNode => {
     const color = PALETTE[index % PALETTE.length];
     index += 1;
-    nodes.push({ name: node.name, color });
+    const code = extractFamilyCode(node.id);
+    nodes.push({ name: node.name, color, code });
+    const children = node.children?.map(colorize);
     // d3's hierarchy().sum() adds a node's own value to its descendants', so an
     // internal node's value (already the sum of its children) would be counted
     // twice and leave a gap in the circle. Only leaves should carry weight.
-    const hasChildren = node.children && node.children.length > 0;
+    const hasChildren = children !== undefined && children.length > 0;
+    const subtreeDepth = hasChildren
+      ? 1 + Math.max(...children.map((child) => child.subtreeDepth))
+      : 0;
     return {
       ...node,
       value: hasChildren ? 0 : node.value,
-      children: node.children?.map(colorize),
+      children,
       color,
+      code,
+      subtreeDepth,
     };
   };
 
