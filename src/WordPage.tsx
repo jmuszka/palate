@@ -3,7 +3,8 @@ import { useParams, useSearchParams } from "react-router-dom";
 import EtymologyTree, { type EtymologyData } from "./EtymologyTree";
 import BackButton from "./BackButton";
 import FamilySunburst from "./FamilySunburst";
-import { useMapGeometry, useMapHighlight } from "./Map";
+import { useMapGeometry, useMapHighlight, useMapRoutes } from "./Map";
+import { buildTravelRoutes } from "./travelRoutes";
 import useSWR from "swr";
 import { useSEO, siteUrl } from "./seo";
 
@@ -12,6 +13,7 @@ export default function WordPage() {
   const [searchParams] = useSearchParams();
   const setMapGeometry = useMapGeometry();
   const { highlight, setHighlight } = useMapHighlight();
+  const { setRoutes } = useMapRoutes();
 
   useEffect(() => {
     setHighlight(null);
@@ -63,6 +65,12 @@ export default function WordPage() {
     setMapGeometry(etymology?.geojson ?? null);
     return () => setMapGeometry(null);
   }, [etymology, setMapGeometry]);
+
+  useEffect(() => {
+    const routes = etymology ? buildTravelRoutes(etymology.graph, etymology.geojson) : null;
+    setRoutes(routes?.geojson ?? null);
+    return () => setRoutes(null);
+  }, [etymology, setRoutes]);
 
   return (
     <>
