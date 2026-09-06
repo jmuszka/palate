@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-import type { FeatureCollection } from "geojson";
+import type { Feature, FeatureCollection } from "geojson";
 import {
   normalizeGeometry,
   escapeHtml,
   renderPopup,
-  extendBounds,
+  computeFeatureBounds,
+  trimToMajority,
   fitToGeometry,
 } from "./mapGeometry";
 
@@ -131,22 +132,69 @@ describe("renderPopup", () => {
   });
 });
 
-describe("extendBounds", () => {
-  it("extends the bounds with a leaf coordinate", () => {
-    const extend = vi.fn();
-    extendBounds({ extend } as never, [1, 2]);
-    expect(extend).toHaveBeenCalledWith([1, 2]);
+describe("computeFeatureBounds", () => {
+  it("computes bounds for a point", () => {
+    const feature = {
+      type: "Feature",
+      properties: {},
+      geometry: { type: "Point", coordinates: [1, 2] },
+    } as Feature;
+
+    expect(computeFeatureBounds(feature)).toEqual({ minLon: 1, minLat: 2, maxLon: 1, maxLat: 2 });
   });
 
-  it("recurses into nested coordinate arrays", () => {
-    const extend = vi.fn();
-    extendBounds({ extend } as never, [
-      [1, 2],
-      [3, 4],
-    ]);
-    expect(extend).toHaveBeenCalledTimes(2);
-    expect(extend).toHaveBeenNthCalledWith(1, [1, 2]);
-    expect(extend).toHaveBeenNthCalledWith(2, [3, 4]);
+  it("computes bounds across nested polygon coordinates", () => {
+    const feature = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [
+            [0, 0],
+            [10, 0],
+            [10, 5],
+            [0, 0],
+          ],
+        ],
+      },
+    } as Feature;
+
+    expect(computeFeatureBounds(feature)).toEqual({ minLon: 0, minLat: 0, maxLon: 10, maxLat: 5 });
+  });
+
+  it("returns null for geometry without coordinates", () => {
+    const feature = {
+      type: "Feature",
+      properties: {},
+      geometry: { type: "GeometryCollection", geometries: [] },
+    } as Feature;
+
+    expect(computeFeatureBounds(feature)).toBeNull();
+  });
+});
+
+const wb = (minLon: number, minLat: number, maxLon: number, maxLat: number, count: number) => ({
+  bounds: { minLon, minLat, maxLon, maxLat },
+  count,
+});
+
+describe("trimToMajority", () => {
+  it("returns a single item unchanged", () => {
+    const items = [wb(0, 0, 1, 1, 5)];
+    expect(trimToMajority(items)).toEqual(items);
+  });
+
+  it("drops a distant fringe feature while keeping the majority", () => {
+    const items = [wb(0, 0, 1, 1, 4), wb(1, 0, 2, 1, 4), wb(100, 0, 101, 1, 1)];
+
+    expect(trimToMajority(items)).toHaveLength(2);
+  });
+
+  it("keeps all features when removing any would drop below the majority", () => {
+    const items = [wb(0, 0, 1, 1, 4), wb(100, 0, 101, 1, 6)];
+
+    expect(trimToMajority(items)).toHaveLength(2);
   });
 });
 
@@ -165,7 +213,7 @@ describe("fitToGeometry", () => {
     expect(fitBounds).toHaveBeenCalledTimes(1);
     const [bounds, options] = fitBounds.mock.calls[0];
     expect(bounds).toBeInstanceOf(LngLatBounds);
-    expect(options).toEqual({ padding: 60, maxZoom: 8, animate: true, duration: 2000 });
+    expect(options).toEqual({ padding: 60, maxZoom: 8, animate: true, duration: 1500 });
   });
 
   it("does not call fitBounds for empty geometry", () => {
