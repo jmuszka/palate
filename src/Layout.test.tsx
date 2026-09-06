@@ -10,10 +10,16 @@ const mockUseIsMobile = vi.mocked(useIsMobile);
 vi.mock("./Map", async () => {
   const React = await import("react");
   const MapGeometryContext = React.createContext<(g: unknown) => void>(() => {});
+  const HighlightContext = React.createContext({
+    highlight: null,
+    setHighlight: () => {},
+  });
   return {
     default: () => null,
     MapGeometryContext,
+    HighlightContext,
     useMapGeometry: () => React.useContext(MapGeometryContext),
+    useMapHighlight: () => React.useContext(HighlightContext),
   };
 });
 
@@ -46,7 +52,7 @@ describe("Layout", () => {
     mockUseIsMobile.mockReset();
   });
 
-  it("clamps the panel width between 25% and 50% when dragging", () => {
+  it("clamps the panel width between 35% and 60% when dragging", () => {
     mockUseIsMobile.mockReturnValue(false);
 
     const { container } = renderLayout();
@@ -54,16 +60,16 @@ describe("Layout", () => {
     mockRect(root);
 
     const panel = root.children[0] as HTMLElement;
-    expect(panel.style.width).toBe("30%");
+    expect(panel.style.width).toBe("40%");
 
     const divider = container.querySelector(".cursor-col-resize") as HTMLElement;
 
     fireEvent.mouseDown(divider);
     fireEvent.mouseMove(window, { clientX: 900 });
-    expect(panel.style.width).toBe("50%");
+    expect(panel.style.width).toBe("60%");
 
     fireEvent.mouseMove(window, { clientX: 100 });
-    expect(panel.style.width).toBe("25%");
+    expect(panel.style.width).toBe("35%");
 
     fireEvent.mouseUp(window);
   });

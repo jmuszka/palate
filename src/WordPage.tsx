@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import EtymologyTree, { type EtymologyData } from "./EtymologyTree";
 import BackButton from "./BackButton";
 import FamilySunburst from "./FamilySunburst";
-import { useMapGeometry } from "./Map";
+import { useMapGeometry, useMapHighlight } from "./Map";
 import useSWR from "swr";
 import { useSEO, siteUrl } from "./seo";
 
@@ -11,6 +11,12 @@ export default function WordPage() {
   const { word } = useParams<{ word: string }>();
   const [searchParams] = useSearchParams();
   const setMapGeometry = useMapGeometry();
+  const { highlight, setHighlight } = useMapHighlight();
+
+  useEffect(() => {
+    setHighlight(null);
+    return () => setHighlight(null);
+  }, [word, setHighlight]);
 
   const qs = searchParams.toString();
   const suffix = qs ? `?${qs}` : "";
@@ -74,7 +80,11 @@ export default function WordPage() {
           <h2 className="text-zinc-900 text-lg font-semibold">Etymology</h2>
           <EtymologyTree data={etymology} />
           <h2 className="text-zinc-900 text-lg font-semibold">Family Tree</h2>
-          <FamilySunburst familyTree={etymology.familyTree} />
+          <FamilySunburst
+            familyTree={etymology.familyTree}
+            highlight={highlight}
+            onHover={setHighlight}
+          />
         </>
       )}
       {history && (

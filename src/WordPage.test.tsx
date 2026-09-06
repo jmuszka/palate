@@ -10,7 +10,10 @@ const { useSWRMock, navigateMock, mapGeometrySetterMock } = vi.hoisted(() => ({
 }));
 
 vi.mock("swr", () => ({ default: useSWRMock }));
-vi.mock("./Map", () => ({ useMapGeometry: () => mapGeometrySetterMock }));
+vi.mock("./Map", () => ({
+  useMapGeometry: () => mapGeometrySetterMock,
+  useMapHighlight: () => ({ highlight: null, setHighlight: vi.fn() }),
+}));
 vi.mock("./EtymologyTree", () => ({
   default: () => <div data-testid="etymology-tree" />,
 }));

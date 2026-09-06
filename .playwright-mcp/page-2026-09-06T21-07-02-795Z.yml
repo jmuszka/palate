@@ -1,0 +1,89 @@
+- generic [ref=f7e3]:
+    - generic [ref=f7e4]:
+        - generic [ref=f7e5]:
+            - link [ref=f7e6] [cursor=pointer]:
+                - /url: /
+                - heading "EtymoMap" [level=1] [ref=f7e7]
+            - button "Toggle menu" [ref=f7e8]
+        - generic [ref=f7e10]:
+            - button "Back" [ref=f7e11]
+            - generic [ref=f7e14]:
+                - heading "apple" [level=1] [ref=f7e15]
+                - generic [ref=f7e29]: ˈæpəl
+            - heading "Etymology" [level=2] [ref=f7e30]
+            - application [ref=f7e32]:
+                - generic [ref=f7e34]:
+                    - generic:
+                        - generic:
+                            - img:
+                                - group "Edge from apple|English to appel|Middle English" [ref=f7e35] [cursor=pointer]:
+                                    - generic [ref=f7e36]: inherited_from
+                            - img:
+                                - group "Edge from appel|Middle English to æppel|Old English" [ref=f7e38] [cursor=pointer]:
+                                    - generic [ref=f7e39]: inherited_from
+                            - img:
+                                - group "Edge from æppel|Old English to *applu|Proto-West Germanic" [ref=f7e41] [cursor=pointer]:
+                                    - generic [ref=f7e42]: inherited_from
+                            - img:
+                                - group "Edge from *applu|Proto-West Germanic to *aplaz|Proto-Germanic" [ref=f7e44] [cursor=pointer]:
+                                    - generic [ref=f7e47]: inherited_from
+                            - img:
+                                - group "Edge from *aplaz|Proto-Germanic to *h₂ébōl|Proto-Indo-European" [ref=f7e49] [cursor=pointer]:
+                                    - generic [ref=f7e50]: inherited_from
+                            - img:
+                                - group "Edge from *applu|Proto-West Germanic to *apluz|Proto-Germanic" [ref=f7e52] [cursor=pointer]:
+                                    - generic [ref=f7e55]: inherited_from
+                        - generic:
+                            - group [ref=f7e57]: apple (English)
+                            - group [ref=f7e60]: appel (Middle English)
+                            - group [ref=f7e63]: æppel (Old English)
+                            - group [ref=f7e66]: "*applu (Proto-West Germanic)"
+                            - group [ref=f7e69]: "*aplaz (Proto-Germanic)"
+                            - group [ref=f7e72]: "*h₂ébōl (Proto-Indo-European)"
+                            - group [ref=f7e75]: "*apluz (Proto-Germanic)"
+                - generic "Control Panel" [ref=f7e78]:
+                    - button "Zoom In" [ref=f7e79] [cursor=pointer]
+                    - button "Zoom Out" [disabled]
+                    - button "Fit View" [ref=f7e82] [cursor=pointer]
+                    - button "Toggle Interactivity" [ref=f7e85] [cursor=pointer]
+                - link "React Flow attribution" [ref=f7e89] [cursor=pointer]:
+                    - /url: https://reactflow.dev/attribution
+                    - text: React Flow
+            - heading "Family Tree" [level=2] [ref=f7e91]
+            - list [ref=f7e106]:
+                - listitem [ref=f7e107]:
+                    - generic [ref=f7e109]: Indo-European
+                - listitem [ref=f7e110]:
+                    - generic [ref=f7e112]: Classical Indo-European
+                - listitem [ref=f7e113]:
+                    - generic [ref=f7e115]: Germanic
+                - listitem [ref=f7e116]:
+                    - generic [ref=f7e118]: Northwest Germanic
+                - listitem [ref=f7e119]:
+                    - generic [ref=f7e121]: West Germanic
+                - listitem [ref=f7e122]:
+                    - generic [ref=f7e124]: North Sea Germanic
+                - listitem [ref=f7e125]:
+                    - generic [ref=f7e127]: Anglo-Frisian
+                - listitem [ref=f7e128]:
+                    - generic [ref=f7e130]: Anglic
+            - generic [ref=f7e17]:
+                - link "v2026.09.14" [ref=f7e18] [cursor=pointer]:
+                    - /url: /changelog
+                - generic [ref=f7e19]: ·
+                - link "Attributions" [ref=f7e20] [cursor=pointer]:
+                    - /url: /attributions
+    - generic [ref=f7e23]:
+        - region "Map" [ref=f7e24]
+        - group [ref=f7e25]:
+            - generic "Toggle attribution" [ref=f7e26] [cursor=pointer]
+            - generic [ref=f7e27]:
+                - link "MapLibre" [ref=f7e131] [cursor=pointer]:
+                    - /url: https://maplibre.org/
+                - text: "| ©"
+                - link "CARTO" [ref=f7e132] [cursor=pointer]:
+                    - /url: https://carto.com/about-carto/
+                - text: ", ©"
+                - link "OpenStreetMap" [ref=f7e133] [cursor=pointer]:
+                    - /url: http://www.openstreetmap.org/about/
+                - text: contributors

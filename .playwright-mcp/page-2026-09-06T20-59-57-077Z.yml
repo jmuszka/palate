@@ -1,0 +1,34 @@
+- generic [ref=f1e2]:
+    - generic [ref=f1e3]:
+        - generic [ref=f1e4]:
+            - link [ref=f1e5] [cursor=pointer]:
+                - /url: /
+                - heading "EtymoMap" [level=1] [ref=f1e6]
+            - button "Toggle menu" [ref=f1e7]
+        - generic [ref=f1e11]:
+            - region "Map" [ref=f1e12]
+            - group [ref=f1e13]:
+                - generic "Toggle attribution" [ref=f1e14] [cursor=pointer]
+                - generic [ref=f1e15]:
+                    - link "MapLibre" [ref=f1e66] [cursor=pointer]:
+                        - /url: https://maplibre.org/
+                    - text: "| ©"
+                    - link "CARTO" [ref=f1e67] [cursor=pointer]:
+                        - /url: https://carto.com/about-carto/
+                    - text: ", ©"
+                    - link "OpenStreetMap" [ref=f1e68] [cursor=pointer]:
+                        - /url: http://www.openstreetmap.org/about/
+                    - text: contributors
+        - generic [ref=f1e20]:
+            - button "Back" [ref=f1e78]
+            - heading "checkmate" [level=1] [ref=f1e82]
+            - paragraph [ref=f1e83]: We couldn't load this word. Please try again.
+            - generic [ref=f1e62]:
+                - link "v2026.09.14" [ref=f1e63] [cursor=pointer]:
+                    - /url: /changelog
+                - generic [ref=f1e64]: ·
+                - link "Attributions" [ref=f1e65] [cursor=pointer]:
+                    - /url: /attributions
+    - alert [ref=f1e84]:
+        - generic [ref=f1e85]: Something went wrong. Please try again.
+        - button "Dismiss" [ref=f1e86]

@@ -1,0 +1,52 @@
+- generic [ref=f1e3]:
+    - generic [ref=f1e4]:
+        - link [ref=f1e5] [cursor=pointer]:
+            - /url: /
+            - heading "EtymoMap" [level=1] [ref=f1e6]
+        - button "Toggle menu" [ref=f1e7]
+    - generic [ref=f1e11]:
+        - region "Map" [ref=f1e12]
+        - group [ref=f1e13]:
+            - generic "Toggle attribution" [ref=f1e14] [cursor=pointer]
+            - link "MapLibre" [ref=f1e16] [cursor=pointer]:
+                - /url: https://maplibre.org/
+    - generic [ref=f1e20]:
+        - generic [ref=f1e21]:
+            - generic [ref=f1e22]:
+                - heading "Welcome to EtymoMap" [level=2] [ref=f1e23]
+                - paragraph [ref=f1e24]: Every word has a journey. Search any word to trace its roots, meanings, and the paths it travelled across the map of language.
+                - combobox "Search words" [active] [ref=f1e29]
+            - generic [ref=f1e30]:
+                - heading "Explore the story behind every word" [level=3] [ref=f1e31]
+                - paragraph [ref=f1e32]: From the viking invasions to the Norman-French conquest in 1066, and from post-Renaissance neologisms to its status as a global lingua franca, the English language boasts a fascinating history and development. Despite its origins as a West Germanic language, over two-thirds of the English lexicon consists of Romance vocabulary, mainly from French and Latin, with significant influence from Old Norse, Greek, and many others as well.
+                - paragraph [ref=f1e33]: Open any entry to uncover a word's etymology, the languages and older forms it descended from, laid out alongside its International Phonetic Alphabet spelling, historical usage, and an interactive atlas that maps where it came from and how it spread across the world.
+            - generic [ref=f1e34]:
+                - heading "Discover more" [level=3] [ref=f1e35]
+                - paragraph [ref=f1e36]: There's plenty more to dig into beyond the atlas.
+                - generic [ref=f1e37]:
+                    - link "About the project Why EtymoMap exists and the passion for language, history, and cartography behind it." [ref=f1e38] [cursor=pointer]:
+                        - /url: /about
+                        - generic [ref=f1e39]:
+                            - generic [ref=f1e40]: About the project
+                            - generic [ref=f1e41]: Why EtymoMap exists and the passion for language, history, and cartography behind it.
+                    - link "Blog In-depth explorations of etymology and the history of language." [ref=f1e44] [cursor=pointer]:
+                        - /url: /blog/articles
+                        - generic [ref=f1e45]:
+                            - generic [ref=f1e46]: Blog
+                            - generic [ref=f1e47]: In-depth explorations of etymology and the history of language.
+                    - link "Feedback Have a suggestion, found a bug, or want to share your thoughts?" [ref=f1e50] [cursor=pointer]:
+                        - /url: /feedback
+                        - generic [ref=f1e51]:
+                            - generic [ref=f1e52]: Feedback
+                            - generic [ref=f1e53]: Have a suggestion, found a bug, or want to share your thoughts?
+                    - link "Glossary A reference for the linguistic terms used throughout EtymoMap and its blog posts." [ref=f1e56] [cursor=pointer]:
+                        - /url: /glossary
+                        - generic [ref=f1e57]:
+                            - generic [ref=f1e58]: Glossary
+                            - generic [ref=f1e59]: A reference for the linguistic terms used throughout EtymoMap and its blog posts.
+        - generic [ref=f1e62]:
+            - link "v2026.09.14" [ref=f1e63] [cursor=pointer]:
+                - /url: /changelog
+            - generic [ref=f1e64]: ·
+            - link "Attributions" [ref=f1e65] [cursor=pointer]:
+                - /url: /attributions

@@ -134,8 +134,24 @@ describe("normalizeGeometry", () => {
 
     const result = normalizeGeometry(fc);
     expect(result.features).toHaveLength(2);
-    expect(result.features[0].properties).toEqual({ id: "IND", name: "India", count: 1 });
-    expect(result.features[1].properties).toEqual({ id: "CAN", name: "Canada", count: 1 });
+    expect(result.features[0].properties).toEqual({
+      id: "IND",
+      name: "India",
+      lang: "India",
+      count: 1,
+      family: "",
+      familyCode: "",
+      ancestors: "",
+    });
+    expect(result.features[1].properties).toEqual({
+      id: "CAN",
+      name: "Canada",
+      lang: "Canada",
+      count: 1,
+      family: "",
+      familyCode: "",
+      ancestors: "",
+    });
   });
 
   it("falls back to name for id and defaults name to id", () => {
@@ -156,8 +172,55 @@ describe("normalizeGeometry", () => {
     };
 
     const result = normalizeGeometry(fc);
-    expect(result.features[0].properties).toEqual({ id: "English", name: "English", count: 1 });
-    expect(result.features[1].properties).toEqual({ id: "fr", name: "fr", count: 1 });
+    expect(result.features[0].properties).toEqual({
+      id: "English",
+      name: "English",
+      lang: "English",
+      count: 1,
+      family: "",
+      familyCode: "",
+      ancestors: "",
+    });
+    expect(result.features[1].properties).toEqual({
+      id: "fr",
+      name: "fr",
+      lang: "fr",
+      count: 1,
+      family: "",
+      familyCode: "",
+      ancestors: "",
+    });
+  });
+
+  it("passes through family lineage properties", () => {
+    const fc: FeatureCollection = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            id: "olde1238",
+            name: "Old English (ca. 450-1100)",
+            count: 12,
+            family: "Anglic",
+            familyCode: "angl1265",
+            ancestors: "|indo1319|germ1287|angl1265|",
+          },
+          geometry: { type: "Point", coordinates: [0, 0] },
+        },
+      ],
+    };
+
+    const { properties } = normalizeGeometry(fc).features[0];
+    expect(properties).toMatchObject({
+      id: "olde1238",
+      name: "Old English (ca. 450-1100)",
+      lang: "Old English (ca. 450-1100)",
+      count: 12,
+      family: "Anglic",
+      familyCode: "angl1265",
+      ancestors: "|indo1319|germ1287|angl1265|",
+    });
   });
 
   it("rounds a positive count and defaults invalid counts to 1", () => {
@@ -209,10 +272,43 @@ describe("escapeHtml", () => {
 });
 
 describe("renderPopup", () => {
-  it("wraps the escaped name in a styled span", () => {
-    expect(renderPopup({ id: "x", name: "A&B", count: 1 })).toBe(
-      '<span style="font-size:13px;font-weight:600;color:#18181b;">A&amp;B</span>',
-    );
+  it("renders the family name as the title with the language as the subtitle", () => {
+    expect(
+      renderPopup({
+        id: "x",
+        name: "Old English",
+        lang: "Old English",
+        count: 1,
+        family: "Anglic",
+        familyCode: "angc",
+        ancestors: "|angc|",
+      }),
+    ).toContain('style="font-size:13px;font-weight:600;color:#18181b;">Anglic</div>');
+    expect(
+      renderPopup({
+        id: "x",
+        name: "Old English",
+        lang: "Old English",
+        count: 1,
+        family: "Anglic",
+        familyCode: "angc",
+        ancestors: "|angc|",
+      }),
+    ).toContain('style="font-size:11px;color:#71717a;">Old English</div>');
+  });
+
+  it("falls back to the name when no family is known", () => {
+    expect(
+      renderPopup({
+        id: "x",
+        name: "A&B",
+        lang: "A&B",
+        count: 1,
+        family: "",
+        familyCode: "",
+        ancestors: "",
+      }),
+    ).toBe('<div style="font-size:13px;font-weight:600;color:#18181b;">A&amp;B</div>');
   });
 });
 

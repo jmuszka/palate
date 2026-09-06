@@ -1,0 +1,53 @@
+- generic [ref=f2e3]:
+    - generic [ref=f2e4]:
+        - link [ref=f2e5] [cursor=pointer]:
+            - /url: /
+            - heading "EtymoMap" [level=1] [ref=f2e6]
+        - button "Toggle menu" [ref=f2e7]
+    - generic [ref=f2e11]:
+        - region "Map" [ref=f2e12]
+        - group [ref=f2e13]:
+            - generic "Toggle attribution" [ref=f2e14] [cursor=pointer]
+            - link "MapLibre" [ref=f2e16] [cursor=pointer]:
+                - /url: https://maplibre.org/
+    - generic [ref=f2e20]:
+        - generic [ref=f2e21]:
+            - button "Back" [ref=f2e22]
+            - heading "Attributions" [level=2] [ref=f2e25]
+            - paragraph [ref=f2e26]: "EtymoMap is built on data from these sources:"
+            - list [ref=f2e27]:
+                - listitem [ref=f2e28]:
+                    - link "Wiktionary" [ref=f2e29] [cursor=pointer]:
+                        - /url: https://en.wiktionary.org
+                    - paragraph [ref=f2e30]: A crowdsourced multilingual dictionary maintained by the Wikimedia Foundation. Each entry captures a word's definitions, pronunciations, translations, and, critically for EtymoMap, its etymological lineage. Wiktionary allows us to see which ancestors a word descends from and which sibling share that ancestry.
+                    - paragraph [ref=f2e31]:
+                        - text: Provides every word in the database along with the structured etymological relationships between them. Data was extracted using a custom fork of
+                        - link "etymology-db" [ref=f2e32] [cursor=pointer]:
+                            - /url: https://github.com/droher/etymology-db
+                        - text: .
+                - listitem [ref=f2e33]:
+                    - link "Etymonline" [ref=f2e34] [cursor=pointer]:
+                        - /url: https://www.etymonline.com
+                    - paragraph [ref=f2e35]: "An online etymology dictionary launched in the early 2000s that gives informal, narrative-style accounts of how English words came to be. Rather than a rigid tree, it tells the story: what a word originally meant, how its sense shifted over centuries, and which historical events or cultural forces nudged it along."
+                    - paragraph [ref=f2e36]: Supplies the prose etymologies displayed alongside the relationship tree, giving each word a readable backstory that complements the structured graph data..
+                - listitem [ref=f2e37]:
+                    - link "Glottolog" [ref=f2e38] [cursor=pointer]:
+                        - /url: https://glottolog.org
+                    - paragraph [ref=f2e39]: A bibliographic database of the world’s languages run by the Max Planck Institute for Evolutionary Anthropology in Leipzig. It assigns every known language a unique identifier (“glottocode”), classifies them into a genealogical family tree, and tracks the published literature documenting each one.
+                    - paragraph [ref=f2e40]: Provides the language family hierarchy so EtymoMap knows, for example, that English belongs to the West Germanic branch of Indo-European. This powers the family chart and the language classification shown on each word page..
+                - listitem [ref=f2e41]:
+                    - link "Glottography" [ref=f2e42] [cursor=pointer]:
+                        - /url: https://glottography.org
+                    - paragraph [ref=f2e43]: A spatial dataset linked to Glottolog that maps each glottocode to geographic regions. For every language it records both where it is spoken natively today and its historical area of origin.
+                    - paragraph [ref=f2e44]: Supplies the GeoJSON polygon data that draws language regions on the map — the shaded areas and origin points you see when viewing a word's journey..
+                - listitem [ref=f2e45]:
+                    - link "CARTO Positron" [ref=f2e46] [cursor=pointer]:
+                        - /url: https://carto.com/basemaps
+                    - paragraph [ref=f2e47]: A free vector basemap style by CARTO that uses a muted palette of light grays and creams, designed to sit quietly behind data overlays without competing for visual attention.
+                    - paragraph [ref=f2e48]: The tile layer underneath all map content, providing roads, coastlines, and place labels without distracting from the etymology data rendered on top..
+        - generic [ref=f2e49]:
+            - link "v2026.09.14" [ref=f2e50] [cursor=pointer]:
+                - /url: /changelog
+            - generic [ref=f2e51]: ·
+            - link "Attributions" [ref=f2e52] [cursor=pointer]:
+                - /url: /attributions

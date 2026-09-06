@@ -1,0 +1,267 @@
+- generic [ref=f4e3]:
+    - generic [ref=f4e4]:
+        - link [ref=f4e5] [cursor=pointer]:
+            - /url: /
+            - heading "EtymoMap" [level=1] [ref=f4e6]
+        - button "Toggle menu" [ref=f4e7]
+    - generic [ref=f4e11]:
+        - region "Map" [ref=f4e12]
+        - group [ref=f4e13]:
+            - generic "Toggle attribution" [ref=f4e14] [cursor=pointer]
+            - generic [ref=f4e15]:
+                - link "MapLibre" [ref=f4e33] [cursor=pointer]:
+                    - /url: https://maplibre.org/
+                - text: "| ©"
+                - link "CARTO" [ref=f4e34] [cursor=pointer]:
+                    - /url: https://carto.com/about-carto/
+                - text: ", ©"
+                - link "OpenStreetMap" [ref=f4e35] [cursor=pointer]:
+                    - /url: http://www.openstreetmap.org/about/
+                - text: contributors
+    - generic [ref=f4e20]:
+        - button "Back" [ref=f4e41]
+        - article [ref=f4e44]:
+            - generic [ref=f4e45]:
+                - 'heading "Sails on the Horizon: How 1,500 Years of Conquest, Trade, and Migration Reinvented the English Language. Thrice." [level=1] [ref=f4e46]'
+                - generic [ref=f4e47]:
+                    - generic [ref=f4e48]: "Published: September 6, 2026"
+                    - generic [ref=f4e49]: "Last updated: September 6, 2026"
+            - generic [ref=f4e50]:
+                - paragraph [ref=f4e51]: "If you sit down as an English speaker to learn German, you will quickly find yourself tripped up by the three grammatical genders and a rigid case system. Pick up French, and you face silent verb endings and intricate conjugations. Try Icelandic, and you are confronted by a living fossil of a 10th-century Viking tongue. This is the great paradox of language learning as an Anglophone: despite English borrowing heavily from every corner of Europe, no major language on Earth shares more than a 30% direct overlap with modern English."
+                - paragraph [ref=f4e52]: This isolation is no coincidence. Modern English, with its chaotic spellings, silent letters, and overlapping synonyms, did not evolve in a vacuum. It is the direct product of 1,500 years of conquest, migration, trade, and intellectual panic that repeatedly smashed, stripped down, and rebuilt the language over and over again.
+                - paragraph [ref=f4e53]: Þusend geara ær, þis wæs Engliscra manna gereord þe hira geþeode Englisc nemndon. Ac hie ne synd nēah ne feor gelīce. Hit þyncð þæt ān þing þe hie dælað, is þæt nama.
+                - paragraph [ref=f4e54]: Oops, wrong crowd!
+                - paragraph [ref=f4e55]: "Unless you happen to be a time traveler or medieval historian, that paragraph probably looks like a wall of runes. Yet barely 1,000 years ago, that was the living native tongue spoken by people who called themselves Engliscmen, speaking a language they called Englisc. Read it aloud, and it sounds less like modern English and more like a dialect of Old Norse or High German. Modern English and Old English are not even remotely similar: neither in spelling, sound, nor grammar. Looking at the two side by side, it feels like the only thing they share is the name."
+                - paragraph [ref=f4e56]: "Consider this passage from Genesis 6:6-7:"
+                - blockquote [ref=f4e57]:
+                    - paragraph [ref=f4e58]: "Gode ofðuhte* ða ðæt he mann geworhte ofer eorðan … And cwæð: “Ic adylgie ðone man, ðe ic gesceop, fram ðære eorðan ansyne, fram ðam slincendum oð ða fugelas: me ofðingð soðlice ðæt ic hi worhte.”"
+                - paragraph [ref=f4e59]:
+                    - code [ref=f4e60]: Old English (11th century)
+                - blockquote [ref=f4e61]:
+                    - paragraph [ref=f4e62]: "The Lord regretted having made humankind on the earth … So the Lord said: “I will wipe the human beings I have created off the face of the earth, people together with animals and reptiles and birds of the air, because I regret having made them.”"
+                - paragraph [ref=f4e63]:
+                    - code [ref=f4e64]: Modern English (21st century)
+                - paragraph [ref=f4e65]:
+                    - text: An untrained eye might be able to pick out a stray word like
+                    - emphasis [ref=f4e66]: mann
+                    - text: or
+                    - emphasis [ref=f4e67]: Gode
+                    - text: ", but the broader meaning is entirely opaque. Virtually every layer of the language has been completely overhauled, which raises the question: how on"
+                    - emphasis [ref=f4e68]: eorðan
+                    - text: did this happen?
+                - heading "The Anglo-Saxons" [level=3] [ref=f4e69]
+                - paragraph [ref=f4e71]:
+                    - text: To trace the origins of this transformation, we have to travel back to the 5th century A.D. While Rome’s vast borders stretched from the sands of Lebanon to Hadrian’s Wall dividing modern-day England and Scotland, Roman
+                    - emphasis [ref=f4e72]: Britannia
+                    - text: lay on the outermost fringes of the empire, far removed from the cultural center of Rome. Consequently, unlike in Roman Gaul or Iberia, where Latin supplanted local Celtic dialects, Rome’s footprint in Britain remained primarily administrative and for military purposes. The native Celtic-speaking Britons lived mostly unimpeded lives, continuing to speak their indigenous Brythonic tongues while Latin remained a secondary language of government and trade.
+                - paragraph [ref=f4e73]: That stability shattered in 476 A.D. with the final collapse and sacking of the Western Roman Empire. As Rome imploded, the imperial government abandoned its distant provinces, leaving behind a massive power vacuum across Western Europe, including in Britain.
+                - paragraph [ref=f4e75]: Sensing opportunity, Western Germanic warriors began sailing across the North Sea in droves. They crossed the channel not only to raid, but to conquer, settle, and carve out new territories for themselves, setting the stage for a violent demographic and linguistic shift across the island.
+                - paragraph [ref=f4e76]: Over the next century, Germanic tribes, notably from Angles and Saxony, along with the other coastal tribes spanning modern-day Denmark, Germany, and the Netherlands, crossed the North Sea and displaced the native Celtic Britons, pushing them to the mountainous fringes of Wales, Cornwall, and Scotland.
+                - paragraph [ref=f4e77]:
+                    - text: As these Angles and Saxons, or
+                    - emphasis [ref=f4e78]: Anglo-Saxons
+                    - text: ", established regional kingdoms, they brought with them their various West Germanic dialects. Because the linguistic schism between these continental tribes was still recent, their tongues were mutually intelligible. Over centuries of trade, intermarriage, and diplomacy, these regional dialects converged into a common Anglo-Saxon language. By the time the inhabitants of Angle land—England—developed a unified identity as the English people, their speech had solidified into what we now call Old English."
+                - heading "The Vikings" [level=3] [ref=f4e79]
+                - paragraph [ref=f4e81]: This shared identity did not materialize out of nowhere. Throughout human history, conflict and strife are the rule rather than the exception; tribal kingdoms rarely merge out of goodwill alone. It always takes a shared existential threat to forge distinct peoples under a single banner. By the turn of the 9th century, that existential threat arrived on the horizon in the form of relentless Viking raids.
+                - paragraph [ref=f4e82]: These pagan raiders were North Germanic warriors from Scandinavia who discovered they could navigate inland rivers just as easily as open seas. Striking deep within European territories, they looted monasteries and other estates virtually unopposed. The fractured kingdoms of England and the continent were initially powerless to resist. Brief plundering soon turned into permanent occupation, with Viking settlements taking root across England, Ireland, Normandy, and Kievan Rus, planting the seeds of war, trade, and that would redefine European geopolitical dynamics for generations.
+                - paragraph [ref=f4e83]: In England, Viking armies continually ransacked the eastern kingdoms of East Anglia and Northumbria, carving out a permanent Scandinavian realm known as the Danelaw. From this stronghold, Norse settlers staged further attacks inland while establishing farmsteads and market towns. Over decades of cohabitation, the occupiers gradually integrated with the English locals, spreading their language, culture, and lineage across the island.
+                - paragraph [ref=f4e84]: "As early West and North Germanic languages, Old English and Old Norse shared enough common vocabulary to be somewhat mutually intelligible but with significant structural gaps. In general, adults, and particularly adults in a time without dictionaries or formal instruction, struggle with language acquisition, and the settlers and locals needed a pragmatic way to communicate. In a process mirroring creolization, Anglo-Saxons and Scandinavians stripped away the complex syntactic and morphological differences that divided them: they abandoned their respective auxiliary words, noun genders, and case inflections, relying instead on core root words that both cultures held in common."
+                - paragraph [ref=f4e85]:
+                    - text: 'This compromise allowed the two groups to coexist, trade, and intermarry, but it permanently re-engineered the language. As Norse-English offspring grew up hearing this stripped-down trade speech as their primary tongue, the simplified "pidgin" became the new native standard. Over a few generations, English shed its entire system of grammatical gender, collapsing masculine, feminine, and neuter articles into a single universal word:'
+                    - emphasis [ref=f4e86]: the
+                    - text: . It also parted with the vast array of case inflections that sibling Germanic languages like German and Icelandic retain to this day.
+                - paragraph [ref=f4e87]:
+                    - text: Beyond grammar, the Vikings flooded the vocabulary with hundreds of everyday terms. Old Norse instilled core words such as
+                    - emphasis [ref=f4e88]: sky
+                    - text: ","
+                    - emphasis [ref=f4e89]: egg
+                    - text: ","
+                    - emphasis [ref=f4e90]: shirt
+                    - text: ", and"
+                    - emphasis [ref=f4e91]: ill
+                    - text: —the latter of which being why modern English possesses both a West-Germanic
+                    - emphasis [ref=f4e92]: sickness
+                    - text: and a North-Germanic
+                    - emphasis [ref=f4e93]: illness
+                    - text: —along with words like
+                    - emphasis [ref=f4e94]: ransack
+                    - text: and
+                    - emphasis [ref=f4e95]: berserk
+                    - text: that pertained to the ransacking and berserking that the Vikings indeed partook in.
+                - paragraph [ref=f4e96]: Aside from these inflectional simplifications and a handful of new loanwords, Old English remained largely intact. Because Old English and Old Norse were closely related Germanic tongues, the core language held its ground, and within a few generations, the Norse settlers assimilated into wider English society.
+                - paragraph [ref=f4e97]: "By the turn of the 11th century, the language looked like this:"
+                - blockquote [ref=f4e98]:
+                    - paragraph [ref=f4e99]: Hwæt. We Gardena in geardagum,
+                - blockquote [ref=f4e100]:
+                    - paragraph [ref=f4e101]: þeodcyninga, þrym gefrunon,
+                - blockquote [ref=f4e102]:
+                    - paragraph [ref=f4e103]: hu ða æþelingas ellen fremedon.
+                - paragraph [ref=f4e104]:
+                    - code [ref=f4e105]: Beowulf, 11th century A.D.
+                - paragraph [ref=f4e106]: This text still looks nothing like anything a modern English speaker could recognize. English had survived its first great collision, but far grander transformations were looming across the Channel.
+                - heading "The Norman Conquest" [level=3] [ref=f4e107]
+                - paragraph [ref=f4e109]: Recall that the Scandinavian invaders did not settle solely in Britain; they established strongholds all across Europe. One major settlement in northern France was ceded to the "Northmen"—the Normans—giving the region its name, Normandy. Over time, these Norse settlers adopted French speech and customs.
+                - paragraph [ref=f4e110]: "By 1066, a convoluted royal succession crisis following the death of the English king left three men eyeing the throne: Anglo-Saxon contender Harold Godwinson, Viking king Harald Hardrada, and William, Duke of Normandy. After a brutal campaign, William “the Conqueror” emerged victorious and immediately purged England’s native nobility and landowners, transplanting entirely foreign Norman-French aristocracy and institutions onto the conquered island overnight."
+                - paragraph [ref=f4e111]: "For three centuries, a massive linguistic divide split the island: Germanic Anglo-Saxon peasants were ruled by an elite, French-speaking upper class. These foreign conquerors spoke Norman French, a regional northern dialect closely related to Old French, which evolved on English soil into a distinct noble dialect known as Anglo-Norman."
+                - paragraph [ref=f4e112]: Because power, wealth, and authority rested entirely with the crown and its barons, culture flowed strictly downward. English commoners were forced to adopt the language of their masters as they interacted with Anglo-Norman courts of law, royal administration, and estate overseers. The nobility had little reason to learn the vulgar tongue of their serfs, but the commoners had to learn French terms out of necessity to navigate legal disputes, pay taxes, and avoid punishment. This power imbalance flooded the English language with thousands of French loanwords, transforming it forever from a purely Germanic dialect into a hybrid tongue.
+                - paragraph [ref=f4e113]: This one-way exchange is the primary reason why, to this day, French forms the single largest layer of English vocabulary, even surpassing its native Germanic core. If you align a modern English passage alongside equivalent French and German texts, the untrained eye will often find striking parallels with French despite English being fundamentally Germanic at its roots.
+                - blockquote [ref=f4e114]:
+                    - paragraph [ref=f4e115]: The royal judge considered the evidence before rendering a final judgment.
+                - paragraph [ref=f4e116]:
+                    - code [ref=f4e117]: English
+                - blockquote [ref=f4e118]:
+                    - paragraph [ref=f4e119]: Le juge royal a examiné les preuves avant de rendre un jugement final.
+                - paragraph [ref=f4e120]:
+                    - code [ref=f4e121]: French
+                - blockquote [ref=f4e122]:
+                    - paragraph [ref=f4e123]: Der königliche Richter prüfte die Beweise, bevor er ein endgültiges Urteil fällte.
+                - paragraph [ref=f4e124]:
+                    - code [ref=f4e125]: German
+                - paragraph [ref=f4e126]:
+                    - text: More notably, this power balance permanently embedded a class-based register into the heart of the language. English gained a two-tiered system of redundant doublets, where the Germanic term signaled the lowly peasant, while the French synonym conveyed elevated status or formal authority. For instance, Anglo-Saxon serfs who tended animals in the muddy fields spoke of a
+                    - emphasis [ref=f4e127]: pig
+                    - text: ", a"
+                    - emphasis [ref=f4e128]: cow
+                    - text: ", or a"
+                    - emphasis [ref=f4e129]: sheep
+                    - text: ", but when those same animals were slaughtered and served in the lord's manor, the French-speaking aristocracy dined on"
+                    - emphasis [ref=f4e130]: pork
+                    - text: (porc),
+                    - emphasis [ref=f4e131]: beef
+                    - text: (bœuf), and
+                    - emphasis [ref=f4e132]: mutton
+                    - text: (mouton). A commoner would
+                    - emphasis [ref=f4e133]: buy
+                    - text: a plain
+                    - emphasis [ref=f4e134]: shirt
+                    - text: at a market, whereas a Norman lord would
+                    - emphasis [ref=f4e135]: purchase
+                    - text: an elegant
+                    - emphasis [ref=f4e136]: blouse
+                    - text: .
+                - paragraph [ref=f4e137]:
+                    - text: The social friction also left a persistent mark on the legal system. In medieval courtrooms, where French judges presided over Anglo-Saxon defendants, legal clerks paired Germanic and French terms together to ensure both classes understood the proceedings. This practice spawned famous legal doublets still used in courtrooms today, such as “
+                    - emphasis [ref=f4e138]: breaking and entering
+                    - text: ”, “
+                    - emphasis [ref=f4e139]: null and void
+                    - text: ”, and “
+                    - emphasis [ref=f4e140]: will and testament
+                    - text: ”.
+                - paragraph [ref=f4e141]: The class divide was so deeply entrenched into society that its echo lingers nearly a thousand years later. Socioeconomic studies reveal that British citizens with French-derived surnames still maintain higher average incomes and life expectancies than those with native Anglo-Saxon names. The Vikings may have altered how English was spoken, but the Normans usurped the Anglo-Saxon way of life, transforming their native tongue through a sweeping social revolution.
+                - heading "The Great Vowel Shift" [level=3] [ref=f4e142]
+                - paragraph [ref=f4e144]: "By the mid-13th century, under King Henry III, England formally severed its ties with Normandy, and the Hundred Years' War soon turned French into the language of the enemy. But the linguistic revolution was already complete: three centuries of French dominance had trickled down from the royal courts into literature, commerce, and everyday speech."
+                - paragraph [ref=f4e145]:
+                    - text: By the late 14th century, English re-emerged as the nation’s official language, looking like this opening passage from Geoffrey Chaucer’s
+                    - emphasis [ref=f4e146]: The Canterbury Tales
+                    - text: ":"
+                - blockquote [ref=f4e147]:
+                    - paragraph [ref=f4e148]: Whan that Aprille with his shoures soote
+                - blockquote [ref=f4e149]:
+                    - paragraph [ref=f4e150]: The droghte of March hath perced to the roote,
+                - blockquote [ref=f4e151]:
+                    - paragraph [ref=f4e152]: And bathed every veyne in swich licour
+                - blockquote [ref=f4e153]:
+                    - paragraph [ref=f4e154]: Of which vertu engendred is the flour…
+                - paragraph [ref=f4e155]: Unlike the Anglo-Saxon texts from a few short centuries prior, this text is recognizable. It remains a hurdle for modern eyes, but with an aspirin and a few annotations for antiquated vocabulary, an English speaker today can actually read it. The core Germanic engine had fused with a French vocabulary to form Middle English. Yet, the reshaping of our language was not quite finished.
+                - paragraph [ref=f4e156]: "Compounding these political shifts was a demographic catastrophe: the Black Death, which eradicated up to half of England's population by the mid-14th century. The resulting worker shortage shattered feudal ties, triggering widespread migration as peasants left their small villages to seek opportunities in major towns and cities."
+                - paragraph [ref=f4e157]: Unlike the mass-communication channels of modern times, medieval speech varied drastically every few miles, with each community bound to its own distinct dialect, vocabulary, and pronunciation. As workers from across the island converged in crowded urban centers, these hyper-local dialects collided and blended. This period of intense social mobility forced a rapid dialectal melting pot, smoothing away regional differences and laying the groundwork for a standardized national language.
+                - paragraph [ref=f4e158]: "Driven by rapid urbanization and inter-class mingling, England entered the Early Modern period amidst a massive speech overhaul known as the Great Vowel Shift. Phonological evolution is a universal constant throughout the history of human language, but this particular shift collided head-on with a major technological innovation: the printing press."
+                - paragraph [ref=f4e159]: Historically, when literacy rates were low and manuscripts were copied by hand, written text naturally adapted to shifts in vulgar speech. Scribes had routinely updated spellings across the centuries following the Norman Conquest. However, around 1476, when William Caxton established his printing press, he inadvertently froze English spelling right in the middle of its ongoing vowel transformation.
+                - paragraph [ref=f4e160]:
+                    - text: This orthography was further distorted by the personal opinions and practical quirks of early Dutch typesetters, who introduced silent letters to familiar words (like the
+                    - emphasis [ref=f4e161]: h
+                    - text: in ghost), mirroring Dutch spelling conventions. Typesetters routinely trimmed words or padded them with extra letters just to justify text margins on the page.
+                - paragraph [ref=f4e162]: "The release of the King James Version of the Bible in 1611 demonstrably cemented these conventions for good, and the result is the notorious inconsistency of modern English spelling: a fixed, 15th-century writing system permanently frozen in time against a vernacular that kept on evolving."
+                - heading "Intellectual Movements" [level=3] [ref=f4e163]
+                - paragraph [ref=f4e164]: Following the turmoil of the Middle Ages, the Renaissance proliferated a widespread renewed interest in classical scholarship. Humanist writers embarked on an ambitious endeavor to elevate the written language, importing an immense volume of Latin and Greek terminology to describe philosophical, legal, and artistic concepts that native Germanic roots simply could not accommodate.
+                - paragraph [ref=f4e165]:
+                    - text: This movement expanded during the Age of Enlightenment and the Scientific Revolution. As intellectuals constructed new disciplines, they coined neologisms using ancient Greek and Latin roots to designate original theories and technical terminology, releasing “inkhorn” terms like
+                    - emphasis [ref=f4e166]: hypothesis
+                    - text: ","
+                    - emphasis [ref=f4e167]: electricity
+                    - text: ","
+                    - emphasis [ref=f4e168]: microscope
+                    - text: ", and"
+                    - emphasis [ref=f4e169]: gravity
+                    - text: directly onto the language.
+                - paragraph [ref=f4e170]:
+                    - text: Just as the influence of Norman-French imposed a social register, this influx of classical vocabulary expanded English into a three-tiered system in certain contexts. A commoner might
+                    - emphasis [ref=f4e171]: ask
+                    - text: for something, a judge might
+                    - emphasis [ref=f4e172]: question
+                    - text: a witness, but a scholar would
+                    - emphasis [ref=f4e173]: interrogate
+                    - text: "a hypothesis: the Latin neologism signaled an even higher tier of prestige, intellect, and authority than the already-elevated French term."
+                - heading "A Global Lingua Franca" [level=3] [ref=f4e174]
+                - paragraph [ref=f4e176]: "All in all, today we are left with a bastard tongue that is a shell of its former West-Germanic self. Nowhere is this sweeping transformation clearer than in how the language's core texts transformed across the four major “periods” of English that linguists have canonized:"
+                - blockquote [ref=f4e177]:
+                    - paragraph [ref=f4e178]: Fæder ure þu þe eart on heofonum; Si þin nama gehalgod.
+                - paragraph [ref=f4e179]:
+                    - code [ref=f4e180]: Old English, 11th century
+                - blockquote [ref=f4e181]:
+                    - paragraph [ref=f4e182]: Oure fadir þat art in heuenes, halwid be þi name.
+                - paragraph [ref=f4e183]:
+                    - code [ref=f4e184]: Middle English, 14th century
+                - blockquote [ref=f4e185]:
+                    - paragraph [ref=f4e186]: Our father which art in heaven, hallowed be thy name.
+                - paragraph [ref=f4e187]:
+                    - code [ref=f4e188]: Early Modern English, 17th century
+                - blockquote [ref=f4e189]:
+                    - paragraph [ref=f4e190]: Our father who is in heaven, hallowed be your name.
+                - paragraph [ref=f4e191]:
+                    - code [ref=f4e192]: Modern English, 20th century
+                - paragraph [ref=f4e193]: While everyday phrases like "good morning," "come home," or "drink water" demonstrate that its underlying bones remain firmly Germanic, the French-induced cultural revolution and the importation of classical Latinisms have transformed English into a linguistic mutt. Modern English shares over two-thirds of its total vocabulary with Romance languages—a far higher percentage than with any of its immediate Germanic relatives like German or Dutch.
+                - paragraph [ref=f4e194]:
+                    - text: With Britain forming the largest colonial empire in history and the United States growing into the most influential economic and cultural superpower post-WWII, English has united global trade, diplomacy, and science far more effectively than any prior attempts at establishing a
+                    - emphasis [ref=f4e195]: lingua franca
+                    - text: . Today, as the world's most widely spoken language, English continues to bend, borrow, and adapt across every continent it touches. Caught between global dialects, internet slang, and immeasurable cultural exchange, modern English is driven by the same chaotic forces that built it, and will undoubtedly look just as unrecognizable 1,000 years from now as Old English does to us today.
+                - heading "Epilogue" [level=3] [ref=f4e196]
+                - paragraph [ref=f4e197]: "You may have noticed that the oft-forgotten Celtic languages made only a quiet whisper in the grand story of English. Despite predating any Germanic footprint on the British Isles, remarkably little Celtic vocabulary or culture diffused into the Anglo-Saxon tongue. The native Brythonic peoples were out-fought, pushed into the western peripheries of Wales, Cornwall, and Scotland, and gradually assimilated into the broader Anglo-Saxon nation. However, there are a handful of subtle features that English retains thanks to its peripheral Celtic influences:"
+                - list [ref=f4e198]:
+                    - listitem [ref=f4e199]:
+                        - strong [ref=f4e200]: Folk Rhymes
+                        - text: ': The classic nursery rhyme opener "'
+                        - emphasis [ref=f4e201]: Eeny, meeny, miny, moe
+                        - text: '" is a corrupted remnant of ancient Brythonic sheep-counting systems used by shepherds to tally livestock.'
+                    - listitem [ref=f4e202]:
+                        - strong [ref=f4e203]: '"Do" You Know?'
+                        - text: ': English is unique among most European languages in forming questions and negatives using the auxiliary verb "do" (e.g., "'
+                        - emphasis [ref=f4e204]: Do you know?
+                        - text: '" instead of "'
+                        - emphasis [ref=f4e205]: Know you?
+                        - text: '"). No other Germanic or Romance language does this, but the construction aligns directly with patterns found in Welsh and Cornish.'
+                    - listitem [ref=f4e206]:
+                        - strong [ref=f4e207]: Progressive Tense
+                        - text: ": The constant use of the continuous -"
+                        - emphasis [ref=f4e208]: ing
+                        - text: form ("
+                        - emphasis [ref=f4e209]: I am speaking
+                        - text: '" rather than "'
+                        - emphasis [ref=f4e210]: I speak
+                        - text: '") mirrors Celtic sentence structures, setting English apart from continental European relatives that rely on simple present tenses.'
+                    - listitem [ref=f4e211]:
+                        - strong [ref=f4e212]: Preserving the "th"
+                        - text: ": While continental Germanic languages abandoned this sound that foreign speakers infamously struggle with, English retained the sound partly due to continuous contact with Celtic dialects that preserved the same phoneme."
+                - paragraph [ref=f4e213]: Without a doubt, English underwent a staggering transformation over a remarkably short period of time. While it is easy to frame medieval speakers as passive spectators carried along by the governing forces of linguistic evolution, the reality was far more nuanced. Deserving of its own article, the sheer pace of change ignited fierce reactionary backlash. Scholars from the late Middle English and Early Modern periods looked back at ancestral manuscripts, and even texts written mere decades prior, only to find them incomprehensible. Terrified that their literary heritage and cultural identity were being eroded, purists mounted a bitter defense against the influx of foreign "inkhorn" terms. They loathed these Latinate and Hellenic additions, branding them as pretentious, artificial corruptions that polluted the clarity of pure native speech.
+                - paragraph [ref=f4e214]:
+                    - text: Over the centuries, this linguistic conservatism cultivated recurring movements dedicated to purifying the language or reversing its foreign influence, most famously seen today in
+                    - emphasis [ref=f4e215]: Anglish
+                    - text: ", a thought experiment that seeks to purge English of its French, Latin, and Norse borrowings, replacing them entirely with pre-1066 Germanic roots:"
+                    - emphasis [ref=f4e216]: skill
+                    - text: instead of
+                    - emphasis [ref=f4e217]: ability
+                    - text: ","
+                    - emphasis [ref=f4e218]: inborn
+                    - text: over
+                    - emphasis [ref=f4e219]: native
+                    - text: ", and coining new"
+                    - emphasis [ref=f4e220]: wordstock
+                    - text: to replace foreign
+                    - emphasis [ref=f4e221]: vocabulary
+                    - text: .
+        - generic [ref=f4e29]:
+            - link "v2026.09.14" [ref=f4e30] [cursor=pointer]:
+                - /url: /changelog
+            - generic [ref=f4e31]: ·
+            - link "Attributions" [ref=f4e32] [cursor=pointer]:
+                - /url: /attributions

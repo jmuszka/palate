@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildColoredTree, PALETTE } from "./familyTree";
+import { buildColoredTree, extractFamilyCode, matchFamily, PALETTE } from "./familyTree";
 import type { FamilyTreeNode } from "./etymologyTree";
 
 describe("buildColoredTree", () => {
@@ -72,5 +72,99 @@ describe("buildColoredTree", () => {
     expect(root.children?.[0].value).toBe(0);
     expect(root.children?.[0].children?.[0].value).toBe(1);
     expect(root.children?.[1].value).toBe(1);
+  });
+
+  it("computes subtreeDepth as the number of levels below each node", () => {
+    const tree: FamilyTreeNode = {
+      id: "root",
+      name: "root",
+      value: 6,
+      children: [
+        {
+          id: "a",
+          name: "A",
+          value: 4,
+          children: [
+            { id: "a1", name: "A1", value: 3, children: [{ id: "a11", name: "A11", value: 1 }] },
+            { id: "a2", name: "A2", value: 1 },
+          ],
+        },
+        { id: "b", name: "B", value: 1 },
+      ],
+    };
+
+    const { root } = buildColoredTree(tree);
+
+    expect(root.subtreeDepth).toBe(3);
+    expect(root.children?.[0].subtreeDepth).toBe(2);
+    expect(root.children?.[0].children?.[0].subtreeDepth).toBe(1);
+    expect(root.children?.[0].children?.[0].children?.[0].subtreeDepth).toBe(0);
+    expect(root.children?.[1].subtreeDepth).toBe(0);
+  });
+
+  it("extracts glidecodes from bracketed family ids", () => {
+    const tree: FamilyTreeNode = {
+      id: "root",
+      name: "root",
+      value: 1,
+      children: [{ id: "'Indo-European [indo1319]'", name: "Indo-European", value: 1 }],
+    };
+
+    const { root } = buildColoredTree(tree);
+
+    expect(root.children?.[0].code).toBe("indo1319");
+    expect(root.children?.[0].name).toBe("Indo-European");
+  });
+});
+
+describe("extractFamilyCode", () => {
+  it("extracts a code from a bracketed id", () => {
+    expect(extractFamilyCode("Indo-European [indo1319]")).toBe("indo1319");
+  });
+
+  it("returns undefined when there is no code", () => {
+    expect(extractFamilyCode("Indo-European")).toBeUndefined();
+  });
+});
+
+describe("matchFamily", () => {
+  const tree: FamilyTreeNode = {
+    id: "root",
+    name: "root",
+    value: 5,
+    children: [
+      {
+        id: "'Germanic [germ1287]'",
+        name: "Germanic",
+        value: 2,
+        children: [
+          { id: "'West Germanic [west2793]'", name: "West Germanic", value: 1 },
+          { id: "'North Germanic [nort2782]'", name: "North Germanic", value: 1 },
+        ],
+      },
+      {
+        id: "'Romance [roma1334]'",
+        name: "Romance",
+        value: 1,
+      },
+    ],
+  };
+
+  it("activates a family, its ancestors, and its descendants", () => {
+    const { root } = buildColoredTree(tree);
+    const { active, found } = matchFamily(root, "west2793");
+
+    expect(found).toBe(true);
+    // root has no code; Germanic and West Germanic are on the path
+    expect(active.has("germ1287")).toBe(true);
+    expect(active.has("west2793")).toBe(true);
+    expect(active.has("nort2782")).toBe(false);
+    expect(active.has("roma1334")).toBe(false);
+  });
+
+  it("reports not found for families outside the tree", () => {
+    const { root } = buildColoredTree(tree);
+    const { found } = matchFamily(root, "absent1234");
+    expect(found).toBe(false);
   });
 });

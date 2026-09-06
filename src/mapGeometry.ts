@@ -4,7 +4,11 @@ import type { FeatureCollection, Feature } from "geojson";
 export interface RegionProperties {
   id?: string;
   name?: string;
+  lang?: string;
   count?: number;
+  family?: string;
+  familyCode?: string;
+  ancestors?: string;
   ADMIN?: string;
   ISO_A3?: string;
   ISO_A2?: string;
@@ -13,7 +17,11 @@ export interface RegionProperties {
 export interface NormalizedProps {
   id: string;
   name: string;
+  lang: string;
   count: number;
+  family: string;
+  familyCode: string;
+  ancestors: string;
 }
 
 export function normalizeGeometry(geometry: FeatureCollection): FeatureCollection {
@@ -41,7 +49,15 @@ export function normalizeGeometry(geometry: FeatureCollection): FeatureCollectio
 
     features.push({
       ...feature,
-      properties: { id, name, count },
+      properties: {
+        id,
+        name,
+        lang: raw.lang ?? name,
+        count,
+        family: raw.family ?? "",
+        familyCode: raw.familyCode ?? "",
+        ancestors: raw.ancestors ?? "",
+      },
     });
   }
 
@@ -58,7 +74,12 @@ export function escapeHtml(value: string): string {
 }
 
 export function renderPopup(props: NormalizedProps): string {
-  return `<span style="font-size:13px;font-weight:600;color:#18181b;">${escapeHtml(props.name)}</span>`;
+  const title = escapeHtml(props.family || props.name);
+  const subtitle = props.family ? escapeHtml(props.name) : "";
+  return (
+    `<div style="font-size:13px;font-weight:600;color:#18181b;">${title}</div>` +
+    (subtitle ? `<div style="font-size:11px;color:#71717a;">${subtitle}</div>` : "")
+  );
 }
 
 export interface Bounds {
