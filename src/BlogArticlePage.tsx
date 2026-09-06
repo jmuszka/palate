@@ -17,6 +17,9 @@ const mdComponents = {
   a: (props: object) => <a className="text-indigo-600 hover:underline" {...props} />,
   ul: (props: object) => <ul className="list-disc pl-5 flex flex-col gap-1" {...props} />,
   ol: (props: object) => <ol className="list-decimal pl-5 flex flex-col gap-1" {...props} />,
+  blockquote: (props: object) => (
+    <blockquote className="border-l-4 border-zinc-300 pl-4 text-zinc-500" {...props} />
+  ),
 };
 
 function PrefetchMarkers({ endpoints }: { endpoints: string[] }) {
