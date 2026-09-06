@@ -5,6 +5,7 @@ import { useTooltip } from "@nivo/tooltip";
 import type { FamilyTreeNode } from "./etymologyTree";
 import { buildColoredTree } from "./familyTree";
 import type { ColoredFamilyNode } from "./familyTree";
+import useIsMobile from "./hooks/useIsMobile";
 
 function ReversedSunburstLayer({
   nodes,
@@ -54,6 +55,7 @@ function ReversedSunburstLayer({
 }
 
 export default function FamilySunburst({ familyTree }: { familyTree: FamilyTreeNode }) {
+  const isMobile = useIsMobile();
   const model = useMemo(
     () => (familyTree?.children?.length ? buildColoredTree(familyTree) : null),
     [familyTree],
@@ -62,7 +64,7 @@ export default function FamilySunburst({ familyTree }: { familyTree: FamilyTreeN
   if (!model) return null;
 
   return (
-    <div className="flex items-center gap-4">
+    <div className={`flex items-center gap-4 ${isMobile ? "flex-col" : ""}`}>
       <div className="aspect-square w-72 max-w-full">
         <ResponsiveSunburst
           data={model.root}
@@ -74,7 +76,7 @@ export default function FamilySunburst({ familyTree }: { familyTree: FamilyTreeN
         />
       </div>
 
-      <ul className="flex w-48 shrink-0 flex-col gap-2">
+      <ul className={`flex flex-col gap-2 ${isMobile ? "w-full" : "w-48 shrink-0"}`}>
         {model.legend.map((entry) => (
           <li key={entry.name} className="flex items-center gap-2 text-xs text-zinc-600">
             <span
