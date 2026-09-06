@@ -54,6 +54,90 @@ describe("normalizeGeometry", () => {
     expect(result.features).toHaveLength(1);
   });
 
+  it("keeps multiple features that share a name (geography regions)", () => {
+    const fc: FeatureCollection = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: { name: "BritishEmpire" },
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [0, 0],
+                [1, 0],
+                [1, 1],
+                [0, 0],
+              ],
+            ],
+          },
+        },
+        {
+          type: "Feature",
+          properties: { name: "BritishEmpire" },
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [10, 10],
+                [11, 10],
+                [11, 11],
+                [10, 10],
+              ],
+            ],
+          },
+        },
+      ],
+    };
+
+    const result = normalizeGeometry(fc);
+    expect(result.features).toHaveLength(2);
+  });
+
+  it("maps Natural Earth properties (ADMIN / ISO_A3) to id and name", () => {
+    const fc: FeatureCollection = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: { ADMIN: "India", ISO_A2: "IN", ISO_A3: "IND" },
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [0, 0],
+                [1, 0],
+                [1, 1],
+                [0, 0],
+              ],
+            ],
+          },
+        },
+        {
+          type: "Feature",
+          properties: { ADMIN: "Canada", ISO_A2: "CA", ISO_A3: "CAN" },
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [10, 10],
+                [11, 10],
+                [11, 11],
+                [10, 10],
+              ],
+            ],
+          },
+        },
+      ],
+    };
+
+    const result = normalizeGeometry(fc);
+    expect(result.features).toHaveLength(2);
+    expect(result.features[0].properties).toEqual({ id: "IND", name: "India", count: 1 });
+    expect(result.features[1].properties).toEqual({ id: "CAN", name: "Canada", count: 1 });
+  });
+
   it("falls back to name for id and defaults name to id", () => {
     const fc: FeatureCollection = {
       type: "FeatureCollection",
