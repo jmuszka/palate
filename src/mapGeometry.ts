@@ -175,5 +175,5 @@ export function fitToGeometry(map: maplibregl.Map, geometry: FeatureCollection) 
   const mapBounds = new maplibregl.LngLatBounds();
   mapBounds.extend([bounds.minLon, bounds.minLat]);
   mapBounds.extend([bounds.maxLon, bounds.maxLat]);
-  map.fitBounds(mapBounds, { padding: 60, maxZoom: 8, animate: true, duration: 2000 });
+  map.fitBounds(mapBounds, { padding: 60, maxZoom: 8, animate: true, duration: 1500 });
 }

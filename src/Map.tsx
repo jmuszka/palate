@@ -160,7 +160,7 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
     if (!mapRef.current || !mapLoadedRef.current) return;
     applyGeometry(mapRef.current, geometry);
     if (!geometry) {
-      mapRef.current.easeTo({ center: defaultView.center, zoom: defaultView.zoom, duration: 2000 });
+      mapRef.current.easeTo({ center: defaultView.center, zoom: defaultView.zoom, duration: 1500 });
     }
   }, [geometry, defaultView]);
 

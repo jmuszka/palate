@@ -213,7 +213,7 @@ describe("fitToGeometry", () => {
     expect(fitBounds).toHaveBeenCalledTimes(1);
     const [bounds, options] = fitBounds.mock.calls[0];
     expect(bounds).toBeInstanceOf(LngLatBounds);
-    expect(options).toEqual({ padding: 60, maxZoom: 8, animate: true, duration: 2000 });
+    expect(options).toEqual({ padding: 60, maxZoom: 8, animate: true, duration: 1500 });
   });
 
   it("does not call fitBounds for empty geometry", () => {
