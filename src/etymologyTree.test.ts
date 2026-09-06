@@ -11,7 +11,7 @@ vi.mock("elkjs/lib/elk.bundled.js", () => ({
   },
 }));
 
-import { buildGraph, getLayoutedElements } from "./etymologyTree";
+import { buildGraph, computeNodeAges, getLayoutedElements } from "./etymologyTree";
 
 function path(
   nodes: Array<{ id: number; term?: string; lang?: string }>,
@@ -180,5 +180,42 @@ describe("getLayoutedElements", () => {
     expect(result.edges).toBe(edges);
     expect(errorSpy).toHaveBeenCalled();
     errorSpy.mockRestore();
+  });
+});
+
+describe("computeNodeAges", () => {
+  const node = (id: string) => ({ id, position: { x: 0, y: 0 }, data: {} });
+  const edge = (source: string, target: string) =>
+    ({ id: `${source}->${target}`, source, target }) as never;
+
+  it("assigns 0 to roots and increases toward the descendant head", () => {
+    const ages = computeNodeAges([node("a"), node("b"), node("c")] as never, [
+      edge("b", "a"),
+      edge("c", "b"),
+    ]);
+
+    expect(ages.get("a")).toBe(0);
+    expect(ages.get("b")).toBe(1);
+    expect(ages.get("c")).toBe(2);
+  });
+
+  it("takes the longest ancestor chain on merges", () => {
+    const ages = computeNodeAges([node("a"), node("b"), node("c"), node("d")] as never, [
+      edge("b", "a"),
+      edge("c", "b"),
+      edge("d", "a"),
+    ]);
+
+    expect(ages.get("d")).toBe(1);
+    expect(ages.get("c")).toBe(2);
+  });
+
+  it("terminates on cyclic graphs", () => {
+    const ages = computeNodeAges([node("a"), node("b")] as never, [edge("a", "b"), edge("b", "a")]);
+
+    // The cycle boundary gets cut at whichever node was visited first;
+    // ages stay finite and deterministic for layout purposes.
+    expect(ages.get("a")).toBe(2);
+    expect(ages.get("b")).toBe(1);
   });
 });

@@ -13,7 +13,6 @@ vi.mock("swr", () => ({ default: useSWRMock }));
 vi.mock("./Map", () => ({
   useMapGeometry: () => mapGeometrySetterMock,
   useMapHighlight: () => ({ highlight: null, setHighlight: vi.fn() }),
-  useMapRoutes: () => ({ routes: null, setRoutes: vi.fn() }),
 }));
 vi.mock("./EtymologyTree", () => ({
   default: () => <div data-testid="etymology-tree" />,

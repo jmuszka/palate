@@ -14,15 +14,12 @@ vi.mock("./Map", async () => {
     highlight: null,
     setHighlight: () => {},
   });
-  const RoutesContext = React.createContext({ routes: null, setRoutes: () => {} });
   return {
     default: () => null,
     MapGeometryContext,
     HighlightContext,
-    RoutesContext,
     useMapGeometry: () => React.useContext(MapGeometryContext),
     useMapHighlight: () => React.useContext(HighlightContext),
-    useMapRoutes: () => React.useContext(RoutesContext),
   };
 });
 

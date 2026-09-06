@@ -65,7 +65,9 @@ export const elkOptions = {
 
 // Age of each node within the tree: 0 for the oldest ancestor (no further
 // ancestors), 1 + max(age of its ancestors) for the rest. Edges point from a
-// descendant to its ancestor (source = descendant, target = ancestor).
+// descendant to its ancestor (source = descendant, target = ancestor). The
+// etymology graph can contain cycles (a word may be its own ancestor through
+// e.g. doublets), so ages memoize and treat revisits as age 0.
 export function computeNodeAges(nodes: Node[], edges: Edge[]): Map<string, number> {
   const ancestors = new Map<string, string[]>();
   for (const edge of edges) {
@@ -75,11 +77,15 @@ export function computeNodeAges(nodes: Node[], edges: Edge[]): Map<string, numbe
   }
 
   const memo = new Map<string, number>();
+  const visiting = new Set<string>();
   const ageOf = (id: string): number => {
     const cached = memo.get(id);
     if (cached !== undefined) return cached;
+    if (visiting.has(id)) return 0;
+    visiting.add(id);
     const parents = ancestors.get(id) ?? [];
     const age = parents.length === 0 ? 0 : 1 + Math.max(...parents.map((p) => ageOf(p)));
+    visiting.delete(id);
     memo.set(id, age);
     return age;
   };

@@ -10,27 +10,15 @@ import type { NormalizedProps } from "./mapGeometry";
 
 const GEOMETRY_SOURCE = "etymology-geometry";
 const FILL_LAYER_ID = `${GEOMETRY_SOURCE}-fill`;
-const BORDER_LAYER_ID = `${GEOMETRY_SOURCE}-feathered-border`;
-const ROUTES_SOURCE = "etymology-routes";
-const ROUTE_LINE_ID = `${ROUTES_SOURCE}-line`;
-const ROUTE_ARROWS_ID = `${ROUTES_SOURCE}-arrows`;
-const ROUTE_CHEVRON = "route-chevron";
 const EMPTY_FC: FeatureCollection = {
   type: "FeatureCollection",
   features: [],
 };
 
-// Travel-direction dash flow: a repeating dash pattern that slides along the
-// route lines, suggesting movement from the ancestor toward the newer language.
-const DASH_SEGMENT = [8, 10];
-const DASH_PATTERN = Array.from({ length: 12 }, () => DASH_SEGMENT).flat();
-
 const HEAT_LIGHT = "#e8ebff";
 const HEAT_MID = "#8b93f8";
 const HEAT_DARK = "#312e81";
 const DIM_FILL = "#e4e4e7";
-const BORDER_BASE = "#4f46e5";
-const BORDER_HIGHLIGHT = "#dc2626";
 
 // Continuous heat ramp: heat = count / maxCount in [0, 1] maps smoothly from a
 // pale tint to deep indigo via a light-blue midpoint.
@@ -57,12 +45,6 @@ function highlightPaints(highlight: string | null, maxCount: number) {
   return {
     fillColor: match ? (["case", match, heat, DIM_FILL] as unknown[]) : heat,
     fillOpacity: match ? (["case", match, 0.85, 0.12] as unknown[]) : 0.7,
-    borderColor: match
-      ? (["case", match, BORDER_HIGHLIGHT, BORDER_BASE] as unknown[])
-      : BORDER_BASE,
-    borderWidth: match ? (["case", match, 2, 12] as unknown[]) : 12,
-    borderBlur: match ? (["case", match, 5, 8] as unknown[]) : 8,
-    borderOpacity: match ? (["case", match, 0.9, 0.3] as unknown[]) : 0.3,
   };
 }
 
@@ -99,18 +81,6 @@ function applyGeometry(
         "fill-opacity": 0.7,
       },
     });
-    // Feather the polygon edges with a soft blurred halo hugging the boundary.
-    map.addLayer({
-      id: BORDER_LAYER_ID,
-      type: "line",
-      source: GEOMETRY_SOURCE,
-      paint: {
-        "line-color": BORDER_BASE,
-        "line-width": 12,
-        "line-blur": 8,
-        "line-opacity": 0.3,
-      },
-    });
   } catch (error) {
     console.error("Failed to apply geometry:", error);
     toast("Couldn't render the map data.", "error");
@@ -121,100 +91,6 @@ function applyHighlight(map: maplibregl.Map, highlight: string | null, maxCount:
   const paints = highlightPaints(highlight, maxCount);
   map.setPaintProperty(FILL_LAYER_ID, "fill-color", paints.fillColor as never);
   map.setPaintProperty(FILL_LAYER_ID, "fill-opacity", paints.fillOpacity as never);
-  map.setPaintProperty(BORDER_LAYER_ID, "line-color", paints.borderColor as never);
-  map.setPaintProperty(BORDER_LAYER_ID, "line-width", paints.borderWidth as never);
-  map.setPaintProperty(BORDER_LAYER_ID, "line-blur", paints.borderBlur as never);
-  map.setPaintProperty(BORDER_LAYER_ID, "line-opacity", paints.borderOpacity as never);
-}
-
-function ensureChevronImage(map: maplibregl.Map) {
-  if (map.hasImage(ROUTE_CHEVRON)) return;
-  const canvas = document.createElement("canvas");
-  canvas.width = 28;
-  canvas.height = 28;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-  // Chevron pointing up; with symbol-placement "line" the icon's top faces the
-  // line's direction of travel, so these point from ancestor to descendant.
-  ctx.fillStyle = "#b45309";
-  ctx.beginPath();
-  ctx.moveTo(14, 24);
-  ctx.lineTo(4, 12);
-  ctx.lineTo(9, 12);
-  ctx.lineTo(14, 19);
-  ctx.lineTo(19, 12);
-  ctx.lineTo(24, 12);
-  ctx.closePath();
-  ctx.fill();
-  const imageData = ctx.getImageData(0, 0, 28, 28);
-  map.addImage(ROUTE_CHEVRON, imageData);
-}
-
-// Geodesic route lines with a fading gradient, plus chevron markers and the
-// animated dash flow that shows where a word travelled across the map.
-function applyRoutes(map: maplibregl.Map, routes: FeatureCollection | null) {
-  if (!routes) {
-    if (map.getLayer(ROUTE_ARROWS_ID)) map.removeLayer(ROUTE_ARROWS_ID);
-    if (map.getLayer(ROUTE_LINE_ID)) map.removeLayer(ROUTE_LINE_ID);
-    if (map.getSource(ROUTES_SOURCE)) map.removeSource(ROUTES_SOURCE);
-    return;
-  }
-
-  const existing = map.getSource(ROUTES_SOURCE) as maplibregl.GeoJSONSource | undefined;
-  if (existing) {
-    existing.setData(routes);
-    return;
-  }
-
-  map.addSource(ROUTES_SOURCE, { type: "geojson", data: routes, lineMetrics: true });
-  map.addLayer({
-    id: ROUTE_LINE_ID,
-    type: "line",
-    source: ROUTES_SOURCE,
-    layout: { "line-cap": "round", "line-join": "round" },
-    paint: {
-      "line-color": [
-        "interpolate",
-        ["linear"],
-        ["line-progress"],
-        0,
-        "rgba(180, 83, 9, 0.10)",
-        1,
-        "rgba(180, 83, 9, 0.65)",
-      ],
-      "line-width": 2.5,
-    },
-  });
-  ensureChevronImage(map);
-  if (map.hasImage(ROUTE_CHEVRON)) {
-    map.addLayer({
-      id: ROUTE_ARROWS_ID,
-      type: "symbol",
-      source: ROUTES_SOURCE,
-      layout: {
-        "symbol-placement": "line",
-        "symbol-spacing": 30,
-        "icon-image": ROUTE_CHEVRON,
-        "icon-size": 0.8,
-        "icon-rotation-alignment": "map",
-        "icon-ignore-placement": true,
-      },
-      paint: { "icon-opacity": 0.85 },
-    });
-  }
-}
-
-// Slide the dash pattern along the route lines for a subtle flow effect.
-function startRouteFlow(map: maplibregl.Map): () => void {
-  let phase = 0;
-  const id = window.setInterval(() => {
-    phase = (phase + 1) % DASH_PATTERN.length;
-    const shifted = DASH_PATTERN.slice(phase).concat(DASH_PATTERN.slice(0, phase));
-    if (map.getLayer(ROUTE_LINE_ID)) {
-      map.setPaintProperty(ROUTE_LINE_ID, "line-dasharray", shifted);
-    }
-  }, 90);
-  return () => window.clearInterval(id);
 }
 
 const MapGeometryContext = createContext<(geometry: FeatureCollection | null) => void>(() => {});
@@ -226,23 +102,13 @@ export interface MapHighlight {
 
 const HighlightContext = createContext<MapHighlight>({ highlight: null, setHighlight: () => {} });
 
-export interface MapRoutes {
-  routes: FeatureCollection | null;
-  setRoutes: (routes: FeatureCollection | null) => void;
-}
-
-const RoutesContext = createContext<MapRoutes>({ routes: null, setRoutes: () => {} });
-
 // eslint-disable-next-line react-refresh/only-export-components
 export const useMapGeometry = () => useContext(MapGeometryContext);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useMapHighlight = () => useContext(HighlightContext);
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useMapRoutes = () => useContext(RoutesContext);
-
-export { MapGeometryContext, HighlightContext, RoutesContext };
+export { MapGeometryContext, HighlightContext };
 
 export default function Map({ geometry }: { geometry: FeatureCollection | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -257,9 +123,6 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
   const { highlight, setHighlight } = useMapHighlight();
   const highlightRef = useRef(highlight);
   highlightRef.current = highlight;
-  const routesRef = useRef<FeatureCollection | null>(null);
-  const stopFlowRef = useRef<(() => void) | null>(null);
-  const { routes } = useMapRoutes();
   const location = useLocation();
 
   const isWordPage = location.pathname.startsWith("/words/");
@@ -333,19 +196,12 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
       if (highlightRef.current) {
         applyHighlight(map, highlightRef.current, maxCountRef.current);
       }
-      routesRef.current = routesRef.current ?? null;
-      if (routesRef.current) {
-        applyRoutes(map, routesRef.current);
-        stopFlowRef.current = startRouteFlow(map);
-      }
     });
     return () => {
       popupRef.current?.remove();
       popupRef.current = null;
       hoveredIdRef.current = null;
       hoveredFamilyRef.current = null;
-      stopFlowRef.current?.();
-      stopFlowRef.current = null;
       map.remove();
       mapRef.current = null;
       mapLoadedRef.current = false;
@@ -370,18 +226,6 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
     if (!geometryRef.current) return;
     applyHighlight(map, highlight, maxCountRef.current);
   }, [highlight]);
-
-  useEffect(() => {
-    routesRef.current = routes;
-    const map = mapRef.current;
-    if (!map || !mapLoadedRef.current) return;
-    stopFlowRef.current?.();
-    stopFlowRef.current = null;
-    applyRoutes(map, routes);
-    if (routes) {
-      stopFlowRef.current = startRouteFlow(map);
-    }
-  }, [routes]);
 
   return (
     <div
