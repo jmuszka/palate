@@ -1,0 +1,25 @@
+- generic [ref=f4e3]:
+    - generic [ref=f4e4]:
+        - link [ref=f4e5] [cursor=pointer]:
+            - /url: /
+            - heading "EtymoMap" [level=1] [ref=f4e6]
+        - button "Toggle menu" [ref=f4e7]
+    - generic [ref=f4e11]:
+        - region "Map" [ref=f4e12]
+        - group [ref=f4e13]:
+            - generic "Toggle attribution" [ref=f4e14] [cursor=pointer]
+            - link "MapLibre" [ref=f4e16] [cursor=pointer]:
+                - /url: https://maplibre.org/
+    - generic [ref=f4e20]:
+        - button "Back" [ref=f4e21]
+        - generic [ref=f4e24]:
+            - generic [ref=f4e25]:
+                - heading "Blog" [level=2] [ref=f4e26]
+                - paragraph [ref=f4e27]: Articles about language, etymology, and the stories behind words.
+            - paragraph [ref=f4e28]: Loading…
+        - generic [ref=f4e29]:
+            - link "v2026.09.14" [ref=f4e30] [cursor=pointer]:
+                - /url: /changelog
+            - generic [ref=f4e31]: ·
+            - link "Attributions" [ref=f4e32] [cursor=pointer]:
+                - /url: /attributions

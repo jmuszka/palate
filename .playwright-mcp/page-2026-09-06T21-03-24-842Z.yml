@@ -1,0 +1,23 @@
+- generic [ref=f6e3]:
+    - generic [ref=f6e4]:
+        - generic [ref=f6e5]:
+            - link [ref=f6e6] [cursor=pointer]:
+                - /url: /
+                - heading "EtymoMap" [level=1] [ref=f6e7]
+            - button "Toggle menu" [ref=f6e8]
+        - generic [ref=f6e10]:
+            - button "Back" [ref=f6e11]
+            - heading "apple" [level=1] [ref=f6e15]
+            - paragraph [ref=f6e16]: Loading…
+            - generic [ref=f6e17]:
+                - link "v2026.09.14" [ref=f6e18] [cursor=pointer]:
+                    - /url: /changelog
+                - generic [ref=f6e19]: ·
+                - link "Attributions" [ref=f6e20] [cursor=pointer]:
+                    - /url: /attributions
+    - generic [ref=f6e23]:
+        - region "Map" [ref=f6e24]
+        - group [ref=f6e25]:
+            - generic "Toggle attribution" [ref=f6e26] [cursor=pointer]
+            - link "MapLibre" [ref=f6e28] [cursor=pointer]:
+                - /url: https://maplibre.org/

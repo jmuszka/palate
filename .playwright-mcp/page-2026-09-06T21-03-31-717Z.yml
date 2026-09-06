@@ -1,0 +1,93 @@
+- generic [ref=f6e3]:
+    - generic [ref=f6e4]:
+        - generic [ref=f6e5]:
+            - link [ref=f6e6] [cursor=pointer]:
+                - /url: /
+                - heading "EtymoMap" [level=1] [ref=f6e7]
+            - button "Toggle menu" [ref=f6e8]
+        - generic [ref=f6e10]:
+            - button "Back" [ref=f6e11]
+            - generic [ref=f6e14]:
+                - heading "apple" [level=1] [ref=f6e15]
+                - generic [ref=f6e32]: ˈæpəl
+            - heading "Etymology" [level=2] [ref=f6e33]
+            - generic [ref=f6e34]:
+                - application:
+                    - generic:
+                        - generic:
+                            - generic:
+                                - generic:
+                                    - img:
+                                        - group "Edge from apple|English to appel|Middle English" [ref=f6e35] [cursor=pointer]:
+                                            - generic [ref=f6e36]: inherited_from
+                                    - img:
+                                        - group "Edge from appel|Middle English to æppel|Old English" [ref=f6e38] [cursor=pointer]:
+                                            - generic [ref=f6e39]: inherited_from
+                                    - img:
+                                        - group "Edge from æppel|Old English to *applu|Proto-West Germanic" [ref=f6e41] [cursor=pointer]:
+                                            - generic [ref=f6e42]: inherited_from
+                                    - img:
+                                        - group "Edge from *applu|Proto-West Germanic to *aplaz|Proto-Germanic" [ref=f6e44] [cursor=pointer]:
+                                            - generic [ref=f6e47]: inherited_from
+                                    - img:
+                                        - group "Edge from *aplaz|Proto-Germanic to *h₂ébōl|Proto-Indo-European" [ref=f6e49] [cursor=pointer]:
+                                            - generic [ref=f6e50]: inherited_from
+                                    - img:
+                                        - group "Edge from *applu|Proto-West Germanic to *apluz|Proto-Germanic" [ref=f6e52] [cursor=pointer]:
+                                            - generic [ref=f6e55]: inherited_from
+                                - generic:
+                                    - group [ref=f6e57]: apple (English)
+                                    - group [ref=f6e60]: appel (Middle English)
+                                    - group [ref=f6e63]: æppel (Old English)
+                                    - group [ref=f6e66]: "*applu (Proto-West Germanic)"
+                                    - group [ref=f6e69]: "*aplaz (Proto-Germanic)"
+                                    - group [ref=f6e72]: "*h₂ébōl (Proto-Indo-European)"
+                                    - group [ref=f6e75]: "*apluz (Proto-Germanic)"
+                    - generic "Control Panel" [ref=f6e78]:
+                        - button "Zoom In" [ref=f6e79] [cursor=pointer]
+                        - button "Zoom Out" [disabled]
+                        - button "Fit View" [ref=f6e82] [cursor=pointer]
+                        - button "Toggle Interactivity" [ref=f6e85] [cursor=pointer]
+                    - link "React Flow attribution" [ref=f6e89] [cursor=pointer]:
+                        - /url: https://reactflow.dev/attribution
+                        - text: React Flow
+            - heading "Family Tree" [level=2] [ref=f6e91]
+            - list [ref=f6e106]:
+                - listitem [ref=f6e107]:
+                    - generic [ref=f6e109]: Indo-European
+                - listitem [ref=f6e110]:
+                    - generic [ref=f6e112]: Classical Indo-European
+                - listitem [ref=f6e113]:
+                    - generic [ref=f6e115]: Germanic
+                - listitem [ref=f6e116]:
+                    - generic [ref=f6e118]: Northwest Germanic
+                - listitem [ref=f6e119]:
+                    - generic [ref=f6e121]: West Germanic
+                - listitem [ref=f6e122]:
+                    - generic [ref=f6e124]: North Sea Germanic
+                - listitem [ref=f6e125]:
+                    - generic [ref=f6e127]: Anglo-Frisian
+                - listitem [ref=f6e128]:
+                    - generic [ref=f6e130]: Anglic
+            - heading "History" [level=2] [ref=f6e131]
+            - paragraph [ref=f6e132]: Apple comes from Old English æppel, meaning "apple" or any fruit, from Proto-Germanic *ap(a)laz and possibly PIE *ab(e)l- "apple," though the original sense is uncertain. In Middle English and into the 17th century, it served as a generic term for all fruit except berries, later becoming associated with the forbidden fruit in Genesis and gaining extended meanings like "apple of one's eye" and "apple-polisher."
+            - generic [ref=f6e17]:
+                - link "v2026.09.14" [ref=f6e18] [cursor=pointer]:
+                    - /url: /changelog
+                - generic [ref=f6e19]: ·
+                - link "Attributions" [ref=f6e20] [cursor=pointer]:
+                    - /url: /attributions
+    - generic [ref=f6e23]:
+        - region "Map" [ref=f6e24]
+        - group [ref=f6e25]:
+            - generic "Toggle attribution" [ref=f6e26] [cursor=pointer]
+            - generic [ref=f6e27]:
+                - link "MapLibre" [ref=f6e29] [cursor=pointer]:
+                    - /url: https://maplibre.org/
+                - text: "| ©"
+                - link "CARTO" [ref=f6e30] [cursor=pointer]:
+                    - /url: https://carto.com/about-carto/
+                - text: ", ©"
+                - link "OpenStreetMap" [ref=f6e31] [cursor=pointer]:
+                    - /url: http://www.openstreetmap.org/about/
+                - text: contributors

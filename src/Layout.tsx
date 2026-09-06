@@ -8,7 +8,7 @@ import type { FeatureCollection } from "geojson";
 export default function Layout({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
   const [geometry, setGeometry] = useState<FeatureCollection | null>(null);
-  const [panelWidth, setPanelWidth] = useState(30);
+  const [panelWidth, setPanelWidth] = useState(40);
   const [mapHeightPct, setMapHeightPct] = useState(40);
   const dragging = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -37,7 +37,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         setMapHeightPct(Math.min(Math.max(pct, 20), 60));
       } else {
         const pct = ((e.clientX - rect.left) / rect.width) * 100;
-        setPanelWidth(Math.min(Math.max(pct, 25), 50));
+        setPanelWidth(Math.min(Math.max(pct, 35), 60));
       }
     };
     const onTouchMove = (e: TouchEvent) => {
@@ -51,7 +51,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         setMapHeightPct(Math.min(Math.max(pct, 20), 60));
       } else {
         const pct = ((touch.clientX - rect.left) / rect.width) * 100;
-        setPanelWidth(Math.min(Math.max(pct, 25), 50));
+        setPanelWidth(Math.min(Math.max(pct, 35), 60));
       }
     };
     const onEnd = () => {
