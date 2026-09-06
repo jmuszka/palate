@@ -70,7 +70,7 @@ describe("buildGraph", () => {
     expect(nodes[0].id).toBe("run|en");
   });
 
-  it("labels nodes as 'term (lang)' and falls back to term", () => {
+  it("labels nodes with just the term", () => {
     const { nodes } = buildGraph([
       path(
         [
@@ -83,7 +83,7 @@ describe("buildGraph", () => {
 
     const withLang = nodes.find((n) => n.id === "run|en");
     const withoutLang = nodes.find((n) => n.id === "rinnan|undefined");
-    expect(withLang?.data.label).toBe("run (en)");
+    expect(withLang?.data.label).toBe("run");
     expect(withoutLang?.data.label).toBe("rinnan");
   });
 

@@ -112,7 +112,7 @@ export const buildGraph = (data: Neo4jPath[]): { nodes: Node[]; edges: Edge[] } 
       if (!nodeMap.has(key)) {
         nodeMap.set(key, {
           id: key,
-          data: { label: lang ? `${term} (${lang})` : (term ?? key), term, lang },
+          data: { label: term ?? key, term, lang },
           position: { x: 0, y: 0 },
         });
       }
