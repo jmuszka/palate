@@ -5,6 +5,9 @@ export interface RegionProperties {
   id?: string;
   name?: string;
   count?: number;
+  ADMIN?: string;
+  ISO_A3?: string;
+  ISO_A2?: string;
 }
 
 export interface NormalizedProps {
@@ -19,11 +22,20 @@ export function normalizeGeometry(geometry: FeatureCollection): FeatureCollectio
 
   for (const feature of geometry.features) {
     const raw = (feature.properties ?? {}) as RegionProperties;
-    const id = raw.id ?? raw.name;
-    if (!id || seen.has(id)) continue;
-    seen.add(id);
+    const name = raw.name ?? raw.ADMIN ?? raw.id;
+    if (!name) continue;
 
-    const name = raw.name ?? id;
+    // A stable code (glottocode or ISO code) uniquely identifies a region, so
+    // duplicate codes are collapsed. Features that carry only a name may
+    // legitimately repeat (geography regions split into multiple polygons),
+    // so those are all kept.
+    const stableId = raw.id ?? raw.ISO_A3 ?? raw.ISO_A2;
+    if (stableId) {
+      if (seen.has(stableId)) continue;
+      seen.add(stableId);
+    }
+
+    const id = stableId ?? name;
     const countValue = Number(raw.count);
     const count = Number.isFinite(countValue) && countValue > 0 ? Math.round(countValue) : 1;
 
