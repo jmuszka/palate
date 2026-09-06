@@ -16,15 +16,68 @@ const EMPTY_FC: FeatureCollection = {
   features: [],
 };
 
-function applyGeometry(map: maplibregl.Map, geometry: FeatureCollection | null) {
+const HEAT_LIGHT = "#e8ebff";
+const HEAT_MID = "#8b93f8";
+const HEAT_DARK = "#312e81";
+const DIM_FILL = "#e4e4e7";
+const BORDER_BASE = "#4f46e5";
+const BORDER_HIGHLIGHT = "#dc2626";
+
+// Continuous heat ramp: heat = count / maxCount in [0, 1] maps smoothly from a
+// pale tint to deep indigo via a light-blue midpoint.
+function heatExpression(maxCount: number) {
+  const range = Math.max(1, maxCount);
+  return [
+    "interpolate",
+    ["linear"],
+    ["/", ["get", "count"], range],
+    0,
+    HEAT_LIGHT,
+    0.5,
+    HEAT_MID,
+    1,
+    HEAT_DARK,
+  ];
+}
+
+// Highlight paint: features whose ancestor chain contains the hovered family
+// keep their heat coloring while everything else dims.
+function highlightPaints(highlight: string | null, maxCount: number) {
+  const match = highlight ? ["in", `|${highlight}|`, ["get", "ancestors"]] : null;
+  const heat = heatExpression(maxCount);
+  return {
+    fillColor: match ? (["case", match, heat, DIM_FILL] as unknown[]) : heat,
+    fillOpacity: match ? (["case", match, 0.85, 0.12] as unknown[]) : 0.7,
+    borderColor: match
+      ? (["case", match, BORDER_HIGHLIGHT, BORDER_BASE] as unknown[])
+      : BORDER_BASE,
+    borderWidth: match ? (["case", match, 2, 12] as unknown[]) : 12,
+    borderBlur: match ? (["case", match, 5, 8] as unknown[]) : 8,
+    borderOpacity: match ? (["case", match, 0.9, 0.3] as unknown[]) : 0.3,
+  };
+}
+
+function applyGeometry(
+  map: maplibregl.Map,
+  geometry: FeatureCollection | null,
+  onMaxCount: (maxCount: number) => void,
+) {
   try {
     const data = geometry ? normalizeGeometry(geometry) : EMPTY_FC;
     if (geometry) fitToGeometry(map, data);
-    const rewound = rewind(data, { reverse: true });
+    const rewound = rewind(data, { reverse: true }) as FeatureCollection;
 
+    let maxCount = 1;
+    for (const feature of rewound.features) {
+      const raw = Number((feature.properties as { count?: unknown })?.count);
+      if (Number.isFinite(raw) && raw > maxCount) maxCount = Math.round(raw);
+    }
+    onMaxCount(maxCount);
     const source = map.getSource(GEOMETRY_SOURCE) as maplibregl.GeoJSONSource | undefined;
     if (source) {
       source.setData(rewound);
+      // Refresh the ramp to match the new payload's scale.
+      map.setPaintProperty(FILL_LAYER_ID, "fill-color", heatExpression(maxCount) as never);
       return;
     }
     map.addSource(GEOMETRY_SOURCE, { type: "geojson", data: rewound });
@@ -33,35 +86,20 @@ function applyGeometry(map: maplibregl.Map, geometry: FeatureCollection | null) 
       type: "fill",
       source: GEOMETRY_SOURCE,
       paint: {
-        "fill-color": [
-          "interpolate",
-          ["linear"],
-          ["get", "count"],
-          0,
-          "#eef2ff",
-          1,
-          "#c7d2fe",
-          3,
-          "#818cf8",
-          5,
-          "#6366f1",
-          7,
-          "#4f46e5",
-          10,
-          "#312e81",
-        ],
+        "fill-color": heatExpression(maxCount) as never,
         "fill-opacity": 0.7,
       },
     });
+    // Feather the polygon edges with a soft blurred halo hugging the boundary.
     map.addLayer({
       id: BORDER_LAYER_ID,
       type: "line",
       source: GEOMETRY_SOURCE,
       paint: {
-        "line-color": "#4f46e5",
-        "line-width": 2,
-        "line-blur": 100,
-        "line-opacity": 0.35,
+        "line-color": BORDER_BASE,
+        "line-width": 12,
+        "line-blur": 8,
+        "line-opacity": 0.3,
       },
     });
   } catch (error) {
@@ -70,12 +108,32 @@ function applyGeometry(map: maplibregl.Map, geometry: FeatureCollection | null) 
   }
 }
 
+function applyHighlight(map: maplibregl.Map, highlight: string | null, maxCount: number) {
+  const paints = highlightPaints(highlight, maxCount);
+  map.setPaintProperty(FILL_LAYER_ID, "fill-color", paints.fillColor as never);
+  map.setPaintProperty(FILL_LAYER_ID, "fill-opacity", paints.fillOpacity as never);
+  map.setPaintProperty(BORDER_LAYER_ID, "line-color", paints.borderColor as never);
+  map.setPaintProperty(BORDER_LAYER_ID, "line-width", paints.borderWidth as never);
+  map.setPaintProperty(BORDER_LAYER_ID, "line-blur", paints.borderBlur as never);
+  map.setPaintProperty(BORDER_LAYER_ID, "line-opacity", paints.borderOpacity as never);
+}
+
 const MapGeometryContext = createContext<(geometry: FeatureCollection | null) => void>(() => {});
+
+export interface MapHighlight {
+  highlight: string | null;
+  setHighlight: (code: string | null) => void;
+}
+
+const HighlightContext = createContext<MapHighlight>({ highlight: null, setHighlight: () => {} });
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useMapGeometry = () => useContext(MapGeometryContext);
 
-export { MapGeometryContext };
+// eslint-disable-next-line react-refresh/only-export-components
+export const useMapHighlight = () => useContext(HighlightContext);
+
+export { MapGeometryContext, HighlightContext };
 
 export default function Map({ geometry }: { geometry: FeatureCollection | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -85,6 +143,11 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
   const mapErrorShownRef = useRef(false);
   const popupRef = useRef<maplibregl.Popup | null>(null);
   const hoveredIdRef = useRef<string | null>(null);
+  const hoveredFamilyRef = useRef<string | null>(null);
+  const maxCountRef = useRef(1);
+  const { highlight, setHighlight } = useMapHighlight();
+  const highlightRef = useRef(highlight);
+  highlightRef.current = highlight;
   const location = useLocation();
 
   const isWordPage = location.pathname.startsWith("/words/");
@@ -131,24 +194,39 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
         const features = map.queryRenderedFeatures(e.point, { layers: [FILL_LAYER_ID] });
         map.getCanvas().style.cursor = features.length > 0 ? "pointer" : "";
         if (features.length === 0) {
-          if (hoveredIdRef.current !== null) {
+          if (hoveredIdRef.current !== null || hoveredFamilyRef.current !== null) {
             hoveredIdRef.current = null;
+            hoveredFamilyRef.current = null;
             popupRef.current?.remove();
+            setHighlight(null);
           }
           return;
         }
         const props = features[0].properties as NormalizedProps;
-        if (props.id === hoveredIdRef.current) return;
-        hoveredIdRef.current = props.id;
-        popupRef.current?.setLngLat(e.lngLat).setHTML(renderPopup(props)).addTo(map);
+        if (props.id !== hoveredIdRef.current) {
+          hoveredIdRef.current = props.id;
+          popupRef.current?.setLngLat(e.lngLat).setHTML(renderPopup(props)).addTo(map);
+        }
+        // Hovering a region links it to the family chart.
+        const family = props.familyCode || null;
+        if (family !== hoveredFamilyRef.current) {
+          hoveredFamilyRef.current = family;
+          setHighlight(family);
+        }
       });
 
-      applyGeometry(map, geometryRef.current);
+      applyGeometry(map, geometryRef.current, (maxCount) => {
+        maxCountRef.current = maxCount;
+      });
+      if (highlightRef.current) {
+        applyHighlight(map, highlightRef.current, maxCountRef.current);
+      }
     });
     return () => {
       popupRef.current?.remove();
       popupRef.current = null;
       hoveredIdRef.current = null;
+      hoveredFamilyRef.current = null;
       map.remove();
       mapRef.current = null;
       mapLoadedRef.current = false;
@@ -158,11 +236,21 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
   useEffect(() => {
     geometryRef.current = geometry;
     if (!mapRef.current || !mapLoadedRef.current) return;
-    applyGeometry(mapRef.current, geometry);
+    applyGeometry(mapRef.current, geometry, (maxCount) => {
+      maxCountRef.current = maxCount;
+      applyHighlight(mapRef.current!, highlightRef.current ?? null, maxCount);
+    });
     if (!geometry && !isWordPage) {
       mapRef.current.easeTo({ center: defaultView.center, zoom: defaultView.zoom, duration: 1500 });
     }
   }, [geometry, defaultView, isWordPage]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapLoadedRef.current) return;
+    if (!geometryRef.current) return;
+    applyHighlight(map, highlight, maxCountRef.current);
+  }, [highlight]);
 
   return (
     <div
