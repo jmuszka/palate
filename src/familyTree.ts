@@ -43,7 +43,16 @@ export function buildColoredTree(tree: FamilyTreeNode): {
     const color = PALETTE[index % PALETTE.length];
     index += 1;
     nodes.push({ name: node.name, color });
-    return { ...node, children: node.children?.map(colorize), color };
+    // d3's hierarchy().sum() adds a node's own value to its descendants', so an
+    // internal node's value (already the sum of its children) would be counted
+    // twice and leave a gap in the circle. Only leaves should carry weight.
+    const hasChildren = node.children && node.children.length > 0;
+    return {
+      ...node,
+      value: hasChildren ? 0 : node.value,
+      children: node.children?.map(colorize),
+      color,
+    };
   };
 
   const root = colorize(tree);

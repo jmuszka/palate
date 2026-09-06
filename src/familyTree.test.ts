@@ -46,4 +46,31 @@ describe("buildColoredTree", () => {
     expect(root.color).toBe(PALETTE[0]);
     expect(legend).toEqual([]);
   });
+
+  it("zeroes internal node values so only leaves carry weight", () => {
+    const tree: FamilyTreeNode = {
+      id: "root",
+      name: "root",
+      value: 6,
+      children: [
+        {
+          id: "a",
+          name: "A",
+          value: 2,
+          children: [
+            { id: "a1", name: "A1", value: 1 },
+            { id: "a2", name: "A2", value: 1 },
+          ],
+        },
+        { id: "b", name: "B", value: 1 },
+      ],
+    };
+
+    const { root } = buildColoredTree(tree);
+
+    expect(root.value).toBe(0);
+    expect(root.children?.[0].value).toBe(0);
+    expect(root.children?.[0].children?.[0].value).toBe(1);
+    expect(root.children?.[1].value).toBe(1);
+  });
 });
