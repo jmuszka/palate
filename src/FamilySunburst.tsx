@@ -63,7 +63,7 @@ export default function FamilySunburst({ familyTree }: { familyTree: FamilyTreeN
 
   return (
     <div className="flex items-center gap-4">
-      <div className="h-72 min-w-0 flex-1">
+      <div className="aspect-square w-72 max-w-full">
         <ResponsiveSunburst
           data={model.root}
           id="name"
