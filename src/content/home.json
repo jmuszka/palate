@@ -10,17 +10,22 @@
     {
       "href": "/about",
       "title": "About the project",
-      "blurb": "Why EtymoMap exists and the data that powers it."
+      "blurb": "Why EtymoMap exists and the passion for language, history, and cartography behind it."
     },
     {
       "href": "/blog/articles",
       "title": "Blog",
-      "blurb": "Deep dives, word stories, and language curiosities."
+      "blurb": "In-depth explorations of etymology and the history of language."
     },
     {
-      "href": "/games",
-      "title": "Games",
-      "blurb": "Put your knowledge to the test with etymology games."
+      "href": "/feedback",
+      "title": "Feedback",
+      "blurb": "Have a suggestion, found a bug, or want to share your thoughts?"
+    },
+    {
+      "href": "/glossary",
+      "title": "Glossary",
+      "blurb": "A reference for the linguistic terms used throughout EtymoMap and its blog posts."
     }
   ]
 }
