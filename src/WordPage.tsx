@@ -71,11 +71,18 @@ export default function WordPage() {
       )}
       {etymology !== undefined && !loading && (
         <>
+          <h2 className="text-zinc-900 text-lg font-semibold">Etymology</h2>
           <EtymologyTree data={etymology} />
+          <h2 className="text-zinc-900 text-lg font-semibold">Family Tree</h2>
           <FamilySunburst familyTree={etymology.familyTree} />
         </>
       )}
-      {history && <p className="text-zinc-600 text-sm">{history}</p>}
+      {history && (
+        <>
+          <h2 className="text-zinc-900 text-lg font-semibold">History</h2>
+          <p className="text-zinc-600 text-sm">{history}</p>
+        </>
+      )}
     </>
   );
 }
