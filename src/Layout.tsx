@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState, useCallback, type ReactNode } from "react";
 import Header from "./Header";
 import ContentPanel from "./ContentPanel";
-import Map from "./Map";
+import Map, { HighlightContext } from "./Map";
 import useIsMobile from "./hooks/useIsMobile";
 import type { FeatureCollection } from "geojson";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
   const [geometry, setGeometry] = useState<FeatureCollection | null>(null);
+  const [highlight, setHighlight] = useState<string | null>(null);
   const [panelWidth, setPanelWidth] = useState(40);
   const [mapHeightPct, setMapHeightPct] = useState(40);
   const dragging = useRef(false);
@@ -74,44 +75,48 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   if (isMobile) {
     return (
-      <div ref={containerRef} className="flex flex-col w-screen h-dvh p-1 bg-zinc-100">
-        <Header />
-        <div className="flex items-center justify-center h-1 shrink-0 cursor-row-resize group touch-none"></div>
-        <div
-          ref={mapRef}
-          className="shrink-0 rounded-2xl overflow-hidden border border-zinc-200"
-          style={{ height: `${mapHeightPct}%` }}
-        >
-          <Map geometry={geometry} />
+      <HighlightContext.Provider value={{ highlight, setHighlight }}>
+        <div ref={containerRef} className="flex flex-col w-screen h-dvh p-1 bg-zinc-100">
+          <Header />
+          <div className="flex items-center justify-center h-1 shrink-0 cursor-row-resize group touch-none"></div>
+          <div
+            ref={mapRef}
+            className="shrink-0 rounded-2xl overflow-hidden border border-zinc-200"
+            style={{ height: `${mapHeightPct}%` }}
+          >
+            <Map geometry={geometry} />
+          </div>
+          <div
+            className="flex items-center justify-center h-4 shrink-0 cursor-row-resize group touch-none"
+            onMouseDown={startDrag("vertical")}
+            onTouchStart={startDrag("vertical")}
+          >
+            <div className="w-8 h-1 rounded-full bg-zinc-300 group-hover:bg-zinc-400 transition-colors" />
+          </div>
+          <div className="flex-1 min-h-0">
+            <ContentPanel setGeometry={setGeometry}>{children}</ContentPanel>
+          </div>
         </div>
-        <div
-          className="flex items-center justify-center h-4 shrink-0 cursor-row-resize group touch-none"
-          onMouseDown={startDrag("vertical")}
-          onTouchStart={startDrag("vertical")}
-        >
-          <div className="w-8 h-1 rounded-full bg-zinc-300 group-hover:bg-zinc-400 transition-colors" />
-        </div>
-        <div className="flex-1 min-h-0">
-          <ContentPanel setGeometry={setGeometry}>{children}</ContentPanel>
-        </div>
-      </div>
+      </HighlightContext.Provider>
     );
   }
 
   return (
-    <div ref={containerRef} className="flex w-screen h-dvh p-3 gap-0 bg-zinc-100">
-      <div className="h-full flex flex-col gap-3 min-h-0" style={{ width: `${panelWidth}%` }}>
-        <Header />
-        <ContentPanel setGeometry={setGeometry}>{children}</ContentPanel>
+    <HighlightContext.Provider value={{ highlight, setHighlight }}>
+      <div ref={containerRef} className="flex w-screen h-dvh p-3 gap-0 bg-zinc-100">
+        <div className="h-full flex flex-col gap-3 min-h-0" style={{ width: `${panelWidth}%` }}>
+          <Header />
+          <ContentPanel setGeometry={setGeometry}>{children}</ContentPanel>
+        </div>
+        <div
+          className="h-full flex items-center justify-center w-3 shrink-0 cursor-col-resize group touch-none"
+          onMouseDown={startDrag("horizontal")}
+          onTouchStart={startDrag("horizontal")}
+        >
+          <div className="w-1 h-8 rounded-full bg-zinc-300 group-hover:bg-zinc-400 transition-colors" />
+        </div>
+        <Map geometry={geometry} />
       </div>
-      <div
-        className="h-full flex items-center justify-center w-3 shrink-0 cursor-col-resize group touch-none"
-        onMouseDown={startDrag("horizontal")}
-        onTouchStart={startDrag("horizontal")}
-      >
-        <div className="w-1 h-8 rounded-full bg-zinc-300 group-hover:bg-zinc-400 transition-colors" />
-      </div>
-      <Map geometry={geometry} />
-    </div>
+    </HighlightContext.Provider>
   );
 }
