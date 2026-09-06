@@ -47,17 +47,46 @@ export type EtymologyData = {
 
 const elk = new ELK();
 
+// Nominal node card size (px) — layout in ELK matches these dimensions.
+export const NODE_WIDTH = 176;
+export const NODE_HEIGHT = 56;
+
 // Configuration for a clean, downward-flowing tree hierarchy
 export const elkOptions = {
   "elk.algorithm": "layered",
   "elk.direction": "UP",
-  "elk.spacing.nodeNode": "60",
-  "elk.layered.spacing.nodeNodeBetweenLayers": "100",
+  "elk.spacing.nodeNode": "40",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "80",
   // Place every node at its true distance from the root so nodes of the
   // same depth share a level, giving a clean top-down poly-tree structure.
   // (The default NETWORK_SIMPLEX pulls nodes toward their neighbors instead.)
   "elk.layered.layering.strategy": "LONGEST_PATH",
 };
+
+// Age of each node within the tree: 0 for the oldest ancestor (no further
+// ancestors), 1 + max(age of its ancestors) for the rest. Edges point from a
+// descendant to its ancestor (source = descendant, target = ancestor).
+export function computeNodeAges(nodes: Node[], edges: Edge[]): Map<string, number> {
+  const ancestors = new Map<string, string[]>();
+  for (const edge of edges) {
+    const list = ancestors.get(edge.source) ?? [];
+    list.push(edge.target);
+    ancestors.set(edge.source, list);
+  }
+
+  const memo = new Map<string, number>();
+  const ageOf = (id: string): number => {
+    const cached = memo.get(id);
+    if (cached !== undefined) return cached;
+    const parents = ancestors.get(id) ?? [];
+    const age = parents.length === 0 ? 0 : 1 + Math.max(...parents.map((p) => ageOf(p)));
+    memo.set(id, age);
+    return age;
+  };
+
+  for (const node of nodes) ageOf(node.id);
+  return memo;
+}
 
 // Flatten the (potentially many) Neo4j paths into a deduplicated set of
 // nodes and edges. Nodes are deduplicated by term + language, so
@@ -121,8 +150,8 @@ export const getLayoutedElements = async (nodes: Node[], edges: Edge[]) => {
     layoutOptions: elkOptions,
     children: nodes.map((node) => ({
       id: node.id,
-      width: 160,
-      height: 60,
+      width: NODE_WIDTH,
+      height: NODE_HEIGHT,
       targetPosition: "top",
       sourcePosition: "bottom",
     })),
@@ -142,6 +171,8 @@ export const getLayoutedElements = async (nodes: Node[], edges: Edge[]) => {
       return {
         ...node,
         position: { x: elkNode?.x ?? 0, y: elkNode?.y ?? 0 },
+        width: NODE_WIDTH,
+        height: NODE_HEIGHT,
       };
     });
 
