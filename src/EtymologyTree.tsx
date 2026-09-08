@@ -180,7 +180,7 @@ function RelationshipEdge({
             className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-md bg-zinc-900 px-2.5 py-1 text-[11px] font-medium text-white shadow-md"
             style={{ left: labelX, top: labelY }}
           >
-            {String(label)}
+            {String(label).replace(/_/g, " ")}
           </div>
         </EdgeLabelRenderer>
       )}
