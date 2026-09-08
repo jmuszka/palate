@@ -138,7 +138,7 @@ export default function BlogArticlePage() {
                   key={i}
                   data-geo-endpoint={segment.endpoint}
                   aria-hidden="true"
-                  className="block h-px"
+                  className="block h-px -my-[8.5px]"
                   ref={(el) => {
                     if (el) markerRefs.current.set(i, el);
                     else markerRefs.current.delete(i);
