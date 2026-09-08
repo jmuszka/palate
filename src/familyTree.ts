@@ -24,7 +24,8 @@ export const PALETTE = [
 
 export interface ColoredFamilyNode extends FamilyTreeNode {
   color: string;
-  // Glottocode extracted from the node id (e.g. "Indo-European [indo1319]").
+  // Glottocode from the node's glottocode property, falling back to the
+  // bracketed suffix of legacy ids (e.g. "Indo-European [indo1319]").
   code?: string;
   // Number of levels below this node (0 for a leaf). Used by the sunburst to
   // extend arcs inward without leaving gaps in unbalanced trees.
@@ -76,7 +77,7 @@ export function buildColoredTree(tree: FamilyTreeNode): {
   const colorize = (node: FamilyTreeNode): ColoredFamilyNode => {
     const color = PALETTE[index % PALETTE.length];
     index += 1;
-    const code = extractFamilyCode(node.id);
+    const code = node.glottocode || extractFamilyCode(node.id);
     nodes.push({ name: node.name, color, code });
     const children = node.children?.map(colorize);
     // d3's hierarchy().sum() adds a node's own value to its descendants', so an

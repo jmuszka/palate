@@ -35,6 +35,7 @@ export interface FamilyTreeNode {
   id: string;
   name: string;
   value: number;
+  glottocode?: string;
   children?: FamilyTreeNode[];
 }
 
