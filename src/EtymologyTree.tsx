@@ -75,7 +75,7 @@ function WordNodeCard({ data }: NodeProps<WordNode>) {
         borderLeftWidth: isSpine ? 4 : 2,
       }}
     >
-      <Handle type="target" position={Position.Top} className="!opacity-0" />
+      <Handle type="source" position={Position.Top} className="!opacity-0" />
       <div
         className={`truncate text-[13px] font-semibold leading-tight ${
           isSpine ? "text-zinc-900" : "text-zinc-500"
@@ -90,7 +90,7 @@ function WordNodeCard({ data }: NodeProps<WordNode>) {
           {data.lang}
         </div>
       )}
-      <Handle type="source" position={Position.Bottom} className="!opacity-0" />
+      <Handle type="target" position={Position.Bottom} className="!opacity-0" />
     </div>
   );
 }
@@ -107,11 +107,11 @@ function CapsuleNodeCard({ data }: NodeProps<Node<CapsuleNodeData>>) {
           : "border-zinc-300 bg-zinc-50 text-zinc-600 hover:bg-zinc-100"
       }`}
     >
-      <Handle type="target" position={Position.Top} className="!opacity-0" />
+      <Handle type="source" position={Position.Top} className="!opacity-0" />
       <span>
         {capsule.expanded ? "▾" : "▸"} {capsule.count} related forms
       </span>
-      <Handle type="source" position={Position.Bottom} className="!opacity-0" />
+      <Handle type="target" position={Position.Bottom} className="!opacity-0" />
     </div>
   );
 }

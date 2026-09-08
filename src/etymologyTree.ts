@@ -163,8 +163,8 @@ export const getLayoutedElements = async (nodes: Node[], edges: Edge[]) => {
       id: node.id,
       width: NODE_WIDTH,
       height: NODE_HEIGHT,
-      targetPosition: "top",
-      sourcePosition: "bottom",
+      targetPosition: "bottom",
+      sourcePosition: "top",
     })),
     edges: edges.map((edge) => ({
       id: edge.id,
