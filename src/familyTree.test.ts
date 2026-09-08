@@ -115,6 +115,40 @@ describe("buildColoredTree", () => {
     expect(root.children?.[0].code).toBe("indo1319");
     expect(root.children?.[0].name).toBe("Indo-European");
   });
+
+  it("reads glottocodes from the glottocode property", () => {
+    const tree: FamilyTreeNode = {
+      id: "root",
+      name: "root",
+      value: 1,
+      children: [{ id: "Indo-European", name: "Indo-European", glottocode: "indo1319", value: 1 }],
+    };
+
+    const { root, legend } = buildColoredTree(tree);
+
+    expect(root.children?.[0].code).toBe("indo1319");
+    expect(legend[0].code).toBe("indo1319");
+  });
+
+  it("prefers the glottocode property over the bracketed id", () => {
+    const tree: FamilyTreeNode = {
+      id: "root",
+      name: "root",
+      value: 1,
+      children: [
+        {
+          id: "Indo-European [indo1319]",
+          name: "Indo-European",
+          glottocode: "indo9999",
+          value: 1,
+        },
+      ],
+    };
+
+    const { root } = buildColoredTree(tree);
+
+    expect(root.children?.[0].code).toBe("indo9999");
+  });
 });
 
 describe("extractFamilyCode", () => {
