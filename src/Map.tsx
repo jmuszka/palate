@@ -10,6 +10,7 @@ import type { NormalizedProps } from "./mapGeometry";
 
 const GEOMETRY_SOURCE = "etymology-geometry";
 const FILL_LAYER_ID = `${GEOMETRY_SOURCE}-fill`;
+const HALO_LAYER_ID = `${GEOMETRY_SOURCE}-halo`;
 const EMPTY_FC: FeatureCollection = {
   type: "FeatureCollection",
   features: [],
@@ -45,6 +46,8 @@ function highlightPaints(highlight: string | null, maxCount: number) {
   return {
     fillColor: match ? (["case", match, heat, DIM_FILL] as unknown[]) : heat,
     fillOpacity: match ? (["case", match, 0.85, 0.12] as unknown[]) : 0.7,
+    lineColor: match ? (["case", match, heat, DIM_FILL] as unknown[]) : heat,
+    lineOpacity: match ? (["case", match, 0.7, 0.08] as unknown[]) : 0.7,
   };
 }
 
@@ -69,6 +72,7 @@ function applyGeometry(
       source.setData(rewound);
       // Refresh the ramp to match the new payload's scale.
       map.setPaintProperty(FILL_LAYER_ID, "fill-color", heatExpression(maxCount) as never);
+      map.setPaintProperty(HALO_LAYER_ID, "line-color", heatExpression(maxCount) as never);
       return;
     }
     map.addSource(GEOMETRY_SOURCE, { type: "geojson", data: rewound });
@@ -79,6 +83,24 @@ function applyGeometry(
       paint: {
         "fill-color": heatExpression(maxCount) as never,
         "fill-opacity": 0.7,
+        "fill-antialias": true,
+      },
+    });
+    // A blurred stroke over the boundary feathers the fill edge: the gradient
+    // band softens the transition into the surrounding map.
+    map.addLayer({
+      id: HALO_LAYER_ID,
+      type: "line",
+      source: GEOMETRY_SOURCE,
+      layout: {
+        "line-cap": "round",
+        "line-join": "round",
+      },
+      paint: {
+        "line-color": heatExpression(maxCount) as never,
+        "line-width": 10,
+        "line-blur": 8,
+        "line-opacity": 0.7,
       },
     });
   } catch (error) {
@@ -91,6 +113,8 @@ function applyHighlight(map: maplibregl.Map, highlight: string | null, maxCount:
   const paints = highlightPaints(highlight, maxCount);
   map.setPaintProperty(FILL_LAYER_ID, "fill-color", paints.fillColor as never);
   map.setPaintProperty(FILL_LAYER_ID, "fill-opacity", paints.fillOpacity as never);
+  map.setPaintProperty(HALO_LAYER_ID, "line-color", paints.lineColor as never);
+  map.setPaintProperty(HALO_LAYER_ID, "line-opacity", paints.lineOpacity as never);
 }
 
 const MapGeometryContext = createContext<(geometry: FeatureCollection | null) => void>(() => {});

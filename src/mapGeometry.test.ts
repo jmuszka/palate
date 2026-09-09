@@ -7,6 +7,7 @@ import {
   computeFeatureBounds,
   trimToMajority,
   fitToGeometry,
+  smoothGeometry,
 } from "./mapGeometry";
 
 const { LngLatBounds } = vi.hoisted(() => {
@@ -31,6 +32,83 @@ vi.mock("maplibre-gl", () => ({
     GeoJSONSource: class {},
   },
 }));
+
+describe("smoothGeometry", () => {
+  it("rounds polygon corners while keeping the ring closed", () => {
+    const geometry = {
+      type: "Polygon",
+      coordinates: [
+        [
+          [0, 0],
+          [2, 0],
+          [2, 2],
+          [0, 2],
+          [0, 0],
+        ],
+      ],
+    } as Feature["geometry"];
+
+    const result = smoothGeometry(geometry) as { coordinates: number[][][] };
+    const ring = result.coordinates[0];
+
+    expect(ring.length).toBe(17);
+    expect(ring[0]).toEqual(ring[ring.length - 1]);
+    // Original corner vertices are cut away and replaced with curve points.
+    expect(ring).not.toContainEqual([2, 2]);
+    for (const [lon, lat] of ring) {
+      expect(lon).toBeGreaterThanOrEqual(0);
+      expect(lon).toBeLessThanOrEqual(2);
+      expect(lat).toBeGreaterThanOrEqual(0);
+      expect(lat).toBeLessThanOrEqual(2);
+    }
+  });
+
+  it("smooths every polygon in a MultiPolygon including holes", () => {
+    const geometry = {
+      type: "MultiPolygon",
+      coordinates: [
+        [
+          [
+            [0, 0],
+            [2, 0],
+            [2, 2],
+            [0, 2],
+            [0, 0],
+          ],
+          [
+            [0.5, 0.5],
+            [1.5, 0.5],
+            [1.5, 1.5],
+            [0.5, 1.5],
+            [0.5, 0.5],
+          ],
+        ],
+      ],
+    } as Feature["geometry"];
+
+    const result = smoothGeometry(geometry) as { coordinates: number[][][][] };
+    expect(result.coordinates).toHaveLength(1);
+    const [outer, hole] = result.coordinates[0];
+    expect(outer.length).toBe(17);
+    expect(hole.length).toBe(17);
+    expect(outer[0]).toEqual(outer[outer.length - 1]);
+    expect(hole[0]).toEqual(hole[hole.length - 1]);
+  });
+
+  it("passes non-polygon geometry through untouched", () => {
+    const point = { type: "Point", coordinates: [1, 2] } as Feature["geometry"];
+    expect(smoothGeometry(point)).toBe(point);
+
+    const line = {
+      type: "LineString",
+      coordinates: [
+        [0, 0],
+        [1, 1],
+      ],
+    } as Feature["geometry"];
+    expect(smoothGeometry(line)).toBe(line);
+  });
+});
 
 describe("normalizeGeometry", () => {
   it("deduplicates features by id", () => {
