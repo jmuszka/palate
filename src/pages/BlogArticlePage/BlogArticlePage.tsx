@@ -1,0 +1,158 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import useSWR, { useSWRConfig } from "swr";
+import Markdown from "react-markdown";
+import type { FeatureCollection } from "geojson";
+import { useSEO } from "../../lib/seo";
+import { useMapGeometry } from "../../components/Map";
+import { formatDate, type BlogArticle } from "../../lib/blog";
+import { parseContent } from "../../lib/geoMarkers";
+import { fetcher } from "../../lib/fetcher";
+import BackButton from "../../components/BackButton";
+
+const mdComponents = {
+  h1: (props: object) => <h1 className="text-zinc-900 text-xl font-semibold" {...props} />,
+  h2: (props: object) => <h2 className="text-zinc-900 text-lg font-semibold" {...props} />,
+  h3: (props: object) => <h3 className="text-zinc-800 text-base font-semibold" {...props} />,
+  a: (props: object) => <a className="text-indigo-600 hover:underline" {...props} />,
+  ul: (props: object) => <ul className="list-disc pl-5 flex flex-col gap-1" {...props} />,
+  ol: (props: object) => <ol className="list-decimal pl-5 flex flex-col gap-1" {...props} />,
+  blockquote: (props: object) => (
+    <blockquote className="border-l-4 border-zinc-300 pl-4 text-zinc-500" {...props} />
+  ),
+};
+
+function PrefetchMarkers({ endpoints }: { endpoints: string[] }) {
+  const { mutate } = useSWRConfig();
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      for (const endpoint of endpoints) {
+        if (cancelled) break;
+        const key = `${import.meta.env.VITE_SERVER_URL}${endpoint}`;
+        try {
+          const data = await fetcher(key);
+          await mutate(key, data);
+        } catch {
+          // Errors surface later via the active marker's useSWR hook.
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [endpoints, mutate]);
+
+  return null;
+}
+
+export default function BlogArticlePage() {
+  const { slug } = useParams<{ slug: string }>();
+  const setGeometry = useMapGeometry();
+  const [activeEndpoint, setActiveEndpoint] = useState<string | null>(null);
+  const markerRefs = useRef(new Map<number, HTMLSpanElement>());
+
+  const {
+    data: article,
+    isLoading,
+    error,
+  } = useSWR<BlogArticle>(
+    slug
+      ? `${import.meta.env.VITE_SERVER_URL}/api/v1/blog/articles/${encodeURIComponent(slug)}`
+      : null,
+  );
+
+  const segments = useMemo(() => (article ? parseContent(article.content) : []), [article]);
+
+  const endpoints = useMemo(
+    () => segments.filter((s) => s.type === "marker").map((s) => s.endpoint),
+    [segments],
+  );
+
+  const { data: geoData } = useSWR<{ geojson: FeatureCollection }>(
+    activeEndpoint ? `${import.meta.env.VITE_SERVER_URL}${activeEndpoint}` : null,
+    { keepPreviousData: true },
+  );
+
+  useSEO({
+    title: article ? `${article.title} - EtymoMap` : "Blog - EtymoMap",
+    path: slug ? `/blog/articles/${encodeURIComponent(slug)}` : undefined,
+    description: article?.description,
+    type: "article",
+  });
+
+  useEffect(() => {
+    const markers = [...markerRefs.current.values()];
+    const root = markers[0]?.closest("[data-scroll-container]") ?? null;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const endpoint = (entry.target as HTMLElement).dataset.geoEndpoint;
+          if (endpoint) setActiveEndpoint(endpoint);
+        }
+      },
+      { root, rootMargin: "0px 0px -75% 0px", threshold: 0 },
+    );
+    for (const el of markers) observer.observe(el);
+    return () => observer.disconnect();
+  }, [segments]);
+
+  useEffect(() => {
+    setGeometry(geoData?.geojson ?? null);
+    return () => setGeometry(null);
+  }, [geoData, setGeometry]);
+
+  return (
+    <>
+      <PrefetchMarkers endpoints={endpoints} />
+      <BackButton />
+
+      {isLoading && <p className="text-zinc-500 text-sm">Loading…</p>}
+      {error && !isLoading && (
+        <p className="text-red-400 text-sm">We couldn't load this article. Please try again.</p>
+      )}
+      {article && !isLoading && (
+        <article className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-zinc-900 text-2xl font-semibold">{article.title}</h1>
+            <div className="flex flex-col gap-0.5 text-xs text-zinc-400">
+              <span>
+                Published: <b>{formatDate(article.published)}</b>
+              </span>
+              {article?.modified ? (
+                <span>
+                  Last updated: <b>{formatDate(article.modified)}</b>
+                </span>
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 text-zinc-600 text-sm leading-relaxed">
+            {segments.map((segment, i) =>
+              segment.type === "marker" ? (
+                <span
+                  key={i}
+                  data-geo-endpoint={segment.endpoint}
+                  aria-hidden="true"
+                  className="block h-px -my-[8.5px]"
+                  ref={(el) => {
+                    if (el) markerRefs.current.set(i, el);
+                    else markerRefs.current.delete(i);
+                  }}
+                />
+              ) : (
+                <Markdown key={i} components={mdComponents}>
+                  {segment.value}
+                </Markdown>
+              ),
+            )}
+          </div>
+        </article>
+      )}
+    </>
+  );
+}

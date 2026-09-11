@@ -3,21 +3,21 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { SWRConfig } from "swr";
 import "./index.css";
-import ErrorBoundary from "./ErrorBoundary.tsx";
-import ToastProvider from "./Toast.tsx";
-import { fetcher, ApiError } from "./fetcher.ts";
-import { toast } from "./toast.ts";
-import AboutPage from "./AboutPage.tsx";
-import App from "./App.tsx";
-import WordPage from "./WordPage.tsx";
-import ComingSoon from "./ComingSoon.tsx";
-import BlogPage from "./BlogPage.tsx";
-import BlogArticlePage from "./BlogArticlePage.tsx";
-import Attributions from "./Attributions.tsx";
-import FeedbackPage from "./FeedbackPage.tsx";
-import ChangelogPage from "./ChangelogPage.tsx";
-import GlossaryPage from "./GlossaryPage.tsx";
-import Layout from "./Layout.tsx";
+import ErrorBoundary from "./components/ErrorBoundary.tsx";
+import ToastProvider from "./components/Toast.tsx";
+import { fetcher, ApiError } from "./lib/fetcher.ts";
+import { toast } from "./lib/toast.ts";
+import AboutPage from "./pages/AboutPage/AboutPage.tsx";
+import App from "./pages/App.tsx";
+import WordPage from "./pages/WordPage/WordPage.tsx";
+import ComingSoon from "./pages/ComingSoon/ComingSoon.tsx";
+import BlogPage from "./pages/BlogPage/BlogPage.tsx";
+import BlogArticlePage from "./pages/BlogArticlePage/BlogArticlePage.tsx";
+import Attributions from "./pages/Attributions/Attributions.tsx";
+import FeedbackPage from "./pages/FeedbackPage/FeedbackPage.tsx";
+import ChangelogPage from "./pages/ChangelogPage/ChangelogPage.tsx";
+import GlossaryPage from "./pages/GlossaryPage/GlossaryPage.tsx";
+import Layout from "./components/Layout.tsx";
 
 function handleError(error: unknown) {
   const message =
