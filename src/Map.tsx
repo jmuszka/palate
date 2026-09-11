@@ -10,6 +10,7 @@ import type { NormalizedProps } from "./mapGeometry";
 
 const GEOMETRY_SOURCE = "etymology-geometry";
 const FILL_LAYER_ID = `${GEOMETRY_SOURCE}-fill`;
+const HALO_LAYER_ID = `${GEOMETRY_SOURCE}-halo`;
 const EMPTY_FC: FeatureCollection = {
   type: "FeatureCollection",
   features: [],
@@ -19,6 +20,12 @@ const HEAT_LIGHT = "#e8ebff";
 const HEAT_MID = "#8b93f8";
 const HEAT_DARK = "#312e81";
 const DIM_FILL = "#e4e4e7";
+// Halo ramp: the heat colors mixed ~40% toward white. Over a light basemap the
+// semi-transparent halo would otherwise compound with the fill and read darker,
+// so the pale band fades the edge out instead.
+const HALO_LIGHT = "#f1f3ff";
+const HALO_MID = "#b9befb";
+const HALO_DARK = "#8382b3";
 
 // Continuous heat ramp: heat = count / maxCount in [0, 1] maps smoothly from a
 // pale tint to deep indigo via a light-blue midpoint.
@@ -37,14 +44,32 @@ function heatExpression(maxCount: number) {
   ];
 }
 
+function haloHeatExpression(maxCount: number) {
+  const range = Math.max(1, maxCount);
+  return [
+    "interpolate",
+    ["linear"],
+    ["/", ["get", "count"], range],
+    0,
+    HALO_LIGHT,
+    0.5,
+    HALO_MID,
+    1,
+    HALO_DARK,
+  ];
+}
+
 // Highlight paint: features whose ancestor chain contains the hovered family
 // keep their heat coloring while everything else dims.
 function highlightPaints(highlight: string | null, maxCount: number) {
   const match = highlight ? ["in", `|${highlight}|`, ["get", "ancestors"]] : null;
   const heat = heatExpression(maxCount);
+  const haloHeat = haloHeatExpression(maxCount);
   return {
     fillColor: match ? (["case", match, heat, DIM_FILL] as unknown[]) : heat,
     fillOpacity: match ? (["case", match, 0.85, 0.12] as unknown[]) : 0.7,
+    lineColor: match ? (["case", match, haloHeat, DIM_FILL] as unknown[]) : haloHeat,
+    lineOpacity: match ? (["case", match, 0.3, 0.05] as unknown[]) : 0.3,
   };
 }
 
@@ -69,6 +94,7 @@ function applyGeometry(
       source.setData(rewound);
       // Refresh the ramp to match the new payload's scale.
       map.setPaintProperty(FILL_LAYER_ID, "fill-color", heatExpression(maxCount) as never);
+      map.setPaintProperty(HALO_LAYER_ID, "line-color", haloHeatExpression(maxCount) as never);
       return;
     }
     map.addSource(GEOMETRY_SOURCE, { type: "geojson", data: rewound });
@@ -79,6 +105,25 @@ function applyGeometry(
       paint: {
         "fill-color": heatExpression(maxCount) as never,
         "fill-opacity": 0.7,
+        "fill-antialias": true,
+      },
+    });
+    // A blurred, lighter-than-fill stroke just outside the boundary: the pale
+    // gradient band makes the polygon look like it tapers out at its edges
+    // instead of ending in a hard (or darker) border.
+    map.addLayer({
+      id: HALO_LAYER_ID,
+      type: "line",
+      source: GEOMETRY_SOURCE,
+      layout: {
+        "line-cap": "round",
+        "line-join": "round",
+      },
+      paint: {
+        "line-color": haloHeatExpression(maxCount) as never,
+        "line-width": 14,
+        "line-blur": 10,
+        "line-opacity": 0.3,
       },
     });
   } catch (error) {
@@ -91,6 +136,8 @@ function applyHighlight(map: maplibregl.Map, highlight: string | null, maxCount:
   const paints = highlightPaints(highlight, maxCount);
   map.setPaintProperty(FILL_LAYER_ID, "fill-color", paints.fillColor as never);
   map.setPaintProperty(FILL_LAYER_ID, "fill-opacity", paints.fillOpacity as never);
+  map.setPaintProperty(HALO_LAYER_ID, "line-color", paints.lineColor as never);
+  map.setPaintProperty(HALO_LAYER_ID, "line-opacity", paints.lineOpacity as never);
 }
 
 const MapGeometryContext = createContext<(geometry: FeatureCollection | null) => void>(() => {});

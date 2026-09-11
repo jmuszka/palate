@@ -24,6 +24,50 @@ export interface NormalizedProps {
   ancestors: string;
 }
 
+export const SMOOTH_ITERATIONS = 2;
+
+// Chaikin corner cutting: replaces each vertex with two points at 1/4 and 3/4
+// along the adjacent segments, rounding off sharp angles. Rings stay closed.
+function smoothRing(ring: number[][], iterations: number): number[][] {
+  let smoothed = ring;
+  for (let i = 0; i < iterations; i++) {
+    if (smoothed.length < 3) break;
+    const closed =
+      smoothed[0][0] === smoothed[smoothed.length - 1][0] &&
+      smoothed[0][1] === smoothed[smoothed.length - 1][1];
+    const points = closed ? smoothed.slice(0, -1) : smoothed;
+    const next: number[][] = [];
+    for (let j = 0; j < points.length; j++) {
+      const a = points[j];
+      const b = points[(j + 1) % points.length];
+      next.push([a[0] * 0.75 + b[0] * 0.25, a[1] * 0.75 + b[1] * 0.25]);
+      next.push([a[0] * 0.25 + b[0] * 0.75, a[1] * 0.25 + b[1] * 0.75]);
+    }
+    if (closed) next.push([next[0][0], next[0][1]]);
+    smoothed = next;
+  }
+  return smoothed;
+}
+
+// Smooths Polygon/MultiPolygon rings (exterior and holes); other geometry
+// types pass through untouched.
+function smoothPolygonRings(coordinates: number[][][]): number[][][] {
+  return coordinates.map((ring) => smoothRing(ring, SMOOTH_ITERATIONS));
+}
+
+export function smoothGeometry(geometry: Feature["geometry"]): Feature["geometry"] {
+  if (geometry.type === "Polygon") {
+    return { ...geometry, coordinates: smoothPolygonRings(geometry.coordinates) };
+  }
+  if (geometry.type === "MultiPolygon") {
+    return {
+      ...geometry,
+      coordinates: geometry.coordinates.map((polygon) => smoothPolygonRings(polygon)),
+    };
+  }
+  return geometry;
+}
+
 export function normalizeGeometry(geometry: FeatureCollection): FeatureCollection {
   const seen = new Set<string>();
   const features: Feature[] = [];
@@ -49,6 +93,7 @@ export function normalizeGeometry(geometry: FeatureCollection): FeatureCollectio
 
     features.push({
       ...feature,
+      geometry: smoothGeometry(feature.geometry),
       properties: {
         id,
         name,
