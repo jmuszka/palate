@@ -166,6 +166,7 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
   const popupRef = useRef<maplibregl.Popup | null>(null);
   const hoveredIdRef = useRef<string | null>(null);
   const hoveredFamilyRef = useRef<string | null>(null);
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const maxCountRef = useRef(1);
   const { highlight, setHighlight } = useMapHighlight();
   const highlightRef = useRef(highlight);
@@ -213,28 +214,36 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
       popupRef.current = new maplibregl.Popup({ closeButton: false, closeOnClick: false });
 
       map.on("mousemove", (e) => {
-        const features = map.queryRenderedFeatures(e.point, { layers: [FILL_LAYER_ID] });
+        const point = e.point;
+        const lngLat = e.lngLat;
+        const features = map.queryRenderedFeatures(point, { layers: [FILL_LAYER_ID] });
         map.getCanvas().style.cursor = features.length > 0 ? "pointer" : "";
-        if (features.length === 0) {
-          if (hoveredIdRef.current !== null || hoveredFamilyRef.current !== null) {
-            hoveredIdRef.current = null;
-            hoveredFamilyRef.current = null;
-            popupRef.current?.remove();
-            setHighlight(null);
+        // While the mouse keeps moving, only track the cursor; the popup and
+        // highlight settle once the pointer pauses over a region.
+        if (hoverTimerRef.current !== null) clearTimeout(hoverTimerRef.current);
+        hoverTimerRef.current = setTimeout(() => {
+          hoverTimerRef.current = null;
+          if (features.length === 0) {
+            if (hoveredIdRef.current !== null || hoveredFamilyRef.current !== null) {
+              hoveredIdRef.current = null;
+              hoveredFamilyRef.current = null;
+              popupRef.current?.remove();
+              setHighlight(null);
+            }
+            return;
           }
-          return;
-        }
-        const props = features[0].properties as NormalizedProps;
-        if (props.id !== hoveredIdRef.current) {
-          hoveredIdRef.current = props.id;
-          popupRef.current?.setLngLat(e.lngLat).setHTML(renderPopup(props)).addTo(map);
-        }
-        // Hovering a region links it to the family chart.
-        const family = props.familyCode || null;
-        if (family !== hoveredFamilyRef.current) {
-          hoveredFamilyRef.current = family;
-          setHighlight(family);
-        }
+          const props = features[0].properties as NormalizedProps;
+          if (props.id !== hoveredIdRef.current) {
+            hoveredIdRef.current = props.id;
+            popupRef.current?.setLngLat(lngLat).setHTML(renderPopup(props)).addTo(map);
+          }
+          // Hovering a region links it to the family chart.
+          const family = props.familyCode || null;
+          if (family !== hoveredFamilyRef.current) {
+            hoveredFamilyRef.current = family;
+            setHighlight(family);
+          }
+        }, 150);
       });
 
       applyGeometry(map, geometryRef.current, (maxCount) => {
@@ -245,6 +254,10 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
       }
     });
     return () => {
+      if (hoverTimerRef.current !== null) {
+        clearTimeout(hoverTimerRef.current);
+        hoverTimerRef.current = null;
+      }
       popupRef.current?.remove();
       popupRef.current = null;
       hoveredIdRef.current = null;
