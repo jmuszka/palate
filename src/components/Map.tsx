@@ -102,6 +102,11 @@ function applyGeometry(
       id: FILL_LAYER_ID,
       type: "fill",
       source: GEOMETRY_SOURCE,
+      // Draw higher-count (darker) polygons on top so overlapping lighter
+      // diffusion polygons cannot wash out hot regions like Wales.
+      layout: {
+        "fill-sort-key": ["get", "count"],
+      },
       paint: {
         "fill-color": heatExpression(maxCount) as never,
         "fill-opacity": 0.7,
@@ -118,6 +123,7 @@ function applyGeometry(
       layout: {
         "line-cap": "round",
         "line-join": "round",
+        "line-sort-key": ["get", "count"],
       },
       paint: {
         "line-color": haloHeatExpression(maxCount) as never,
