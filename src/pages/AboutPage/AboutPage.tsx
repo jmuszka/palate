@@ -21,6 +21,16 @@ export default function AboutPage() {
         {about.paragraphs.map((paragraph, i) => (
           <Markdown key={i}>{paragraph}</Markdown>
         ))}
+
+        {about.disclaimer && (
+          <>
+            <h3 className="text-zinc-800 text-lg font-semibold">{about.disclaimer.heading}</h3>
+
+            {about.disclaimer.paragraphs.map((paragraph, i) => (
+              <Markdown key={i}>{paragraph}</Markdown>
+            ))}
+          </>
+        )}
       </div>
     </>
   );
