@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 export const SITE_NAME = "EtymoMap";
-export const HOME_TITLE = "EtymoMap";
+export const HOME_TITLE = "EtymoMap - Charting language and culture across space and time.";
 export const SITE_DESCRIPTION =
   "EtymoMap is a historical geolinguistic atlas for visualizing the evolution of natural language over time and space. Search any word to trace its etymology, language family, and geographic journey.";
 
