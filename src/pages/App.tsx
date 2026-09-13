@@ -8,7 +8,7 @@ import home from "../content/home.json";
 const WEBSITE_JSONLD = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: SITE_NAME,
+  name: `${SITE_NAME} - Charting language and culture across space and time`,
   url: siteUrl("/"),
 };
 
