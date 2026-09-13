@@ -29,7 +29,12 @@ import {
   NODE_WIDTH,
   NODE_HEIGHT,
 } from "../lib/etymologyTree";
-import type { Neo4jPath, EtymologyData, EdgeKind, CapsuleNodeData } from "../lib/etymologyTree";
+import type {
+  EtymologyGraph,
+  EtymologyData,
+  EdgeKind,
+  CapsuleNodeData,
+} from "../lib/etymologyTree";
 import "@xyflow/react/dist/style.css";
 
 export type { EtymologyData, FamilyTreeNode } from "../lib/etymologyTree";
@@ -200,7 +205,7 @@ const TreeCanvas = ({
   data,
   onHeight,
 }: {
-  data: Neo4jPath[];
+  data: EtymologyGraph;
   onHeight: (height: number) => void;
 }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<WordNode>([]);
@@ -222,8 +227,8 @@ const TreeCanvas = ({
       return;
     }
 
-    // The head record is the page's word: the root of the ancestry spine.
-    const head = data[0]?.head;
+    // The head is the page's word: the root of the ancestry spine.
+    const head = data.head;
     const headTerm = head?.Props?.term;
     const headLang = head?.Props?.lang;
     const startId = typeof headTerm === "string" ? `${headTerm}|${headLang}` : "";
