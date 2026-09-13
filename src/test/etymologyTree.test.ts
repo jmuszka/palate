@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { Neo4jPath } from "../lib/etymologyTree";
+import type { EtymologyGraph, Neo4jPath } from "../lib/etymologyTree";
 
 const { layoutMock } = vi.hoisted(() => ({ layoutMock: vi.fn() }));
 
@@ -51,45 +51,51 @@ describe("buildGraph", () => {
   });
 
   it("builds a node per unique term|lang pair", () => {
-    const { nodes } = buildGraph([
-      path(
-        [
-          { id: 1, term: "run", lang: "en" },
-          { id: 2, term: "rinnan", lang: "enm" },
-        ],
-        [],
-      ),
-    ]);
+    const { nodes } = buildGraph({
+      paths: [
+        path(
+          [
+            { id: 1, term: "run", lang: "en" },
+            { id: 2, term: "rinnan", lang: "enm" },
+          ],
+          [],
+        ),
+      ],
+    });
 
     expect(nodes).toHaveLength(2);
     expect(nodes.map((n) => n.id)).toEqual(["run|en", "rinnan|enm"]);
   });
 
   it("deduplicates nodes by term + language", () => {
-    const { nodes } = buildGraph([
-      path(
-        [
-          { id: 1, term: "run", lang: "en" },
-          { id: 2, term: "run", lang: "en" },
-        ],
-        [],
-      ),
-    ]);
+    const { nodes } = buildGraph({
+      paths: [
+        path(
+          [
+            { id: 1, term: "run", lang: "en" },
+            { id: 2, term: "run", lang: "en" },
+          ],
+          [],
+        ),
+      ],
+    });
 
     expect(nodes).toHaveLength(1);
     expect(nodes[0].id).toBe("run|en");
   });
 
   it("labels nodes with just the term", () => {
-    const { nodes } = buildGraph([
-      path(
-        [
-          { id: 1, term: "run", lang: "en" },
-          { id: 2, term: "rinnan" },
-        ],
-        [],
-      ),
-    ]);
+    const { nodes } = buildGraph({
+      paths: [
+        path(
+          [
+            { id: 1, term: "run", lang: "en" },
+            { id: 2, term: "rinnan" },
+          ],
+          [],
+        ),
+      ],
+    });
 
     const withLang = nodes.find((n) => n.id === "run|en");
     const withoutLang = nodes.find((n) => n.id === "rinnan|undefined");
@@ -98,15 +104,17 @@ describe("buildGraph", () => {
   });
 
   it("remaps edges from Neo4j ids onto canonical node ids", () => {
-    const { edges } = buildGraph([
-      path(
-        [
-          { id: 1, term: "run", lang: "en" },
-          { id: 2, term: "rinnan", lang: "enm" },
-        ],
-        [{ id: 10, start: 1, end: 2, type: "descends" }],
-      ),
-    ]);
+    const { edges } = buildGraph({
+      paths: [
+        path(
+          [
+            { id: 1, term: "run", lang: "en" },
+            { id: 2, term: "rinnan", lang: "enm" },
+          ],
+          [{ id: 10, start: 1, end: 2, type: "descends" }],
+        ),
+      ],
+    });
 
     expect(edges).toHaveLength(1);
     expect(edges[0].source).toBe("run|en");
@@ -115,39 +123,43 @@ describe("buildGraph", () => {
   });
 
   it("skips self-loops produced by node merging", () => {
-    const { edges } = buildGraph([
-      path(
-        [
-          { id: 1, term: "run", lang: "en" },
-          { id: 2, term: "run", lang: "en" },
-        ],
-        [{ id: 10, start: 1, end: 2 }],
-      ),
-    ]);
+    const { edges } = buildGraph({
+      paths: [
+        path(
+          [
+            { id: 1, term: "run", lang: "en" },
+            { id: 2, term: "run", lang: "en" },
+          ],
+          [{ id: 10, start: 1, end: 2 }],
+        ),
+      ],
+    });
 
     expect(edges).toHaveLength(0);
   });
 
   it("deduplicates parallel edges between the same pair", () => {
-    const { edges } = buildGraph([
-      path(
-        [
-          { id: 1, term: "run", lang: "en" },
-          { id: 2, term: "rinnan", lang: "enm" },
-        ],
-        [
-          { id: 10, start: 1, end: 2 },
-          { id: 11, start: 1, end: 2 },
-        ],
-      ),
-    ]);
+    const { edges } = buildGraph({
+      paths: [
+        path(
+          [
+            { id: 1, term: "run", lang: "en" },
+            { id: 2, term: "rinnan", lang: "enm" },
+          ],
+          [
+            { id: 10, start: 1, end: 2 },
+            { id: 11, start: 1, end: 2 },
+          ],
+        ),
+      ],
+    });
 
     expect(edges).toHaveLength(1);
   });
 
   it("returns empty results for empty or undefined input", () => {
-    expect(buildGraph([])).toEqual({ nodes: [], edges: [] });
-    expect(buildGraph(undefined as unknown as Neo4jPath[])).toEqual({ nodes: [], edges: [] });
+    expect(buildGraph({ paths: [] })).toEqual({ nodes: [], edges: [] });
+    expect(buildGraph(undefined as unknown as EtymologyGraph)).toEqual({ nodes: [], edges: [] });
   });
 });
 

@@ -25,13 +25,20 @@ export interface Neo4jRelationship {
 }
 
 export interface Neo4jPath {
-  head?: {
+  tail?: {
     Props?: { term?: string; lang?: string };
   };
   path: {
     Nodes: Neo4jNode[];
     Relationships: Neo4jRelationship[];
   };
+}
+
+// Shape of the /etymology endpoint: the head word appears once at the graph
+// level and every record holds a tail and the path back to the head.
+export interface EtymologyGraph {
+  head?: Neo4jNode | null;
+  paths?: Neo4jPath[];
 }
 
 export interface FamilyTreeNode {
@@ -43,7 +50,7 @@ export interface FamilyTreeNode {
 }
 
 export type EtymologyData = {
-  graph: Neo4jPath[];
+  graph: EtymologyGraph;
   familyTree: FamilyTreeNode;
   geojson: FeatureCollection;
   ipa: string;
@@ -103,12 +110,12 @@ export function computeNodeAges(nodes: Node[], edges: Edge[]): Map<string, numbe
 // nodes and edges. Nodes are deduplicated by term + language, so
 // the same word in the same language collapses into a single node. Edges reference nodes
 // by Neo4j Id, so we remap each Id onto its term|lang node.
-export const buildGraph = (data: Neo4jPath[]): { nodes: Node[]; edges: Edge[] } => {
+export const buildGraph = (graph: EtymologyGraph): { nodes: Node[]; edges: Edge[] } => {
   const nodeMap = new Map<string, Node>(); // term|lang -> node
   const canonical = new Map<string, string>(); // Neo4j Id -> term|lang node id
   const edgeMap = new Map<string, Edge>();
 
-  for (const { path } of data ?? []) {
+  for (const { path } of graph?.paths ?? []) {
     if (!path) continue;
 
     for (const n of path.Nodes ?? []) {

@@ -31,7 +31,7 @@ vi.mock("react-router-dom", async (importOriginal) => {
 });
 
 const etymologyData = {
-  graph: [],
+  graph: { head: null, paths: [] },
   familyTree: { id: "root", name: "root", value: 1, children: [] },
   geojson: { type: "FeatureCollection", features: [] },
   ipa: "/tɛst/",
