@@ -16,16 +16,16 @@ const EMPTY_FC: FeatureCollection = {
   features: [],
 };
 
-const HEAT_LIGHT = "#e8ebff";
-const HEAT_MID = "#8b93f8";
-const HEAT_DARK = "#312e81";
+const HEAT_LIGHT = "#f3e8ff";
+const HEAT_MID = "#a855f7";
+const HEAT_DARK = "#4c1d95";
 const DIM_FILL = "#e4e4e7";
 // Halo ramp: the heat colors mixed ~40% toward white. Over a light basemap the
 // semi-transparent halo would otherwise compound with the fill and read darker,
 // so the pale band fades the edge out instead.
-const HALO_LIGHT = "#f1f3ff";
-const HALO_MID = "#b9befb";
-const HALO_DARK = "#8382b3";
+const HALO_LIGHT = "#faf5ff";
+const HALO_MID = "#c084fc";
+const HALO_DARK = "#6b21a8";
 
 // Continuous heat ramp: heat = count / maxCount in [0, 1] maps smoothly from a
 // pale tint to deep indigo via a light-blue midpoint.
@@ -167,6 +167,8 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
   const hoveredIdRef = useRef<string | null>(null);
   const hoveredFamilyRef = useRef<string | null>(null);
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hoverFeaturesRef = useRef<maplibregl.MapGeoJSONFeature[]>([]);
+  const lastHoverPointRef = useRef<{ x: number; y: number } | null>(null);
   const maxCountRef = useRef(1);
   const { highlight, setHighlight } = useMapHighlight();
   const highlightRef = useRef(highlight);
@@ -216,13 +218,27 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
       map.on("mousemove", (e) => {
         const point = e.point;
         const lngLat = e.lngLat;
-        const features = map.queryRenderedFeatures(point, { layers: [FILL_LAYER_ID] });
-        map.getCanvas().style.cursor = features.length > 0 ? "pointer" : "";
+
+        // queryRenderedFeatures is the hover hot path (~10ms per call on large
+        // payloads), so only re-query once the pointer has moved far enough to
+        // change the result and reuse the cached features in between.
+        const last = lastHoverPointRef.current;
+        if (last === null || Math.abs(point.x - last.x) > 4 || Math.abs(point.y - last.y) > 4) {
+          lastHoverPointRef.current = { x: point.x, y: point.y };
+          hoverFeaturesRef.current = map.queryRenderedFeatures(point, { layers: [FILL_LAYER_ID] });
+        }
+
+        const cursor = hoverFeaturesRef.current.length > 0 ? "pointer" : "";
+        if (map.getCanvas().style.cursor !== cursor) {
+          map.getCanvas().style.cursor = cursor;
+        }
+
         // While the mouse keeps moving, only track the cursor; the popup and
         // highlight settle once the pointer pauses over a region.
         if (hoverTimerRef.current !== null) clearTimeout(hoverTimerRef.current);
         hoverTimerRef.current = setTimeout(() => {
           hoverTimerRef.current = null;
+          const features = hoverFeaturesRef.current;
           if (features.length === 0) {
             if (hoveredIdRef.current !== null || hoveredFamilyRef.current !== null) {
               hoveredIdRef.current = null;
@@ -262,6 +278,8 @@ export default function Map({ geometry }: { geometry: FeatureCollection | null }
       popupRef.current = null;
       hoveredIdRef.current = null;
       hoveredFamilyRef.current = null;
+      hoverFeaturesRef.current = [];
+      lastHoverPointRef.current = null;
       map.remove();
       mapRef.current = null;
       mapLoadedRef.current = false;
